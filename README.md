@@ -16,8 +16,9 @@
 - Multi-agent orchestration using Azure AI Foundry Agent Service
 
 ## Lab #2: Add Intelligent Data Layer
-**Integrate Azure Cognitive Search (RAG):**
-- Embed documents into Azure Search index  
+**Integrate Azure AI Search (RAG):**
+- Ingest doc into Azure AI Search
+- Use Document Intelligence Service
 - Connect agent to knowledge base  
 - Demonstrate contextual reasoning  
 - Optional: Build a memory/retrieval plugin with Semantic Kernel
