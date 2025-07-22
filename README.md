@@ -4,10 +4,23 @@
 
 ## Overview
 - Duration: 9am to 4pm
-- Lab Environment: GitHub Codespaces
+- Demo: Azure Portal & VS Code
+- Lab: GitHub Codespaces
+
+### Goal
+
+- Build on the Agentic AI aspects
+- Inspire and Motivate 
+- Real world ideas for Agentic AI
+- Focused on End-to-end building AI-powered applications
+- Frictionless learning environment, learn via lab, demo and teaching moments
+- For some people without laptops or limited technical skills, allowing them to watch walkthroughs, whilst others do them
+
+### Audience
+- Technical teams
+- Senior management like C-levels
 
 Note: some of the labs will be adjusted based on the resources and licences available for the participants to use.
-
 
 ## Presentation #1: Morning, Kick-start – 30 min
 **Topics:** Basic Concepts and Overview
@@ -91,21 +104,29 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Next Steps & Resources: Certification paths, community support, and building your first production agent
 
 
-## Azure Services & Framework to be considered
-- **Azure OpenAI** – LLMs for chat, planning, coding, summarization  
+## Azure Services to be considered
 - **Azure AI Foundry (Model Catalog, Playground)** – To explore and test models  
 - **Azure AI Foundry – Agent Service** – For orchestrating multi-agent systems  
 - **Azure AI Services** – For integrating vision, speech, etc.  
-- **Semantic Kernel** – For agent memory, function calling, planning  
-- **App service / AKS / ACA** – App hosting  
-- **APIM** – Secure, scalable API layer
+- **Azure OpenAI** – LLMs for chat, planning, coding, summarization  
 - **Azure AI Search** – Intelligent data layer for RAG
+- **APIM** – Secure, scalable API layer
 - **Azure Functions** – Serverless compute for tool integration
 - **Azure Logic Apps** – Workflow automation for tool orchestration
+- **App Service / AKS / ACA** – App hosting  
 - **Azure DevOps / GitHub Actions** – CI/CD for agent apps
 - **Azure Monitor / Application Insights** – Monitoring and logging
 - **Azure Key Vault** – Secure secrets management
 - **Azure Storage / Cosmos DB** – Data storage for agent state and knowledge
+
+## Dev toolchain to be considered
+- **Semantic Kernel** – For agent memory, planning, and tool integration
+- **Visual Studio Code** – IDE for development
+- **Jupyter Notebooks** – For interactive data exploration and model testing
+- **GitHub Codespaces** – Cloud-based dev environment for labs
+- **GitHub or Azure DevOps** – Source control and CI/CD pipelines and project management
+- **Azure CLI / PowerShell** – Command-line tools for Azure management
+- **Bicep** – Infrastructure as Code for Azure resources
 
 ## Lab Exercise to be considered
 
