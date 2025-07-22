@@ -1,4 +1,6 @@
-# Agentic AI App in a Day
+# Agentic AI App in a Day (Draft)
+
+Note: some of the labs will be adjusted based on the resources and licences available for the participants to use.
 
 ## Presentation #1: Morning, Kick-start – 30 min
 **Topics:** Basic Concepts and Overview
@@ -9,54 +11,67 @@
 - Tool integration patterns and API orchestration
 - Intelligent data layers (Azure Cognitive Search, RAG)  
 
-## Lab #1: Foundry Integration & Extension
-**Leverage Azure AI Foundry services:**
-- Use Model Catalog and various Azure AI Services
-- Customize agent orchestration using no-code / low-code blocks  
-- Connect additional tools (e.g., a calculator API, web search API)
+## Demo #1: AI App Demo
+- use a Accelerator Repo
+- Daniel's LEGO coding chatbot app demo
 
-## Demo #1: Using an Accelerator Repo
-- Multi-agent orchestration using Azure AI Foundry Agent Service
+## Lab #1: AI Foundry Integration & Extension
+**Explore AI Foundry services:**
+- Use Playground and Model Catalog 
+- Various Azure AI Services
+- Customize agent orchestration using no-code / low-code blocks (Functions)
+- Connect additional tools and knowledge bases (e.g., a calculator API, web search API)
+- Connect Agents
+
+## Demo #1: Complex AI App Demo
+- use a Accelerator Repo
+- refer to the repo list in the end
 
 ## Lab #2: Add Intelligent Data Layer
-**Integrate Azure AI Search (RAG):**
+**Integrate Azure AI Search or Cosmos DB:**
 - Ingest doc into Azure AI Search
 - Use Document Intelligence Service
-- Connect agent to knowledge base  
-- Demonstrate contextual reasoning  
-- Optional: Build a memory/retrieval plugin with Semantic Kernel
+- Connect agent to knowledge base
+- Demonstrate contextual reasoning
+- Build a memory/retrieval plugin with Semantic Kernel
+- Advance query, score profile, index, indexer in AI Search
 
 ## Presentation #2: After Lunch – 30 min
 **Topic:** Building Production-Ready AI Apps with Agentic Concepts
 - Technical Deep Dive: Advanced reasoning architectures and hybrid - approaches for complex problem-solving
+- Platform-First Strategies: Scaling, API management, DevOps, and platform selection best practices
 - Practical Considerations: Memory, cost, performance optimization - and error handling strategies
 - Enterprise Readiness: Security, evaluation, testing, and compliance frameworks for production deployment
-- Platform-First Strategies: Scaling, API management, DevOps, and platform selection best practices
 - Real-World Implementation Patterns: Customer service, document processing, developer tools, and multi-modal applications
 
-
-## Lab #3: AI Agent 101 & Sementic Kernal
-**Build an agent**
-- Prompt → Plan → Act → Reflect loop  
-- Basic tool usage and chaining outputs  
-- Setup Codespaces + sample agent repo
-
-## Demo #2: Multi-Agent Walkthrough
-**:**
-- Show multi-agent collaboration, perception → planning → action loop
-- Real-world scenario (Daniel's LEGO demo)  
-
-## Demo #3: Agent Mode Coding Assistant for AI App
+## Demo #2: Agent Mode Coding Assistant for AI App
 **Developer experience showcase:**
 - Prompt-driven coding assistant (e.g., auto-generate unit tests, fix bugs)  
 - Refactoring, adding comments/images, reformatting examples  
 - Show how devs stay in control but move faster
 
-## Lab #4: Deployment + API Layer
-**Deploy and expose app:**
-- Containerize the agent app
-- Deploy ai app and integration to Azure
-- Expose via Azure API Management (with auth, rate limits, monitoring)
+## Lab #3: AI Agent 101 & Semantic Kernel + MCP
+**Build and extend your first agentic AI app:**
+- Implement the Prompt → Plan → Act → Reflect loop  
+- Use Semantic Kernel for memory, planning, and tool integration  
+- Chain outputs between tools and functions
+- Build and integrate MCP for advanced orchestration and extensibility
+- Experiment with adding new skills,
+
+## Demo #3: Multi-Agent Solution Walkthrough
+**Showcase advanced agent collaboration and orchestration:**
+- Demonstrate multi-agent workflows using Azure AI Foundry Services
+- Highlight agent collaboration: perception → planning → action loop
+- Explore coordination strategies and communication between agents
+- Present a real-world scenario (Daniel's agentic LEGO demo) to illustrate practical applications
+
+## Lab #4: AI Integration, Deployment & Productionise
+**Deploy and operationalize your agentic AI app:**
+- Containerize the agent app for portability and scalability
+- Deploy to Azure using ACA, AKS, or App Service with CI/CD
+- Expose APIs securely via Azure API Management (auth, rate limits, monitoring)
+- Implement logging, monitoring, and alerting for production readiness
+- Apply security best practices and cost controls
 
 ## Presentation #3: Afternoon – 30 min
 **Topic:** Responsible AI & Future Considerations
