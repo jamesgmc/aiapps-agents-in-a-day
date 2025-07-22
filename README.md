@@ -12,6 +12,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Intelligent data layers (Azure Cognitive Search, RAG)  
 
 ## Demo #1: AI App Demo - 15min
+**Showcasing a fun AI App**
 - use a Accelerator Repo
 - Daniel's LEGO coding chatbot app demo
 
@@ -24,6 +25,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Connect Agents
 
 ## Demo #2: Complex AI App Demo - 15min
+***Demonstrating Advanced AI Solutions**
 - use a Accelerator Repo
 - refer to the repo list in the end
 
@@ -75,7 +77,6 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 
 ## Presentation #3: Afternoon – 30 min
 **Topic:** Wrap-Up: Responsible AI & Future Considerations
-
 - Responsible AI and Guiderails: Content filtering, prompt injection defense, evaluation, and monitoring
 - Observability & Operations: Agent analytics, performance metrics, cost tracking, and debugging
 - Advanced Topics & Future Trends: Fine-tuning, multi-modal agents, edge deployment, and emerging frameworks
