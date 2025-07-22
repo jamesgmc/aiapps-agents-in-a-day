@@ -1,5 +1,7 @@
 # Agentic AI App in a Day (Draft)
 
+![Agentic AI App in a Day Cover](res/cover.png)
+
 Note: some of the labs will be adjusted based on the resources and licences available for the participants to use.
 
 ## Presentation #1: Morning, Kick-start – 30 min
