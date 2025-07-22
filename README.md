@@ -11,11 +11,11 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Tool integration patterns and API orchestration
 - Intelligent data layers (Azure Cognitive Search, RAG)  
 
-## Demo #1: AI App Demo
+## Demo #1: AI App Demo - 15min
 - use a Accelerator Repo
 - Daniel's LEGO coding chatbot app demo
 
-## Lab #1: AI Foundry Integration & Extension
+## Lab #1: AI Foundry Integration & Extension - 50min
 **Explore AI Foundry services:**
 - Use Playground and Model Catalog 
 - Various Azure AI Services
@@ -23,11 +23,11 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Connect additional tools and knowledge bases (e.g., a calculator API, web search API)
 - Connect Agents
 
-## Demo #1: Complex AI App Demo
+## Demo #2: Complex AI App Demo - 15min
 - use a Accelerator Repo
 - refer to the repo list in the end
 
-## Lab #2: Add Intelligent Data Layer
+## Lab #2: Add Intelligent Data Layer - 50min
 **Integrate Azure AI Search or Cosmos DB:**
 - Ingest doc into Azure AI Search
 - Use Document Intelligence Service
@@ -44,13 +44,13 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Enterprise Readiness: Security, evaluation, testing, and compliance frameworks for production deployment
 - Real-World Implementation Patterns: Customer service, document processing, developer tools, and multi-modal applications
 
-## Demo #2: Agent Mode Coding Assistant for AI App
+## Demo #3: Agent Mode Coding Assistant for AI App - 15min
 **Developer experience showcase:**
 - Prompt-driven coding assistant (e.g., auto-generate unit tests, fix bugs)  
 - Refactoring, adding comments/images, reformatting examples  
 - Show how devs stay in control but move faster
 
-## Lab #3: AI Agent 101 & Semantic Kernel + MCP
+## Lab #3: AI Agent 101 & Semantic Kernel + MCP - 70min
 **Build and extend your first agentic AI app:**
 - Implement the Prompt → Plan → Act → Reflect loop  
 - Use Semantic Kernel for memory, planning, and tool integration  
@@ -58,14 +58,14 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Build and integrate MCP for advanced orchestration and extensibility
 - Experiment with adding new skills,
 
-## Demo #3: Multi-Agent Solution Walkthrough
+## Demo #4: Multi-Agent Solution Walkthrough - 15min
 **Showcase advanced agent collaboration and orchestration:**
 - Demonstrate multi-agent workflows using Azure AI Foundry Services
 - Highlight agent collaboration: perception → planning → action loop
 - Explore coordination strategies and communication between agents
 - Present a real-world scenario (Daniel's agentic LEGO demo) to illustrate practical applications
 
-## Lab #4: AI Integration, Deployment & Productionise
+## Lab #4: AI Integration, Deployment & Productionise - 70min
 **Deploy and operationalize your agentic AI app:**
 - Containerize the agent app for portability and scalability
 - Deploy to Azure using ACA, AKS, or App Service with CI/CD
@@ -74,7 +74,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Apply security best practices and cost controls
 
 ## Presentation #3: Afternoon – 30 min
-**Topic:** Responsible AI & Future Considerations
+**Topic:** Wrap-Up: Responsible AI & Future Considerations
 
 - Responsible AI and Guiderails: Content filtering, prompt injection defense, evaluation, and monitoring
 - Observability & Operations: Agent analytics, performance metrics, cost tracking, and debugging
