@@ -14,6 +14,8 @@
 - Real world ideas for Agentic AI
 - Focused on End-to-end building AI-powered applications
 - Frictionless learning environment, learn via lab, demo and teaching moments
+- Azure AI Protections
+- GitHub Copilot Agent Model to accelerate development
 - For some people without laptops or limited technical skills, allowing them to watch walkthroughs, whilst others do them
 
 ### Audience
@@ -29,7 +31,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Agent architectures: ReAct, Chain-of-Thought
 - Memory systems for agents (short-term, long-term, episodic)
 - Tool integration patterns and API orchestration
-- Intelligent data layers (Azure Cognitive Search, RAG)  
+- Intelligent data layers (Azure AI Search, RAG)  
 
 ## Demo #1: AI App Demo - 15min
 **Showcasing a fun AI App**
@@ -66,7 +68,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Enterprise Readiness: Security, evaluation, testing, and compliance frameworks for production deployment
 - Real-World Implementation Patterns: Customer service, document processing, developer tools, and multi-modal applications
 
-## Demo #3: Agent Mode Coding Assistant for AI App - 15min
+## Demo #3: GitHub Copilot Coding Assistant for AI App - 15min
 **Developer experience showcase:**
 - Prompt-driven coding assistant (e.g., auto-generate unit tests, fix bugs)  
 - Refactoring, adding comments/images, reformatting examples  
