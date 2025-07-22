@@ -3,7 +3,10 @@
 ## Presentation #1: Morning, Kick-start – 30 min
 **Topics:** Basic Concepts and Overview
 - Azure AI + Agentic AI overview  
-- Agentic design patterns (Planning, Tool Use, Reflection, Multi-agent)  
+- Agentic AI design patterns (Planning, Tool Use, Reflection, Multi-agent)  
+- Agent architectures: ReAct, Chain-of-Thought
+- Memory systems for agents (short-term, long-term, episodic)
+- Tool integration patterns and API orchestration
 - Intelligent data layers (Azure Cognitive Search, RAG)  
 
 ## Lab #1: Foundry Integration & Extension
@@ -24,22 +27,24 @@
 - Optional: Build a memory/retrieval plugin with Semantic Kernel
 
 ## Presentation #2: After Lunch – 30 min
-**Topic:** Platform-first strategies  
-- Scaling with AKS / ACA  
-- Secure APIs with APIM  
-- DevOps mindset and governance  
-- Foundry vs. DIY orchestration considerations
+**Topic:** Building Production-Ready AI Apps with Agentic Concepts
+- Technical Deep Dive: Advanced reasoning architectures and hybrid - approaches for complex problem-solving
+- Practical Considerations: Memory, cost, performance optimization - and error handling strategies
+- Enterprise Readiness: Security, evaluation, testing, and compliance frameworks for production deployment
+- Platform-First Strategies: Scaling, API management, DevOps, and platform selection best practices
+- Real-World Implementation Patterns: Customer service, document processing, developer tools, and multi-modal applications
+
 
 ## Lab #3: AI Agent 101 & Sementic Kernal
-**Build a simple agent in Codespaces:**
+**Build an agent**
 - Prompt → Plan → Act → Reflect loop  
 - Basic tool usage and chaining outputs  
 - Setup Codespaces + sample agent repo
 
 ## Demo #2: Multi-Agent Walkthrough
 **:**
-- Real-world scenario (Daniel's LEGO demo)  
 - Show multi-agent collaboration, perception → planning → action loop
+- Real-world scenario (Daniel's LEGO demo)  
 
 ## Demo #3: Agent Mode Coding Assistant for AI App
 **Developer experience showcase:**
@@ -50,22 +55,24 @@
 ## Lab #4: Deployment + API Layer
 **Deploy and expose app:**
 - Containerize the agent app
-- Deploy to AKS or Azure Container Apps  
-- Expose via Azure API Management (with auth, rate limits, monitoring)  
+- Deploy ai app and integration to Azure
+- Expose via Azure API Management (with auth, rate limits, monitoring)
 
 ## Presentation #3: Afternoon – 30 min
-**Topic:** Responsible AI  
-- Azure OpenAI Content Filters, Prompt injection defense  
-- Evaluation techniques (Foundry red teaming tools, logs)  
-- API-level protections (input validation via APIM)  
-- Monitoring & transparency, audit logs
+**Topic:** Responsible AI & Future Considerations
+
+- Responsible AI and Guiderails: Content filtering, prompt injection defense, evaluation, and monitoring
+- Observability & Operations: Agent analytics, performance metrics, cost tracking, and debugging
+- Advanced Topics & Future Trends: Fine-tuning, multi-modal agents, edge deployment, and emerging frameworks
+- Lessons Learned & Best Practices: Common pitfalls, testing strategies, and migration patterns
+- Next Steps & Resources: Certification paths, community support, and building your first production agent
 
 
-## Azure Services to be considered
+## Azure Services & Framework to be considered
 - **Azure OpenAI** – LLMs for chat, planning, coding, summarization  
 - **Azure AI Foundry (Model Catalog, Playground)** – To explore and test models  
 - **Azure AI Foundry – Agent Service** – For orchestrating multi-agent systems  
-- **Azure AI Foundry – Azure AI Services** – For integrating vision, speech, etc.  
+- **Azure AI Services** – For integrating vision, speech, etc.  
 - **Semantic Kernel** – For agent memory, function calling, planning  
 - **App service / AKS / ACA** – App hosting  
 - **APIM** – Secure, scalable API layer
