@@ -2,7 +2,12 @@
 
 ![Agentic AI App in a Day Cover](res/cover.png)
 
+## Overview
+- Duration: 9am to 4pm
+- Lab Environment: GitHub Codespaces
+
 Note: some of the labs will be adjusted based on the resources and licences available for the participants to use.
+
 
 ## Presentation #1: Morning, Kick-start – 30 min
 **Topics:** Basic Concepts and Overview
