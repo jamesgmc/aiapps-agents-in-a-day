@@ -101,7 +101,9 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 
 ## Lab Exercise to be considered
 
-https://github.com/Azure-Samples/AI-Gateway
+- https://github.com/Azure-Samples/AI-Gateway
+- https://github.com/microsoft/AI-For-Beginners
+- https://github.com/microsoft/ai-agents-for-beginners
 
 ## Accelerator Repo to be considered
 - https://github.com/Azure-Samples/get-started-with-ai-chat
