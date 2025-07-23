@@ -22,6 +22,12 @@
 - Technical teams
 - Senior management like C-levels
 
+### Labs
+
+- Keep lab simple and able to be done end to end
+- For experienced developers, share the accelerator repos and let them explore
+
+
 Note: some of the labs will be adjusted based on the resources and licences available for the participants to use.
 
 ## Presentation #1: Morning, Kick-start – 30 min
@@ -32,6 +38,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Memory systems for agents (short-term, long-term, episodic)
 - Tool integration patterns and API orchestration
 - Intelligent data layers (Azure AI Search, RAG)  
+- Low/No Code option in Copilot Studio (vs pro-code)
 
 ## Demo #1: AI App Demo - 15min
 **Showcasing a fun AI App**
@@ -60,7 +67,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Build a memory/retrieval plugin with Semantic Kernel
 - Advance query, score profile, index, indexer in AI Search
 
-## Presentation #2: After Lunch – 30 min
+## Presentation #2: After Lunch – 30min
 **Topic:** Building Production-Ready AI Apps with Agentic Concepts
 - Technical Deep Dive: Advanced reasoning architectures and hybrid - approaches for complex problem-solving
 - Platform-First Strategies: Scaling, API management, DevOps, and platform selection best practices
@@ -97,7 +104,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - Implement logging, monitoring, and alerting for production readiness
 - Apply security best practices and cost controls
 
-## Presentation #3: Afternoon – 30 min
+## Presentation #3: Afternoon – 30min
 **Topic:** Wrap-Up: Responsible AI & Future Considerations
 - Responsible AI and Guiderails: Content filtering, prompt injection defense, evaluation, and monitoring
 - Observability & Operations: Agent analytics, performance metrics, cost tracking, and debugging
@@ -137,6 +144,7 @@ Note: some of the labs will be adjusted based on the resources and licences avai
 - https://github.com/microsoft/ai-agents-for-beginners
 
 ## Accelerator Repo to be considered
+
 - https://github.com/Azure-Samples/get-started-with-ai-chat
 - https://github.com/Azure-Samples/get-started-with-ai-agents
 - https://github.com/microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator
