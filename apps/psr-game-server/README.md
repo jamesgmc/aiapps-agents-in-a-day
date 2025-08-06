@@ -19,7 +19,8 @@ the server should have:
 1- server side restful api
 2- web frontend to display the game state on server side
 
-
+all games server code should be placed in the `apps/psr-game-server` directory.
+the web frontend should be built using React
 
 
 
