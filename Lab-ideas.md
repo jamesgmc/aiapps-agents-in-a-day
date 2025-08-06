@@ -26,7 +26,8 @@ SK lib
 ingest image to cosmos db
 query cosmos db + image vector rag
 create multiple tools to perform local actions
-
+tool to query webapi and response
+langchain lib (use previous lab)
 
 ### Tournament A:
 15 minutes: Scissor Paper Rock Rookie Tournament
@@ -58,10 +59,10 @@ consume vision api
 consume doc intelelligence
 consume voice api
 sequential orcheistration 
+connect agent to logic app
 
 
-
-### Part 4: Deploy, Competition, and Production Readiness
+### Part 4: MCP, Deploy, Competition
 - Enable multi-agent orchestration (agents collaborate, compete, or strategize in Scissor Paper Rock Tournament)
 - Implement strategies for agents to adapt and learn from opponents
 - Prepare the app for production: security, scaling, monitoring, and operational excellence
@@ -70,6 +71,12 @@ sequential orcheistration
 
 **tech**
 azure static web
+human in the loop (human based random question)
+local llm trace
+llm evaluation local
+build a local mcp server
+build github action /ci/cd deployment (no bicep, az resource are provisioned in advance)
+
 
 
 ### Tournament B:
