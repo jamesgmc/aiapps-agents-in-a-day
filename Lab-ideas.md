@@ -2,17 +2,31 @@
 
 ## Lab Structure
 
-### Part 1: Build a Basic Agent for Scissor Paper Rock
+### Part 1: Build a Basic Agent
 - Introduction to agentic AI concepts (prompt → plan → act → reflect loop)
 - Use Azure OpenAI for chat, planning, and coding
 - Hands-on: Build a simple agent that can play Scissor Paper Rock via prompt-response
 - Explore Semantic Kernel for basic agent memory
+
+**tech**
+connect to foundry project 
+consume different llm
+ingest document to ai search
+query ai search + rag
+create tools to perform api call
+SK lib
 
 ### Part 2: Make the Agent Smarter with Data & Tools
 - Integrate Azure AI Search (RAG) for intelligent data retrieval
 - Use Azure Functions for serverless tool integration
 - Store agent state in Azure Storage or Cosmos DB
 - Hands-on: Enhance the agent to learn from previous matches and use external data/tools to improve gameplay
+
+**tech**
+ingest image to cosmos db
+query cosmos db + image vector rag
+create multiple tools to perform local actions
+
 
 ### Tournament A:
 15 minutes: Scissor Paper Rock Rookie Tournament
@@ -33,18 +47,29 @@ Agent
 - tool to invoke api and understand json output
 
 
-### Part 3: Orchestrate, Deploy, and Secure the Agent for Tournament Play
+### Part 3: Orchestrate, Multi-Agent Collaboration
 - Orchestrate agent workflows with Azure Logic Apps
 - Host the agent using App Service, AKS, or Azure Container Apps
 - Secure APIs with Azure API Management and manage secrets with Key Vault
 - Hands-on: Deploy the agent, enable secure API interactions, and automate tournament workflows
 
-### Part 4: Multi-Agent Collaboration, Competition, and Production Readiness
+**tech**
+consume vision api
+consume doc intelelligence
+consume voice api
+sequential orcheistration 
+
+
+
+### Part 4: Deploy, Competition, and Production Readiness
 - Enable multi-agent orchestration (agents collaborate, compete, or strategize in Scissor Paper Rock Tournament)
 - Implement strategies for agents to adapt and learn from opponents
 - Prepare the app for production: security, scaling, monitoring, and operational excellence
 - Hands-on: Agents interact and compete in the tournament, demonstrating orchestration and monitoring
+- deploy to website 
 
+**tech**
+azure static web
 
 
 ### Tournament B:
@@ -52,13 +77,19 @@ Agent
 
 For each round:
 - agent to enrol the game by following instructions (say the magic word)
-- agent to call api to retrieve question (question could be an image, text, word doc, question random)
+- agent to call api to retrieve question (question could be an image, text, word doc, question random, speech)
 - agent to resolve and find the right answer before submitting its move (answer must be correct otherwise timeout)
 - agent to submit its move to the API server
 - connected agent to receive backdoor tips
 - server checks the answer and decides the winner
 - next round starts
 - first to 3 wins
+- special advantage: past result win/loss pattern
+- online deployed agent only (github static page or azure swa using token only)
+- existing speach agent
+- existing doc agent
+- sequencial and handoff pattern
+
 
 Agent
 - prompt to guide strategy
