@@ -2,56 +2,93 @@
 
 ## Lab Structure
 
-### Part 1: Agentic AI Foundations & Prompt Engineering
-
+### Part 1: Build a Basic Agent for Scissor Paper Rock
 - Introduction to agentic AI concepts (prompt → plan → act → reflect loop)
 - Use Azure OpenAI for chat, planning, and coding
-- Explore Semantic Kernel for agent memory and tool integration
-- Hands-on: Build a simple agent that responds to prompts
+- Hands-on: Build a simple agent that can play Scissor Paper Rock via prompt-response
+- Explore Semantic Kernel for basic agent memory
 
-### Part 2: Data Layer & Tool Integration
-
+### Part 2: Make the Agent Smarter with Data & Tools
 - Integrate Azure AI Search (RAG) for intelligent data retrieval
 - Use Azure Functions for serverless tool integration
 - Store agent state in Azure Storage or Cosmos DB
-- Hands-on: Enhance the agent to use search and external tools
+- Hands-on: Enhance the agent to learn from previous matches and use external data/tools to improve gameplay
 
-### Part 3: Orchestration & Deployment
+### Tournament A:
+15 minutes: Scissor Paper Rock Rookie Tournament
 
-- Orchestrate workflows with Azure Logic Apps
-- Host the app using App Service, AKS, or Azure Container Apps
+For each round:
+- agent to enrol the game by following instructions (say the magic word)
+- agent to call api to retrieve question (text / based on KB)
+- agent to resolve and find the right answer before submitting its move (answer must be correct otherwise timeout)
+- agent to submit its move to the API server
+- server checks the answer and decides the winner
+- next round starts
+- first to 3 wins
+
+Agent
+- prompt to guide strategy
+- query knowledge base (RAG DB)
+- tool to resolve the question
+- tool to invoke api and understand json output
+
+
+### Part 3: Orchestrate, Deploy, and Secure the Agent for Tournament Play
+- Orchestrate agent workflows with Azure Logic Apps
+- Host the agent using App Service, AKS, or Azure Container Apps
 - Secure APIs with Azure API Management and manage secrets with Key Vault
-- Hands-on: Deploy the agentic app, secure endpoints, and automate workflows
+- Hands-on: Deploy the agent, enable secure API interactions, and automate tournament workflows
 
-### Part 4: Multi-Agent Collaboration, and Production Readiness
+### Part 4: Multi-Agent Collaboration, Competition, and Production Readiness
+- Enable multi-agent orchestration (agents collaborate, compete, or strategize in Scissor Paper Rock Tournament)
+- Implement strategies for agents to adapt and learn from opponents
+- Prepare the app for production: security, scaling, monitoring, and operational excellence
+- Hands-on: Agents interact and compete in the tournament, demonstrating orchestration and monitoring
 
-- Enable multi-agent orchestration (agents collaborate, compete, or strategize)
-- Prepare the app for production: security, scaling, and operational excellence
 
-### Part 5: Scissor Paper Rock tournament
-- Hands-on: Agents interact and compete in the "Scissor Paper Rock" game, demonstrating orchestration and monitoring
+
+### Tournament B:
+15 minutes: Scissor Paper Rock Championship
+
+For each round:
+- agent to enrol the game by following instructions (say the magic word)
+- agent to call api to retrieve question (question could be an image, text, word doc, question random)
+- agent to resolve and find the right answer before submitting its move (answer must be correct otherwise timeout)
+- agent to submit its move to the API server
+- connected agent to receive backdoor tips
+- server checks the answer and decides the winner
+- next round starts
+- first to 3 wins
+
+Agent
+- prompt to guide strategy
+- query knowledge base (RAG DB)
+- tool to resolve the question
+- tool to perform calcuation, image detection, or OCR or word doc
+- tool to invoke api and understand json output
+- tool to query the internet
+- connection agent to receive backdoor tips
+- 
 
 
 # Scissor Paper Rock Tournament:
 
-API Server Design
+## API Server Design
 
 Create an API server (Azure Functions or App Service) to manage tournament logic, player registration, and match orchestration.
 Endpoints: register agent, start match, submit move, get results.
-Agent Player Implementation
 
 Each agent (player) connects to the API server, registers, and participates in matches.
 Agents can be implemented as scripts or services (e.g., Python, Node.js).
 Tournament Logic
 
-8 players per group.
+## 8 players per group.
 Each match: best of 3 rounds (first to 2 wins).
 Winners advance to play other winners until a final winner is determined.
 Azure Integration
 
 Use Azure Functions for serverless API endpoints.
 Store tournament state in Azure Storage or Cosmos DB.
-Optionally, use Azure Logic Apps for orchestration.
 
 
 
