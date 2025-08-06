@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "Hash": "lU3/a7xeklG1yZ2oubr6lWRdS+GmZDYIZ8eDqE/cJfs=",
+  "Source": "PsrGameServer",
+  "BasePath": "_content/PsrGameServer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "PsrGameServer/wwwroot",
+      "Source": "PsrGameServer",
+      "ContentRoot": "/home/runner/work/agentic-aiapp-in-a-day/agentic-aiapp-in-a-day/apps/psr-game-server/wwwroot/",
+      "BasePath": "_content/PsrGameServer",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/home/runner/work/agentic-aiapp-in-a-day/agentic-aiapp-in-a-day/apps/psr-game-server/wwwroot/css/tournament.css",
+      "SourceId": "PsrGameServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/runner/work/agentic-aiapp-in-a-day/agentic-aiapp-in-a-day/apps/psr-game-server/wwwroot/",
+      "BasePath": "_content/PsrGameServer",
+      "RelativePath": "css/tournament.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/tournament.css"
+    },
+    {
+      "Identity": "/home/runner/work/agentic-aiapp-in-a-day/agentic-aiapp-in-a-day/apps/psr-game-server/wwwroot/index.html",
+      "SourceId": "PsrGameServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/runner/work/agentic-aiapp-in-a-day/agentic-aiapp-in-a-day/apps/psr-game-server/wwwroot/",
+      "BasePath": "_content/PsrGameServer",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
+    },
+    {
+      "Identity": "/home/runner/work/agentic-aiapp-in-a-day/agentic-aiapp-in-a-day/apps/psr-game-server/wwwroot/js/tournament.js",
+      "SourceId": "PsrGameServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/runner/work/agentic-aiapp-in-a-day/agentic-aiapp-in-a-day/apps/psr-game-server/wwwroot/",
+      "BasePath": "_content/PsrGameServer",
+      "RelativePath": "js/tournament.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/tournament.js"
+    }
+  ]
+}
