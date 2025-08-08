@@ -49,6 +49,21 @@ class TournamentApp {
             await this.registerPlayer();
         });
 
+        // Auto player registration form
+        document.getElementById('auto-register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await this.registerAutoPlayers();
+        });
+
+        // Referee controls
+        document.getElementById('start-round-btn').addEventListener('click', async () => {
+            await this.startRound();
+        });
+
+        document.getElementById('release-results-btn').addEventListener('click', async () => {
+            await this.releaseResults();
+        });
+
         // Move buttons
         document.querySelectorAll('.move-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
@@ -94,6 +109,98 @@ class TournamentApp {
         } catch (error) {
             console.error('Registration error:', error);
             this.showMessage('Network error during registration', 'danger');
+        }
+    }
+
+    async registerAutoPlayers() {
+        const countInput = document.getElementById('player-count-input');
+        const count = parseInt(countInput.value);
+
+        try {
+            const response = await fetch('/api/players/register-bulk', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    count: count,
+                    useAutoNames: true
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                this.showMessage(result.message, 'success');
+                await this.loadTournamentState();
+            } else {
+                const error = await response.json();
+                this.showMessage(error.message || 'Auto registration failed', 'danger');
+            }
+        } catch (error) {
+            console.error('Auto registration error:', error);
+            this.showMessage('Network error during auto registration', 'danger');
+        }
+    }
+
+    async startRound() {
+        if (!this.currentTournament) {
+            this.showRefereeMessage('No active tournament found', 'danger');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/tournament/start-round', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    tournamentId: this.currentTournament.tournamentId 
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                this.showRefereeMessage(result.message, 'success');
+                await this.loadTournamentState();
+            } else {
+                const error = await response.json();
+                this.showRefereeMessage(error.message || 'Failed to start round', 'danger');
+            }
+        } catch (error) {
+            console.error('Start round error:', error);
+            this.showRefereeMessage('Network error during round start', 'danger');
+        }
+    }
+
+    async releaseResults() {
+        if (!this.currentTournament) {
+            this.showRefereeMessage('No active tournament found', 'danger');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/tournament/release-results', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    tournamentId: this.currentTournament.tournamentId 
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                this.showRefereeMessage(result.message, 'success');
+                await this.loadTournamentState();
+            } else {
+                const error = await response.json();
+                this.showRefereeMessage(error.message || 'Failed to release results', 'danger');
+            }
+        } catch (error) {
+            console.error('Release results error:', error);
+            this.showRefereeMessage('Network error during result release', 'danger');
         }
     }
 
@@ -154,6 +261,28 @@ class TournamentApp {
         document.getElementById('tournament-title').textContent = tournament.tournamentName || 'Tournament';
         document.getElementById('player-count').textContent = `${tournament.players.length}/8`;
         document.getElementById('current-round').textContent = `Round ${tournament.currentRound}`;
+        document.getElementById('round-info').textContent = tournament.currentRound;
+        
+        // Update round status
+        const roundStatusElement = document.getElementById('round-status');
+        switch (tournament.currentRoundStatus) {
+            case 0: // Waiting
+                roundStatusElement.textContent = 'Waiting';
+                roundStatusElement.className = 'text-secondary';
+                break;
+            case 1: // InProgress
+                roundStatusElement.textContent = 'In Progress';
+                roundStatusElement.className = 'text-warning';
+                break;
+            case 2: // ResultsAvailable
+                roundStatusElement.textContent = 'Results Available';
+                roundStatusElement.className = 'text-info';
+                break;
+            case 3: // Completed
+                roundStatusElement.textContent = 'Completed';
+                roundStatusElement.className = 'text-success';
+                break;
+        }
         
         // Update status
         const statusElement = document.getElementById('tournament-status');
@@ -187,6 +316,9 @@ class TournamentApp {
 
         // Update bracket
         this.updateBracket(tournament);
+        
+        // Update referee controls
+        this.updateRefereeControls(tournament);
     }
 
     updatePlayerList(players) {
@@ -278,6 +410,17 @@ class TournamentApp {
             }
         };
 
+        // Check if moves should be visible based on round status
+        const shouldShowMoves = () => {
+            if (!this.currentTournament) return false;
+            
+            // Show moves only if:
+            // 1. Match is completed AND
+            // 2. Results have been released (ResultsAvailable or Completed) OR tournament is finished
+            return match.status === 2 && 
+                   (this.currentTournament.currentRoundStatus >= 2 || this.currentTournament.status === 2);
+        };
+
         const getPlayerHTML = (player, move, isWinner = false) => {
             if (!player) {
                 return `
@@ -288,10 +431,13 @@ class TournamentApp {
                 `;
             }
 
+            const moveDisplay = shouldShowMoves() ? getMoveClass(move) : 
+                                (move !== 0 ? 'move-submitted' : 'move-none');
+
             return `
                 <div class="player ${isWinner ? 'winner' : ''}">
                     <span class="player-name">${player.name}</span>
-                    <span class="player-move ${getMoveClass(move)}"></span>
+                    <span class="player-move ${moveDisplay}"></span>
                 </div>
             `;
         };
@@ -303,7 +449,7 @@ class TournamentApp {
                     vs
                 </div>
                 ${getPlayerHTML(match.player2, match.player2Move, match.winner?.id === match.player2?.id)}
-                ${match.status === 2 && match.winner ? 
+                ${match.status === 2 && match.winner && shouldShowMoves() ? 
                     `<div class="text-center mt-2"><small class="text-success">Winner: ${match.winner.name}</small></div>` : 
                     ''}
             </div>
@@ -338,6 +484,54 @@ class TournamentApp {
                 bsAlert.close();
             }
         }, 5000);
+    }
+
+    showRefereeMessage(message, type = 'info') {
+        const messageContainer = document.getElementById('referee-message');
+        messageContainer.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            const alert = messageContainer.querySelector('.alert');
+            if (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 5000);
+    }
+
+    updateRefereeControls(tournament) {
+        const startRoundBtn = document.getElementById('start-round-btn');
+        const releaseResultsBtn = document.getElementById('release-results-btn');
+        
+        // Reset button states
+        startRoundBtn.disabled = true;
+        releaseResultsBtn.disabled = true;
+        
+        if (tournament.status !== 1) { // Not in progress
+            return;
+        }
+        
+        // Check current round status to determine which buttons to enable
+        switch (tournament.currentRoundStatus) {
+            case 0: // Waiting - can start round
+                startRoundBtn.disabled = false;
+                break;
+            case 1: // InProgress - check if all matches are completed
+                const currentRoundMatches = tournament.matches.filter(m => m.round === tournament.currentRound);
+                if (currentRoundMatches.length > 0 && currentRoundMatches.every(m => m.status === 2)) {
+                    releaseResultsBtn.disabled = false;
+                }
+                break;
+            case 2: // ResultsAvailable - results have been released
+                // Could advance to next round automatically or wait for referee action
+                break;
+        }
     }
 
     startPeriodicUpdates() {

@@ -75,10 +75,48 @@ public class PlayersController : ControllerBase
     }
 
     /// <summary>
-    /// Get the current match for a specific player
+    /// Register multiple players for the tournament (supports auto-names and simulation)
     /// </summary>
-    /// <param name="playerId">The player's ID</param>
-    /// <returns>Current match information</returns>
+    /// <param name="request">Bulk registration details</param>
+    /// <returns>Registration results for all players</returns>
+    [HttpPost("register-bulk")]
+    public async Task<ActionResult<BulkPlayerRegistrationResponse>> RegisterPlayers([FromBody] BulkPlayerRegistrationRequest request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _gameService.RegisterPlayersAsync(request);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error registering bulk players");
+            return StatusCode(500, new { error = "Internal server error occurred while registering players." });
+        }
+    }
+
+    /// <summary>
+    /// Generate an auto player name
+    /// </summary>
+    /// <returns>Generated player name</returns>
+    [HttpGet("generate-name")]
+    public ActionResult<string> GeneratePlayerName()
+    {
+        try
+        {
+            var name = _gameService.GenerateAutoPlayerName();
+            return Ok(new { name });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error generating player name");
+            return StatusCode(500, new { error = "Internal server error occurred while generating player name." });
+        }
+    }
     [HttpGet("{playerId}/current-match")]
     public async Task<ActionResult<MatchDto>> GetCurrentMatch(int playerId)
     {
