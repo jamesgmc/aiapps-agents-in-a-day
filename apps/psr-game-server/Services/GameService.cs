@@ -318,49 +318,61 @@ public class GameService : IGameService
             .Where(m => m.TournamentId == tournament.Id && m.Round == tournament.CurrentRound)
             .ToListAsync();
 
-        // Check if all matches in current round are completed
+        // Only check if all matches are completed, but don't automatically advance
+        // Round advancement should be controlled by the referee via ReleaseResultsAsync
         if (currentRoundMatches.All(m => m.Status == MatchStatus.Completed))
         {
-            var winners = currentRoundMatches
-                .Where(m => m.WinnerId.HasValue)
-                .Select(m => m.WinnerId!.Value)
-                .ToList();
+            _logger.LogInformation("All matches completed for round {Round} in tournament {TournamentId}. Waiting for referee to release results.", 
+                tournament.CurrentRound, tournament.Id);
+        }
+    }
 
-            if (winners.Count == 1)
+    private async Task AdvanceToNextRoundAsync(Tournament tournament)
+    {
+        var currentRoundMatches = await _context.Matches
+            .Where(m => m.TournamentId == tournament.Id && m.Round == tournament.CurrentRound)
+            .ToListAsync();
+
+        var winners = currentRoundMatches
+            .Where(m => m.WinnerId.HasValue)
+            .Select(m => m.WinnerId!.Value)
+            .ToList();
+
+        if (winners.Count == 1)
+        {
+            // Tournament is complete
+            tournament.Status = TournamentStatus.Completed;
+            tournament.WinnerId = winners.First();
+            tournament.CompletedAt = DateTime.UtcNow;
+            tournament.CurrentRoundStatus = RoundStatus.Completed;
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Tournament {TournamentId} completed. Winner: {WinnerId}", tournament.Id, winners.First());
+        }
+        else if (winners.Count > 1)
+        {
+            // Create next round matches
+            tournament.CurrentRound++;
+            tournament.CurrentRoundStatus = RoundStatus.Waiting;
+            
+            for (int i = 0; i < winners.Count; i += 2)
             {
-                // Tournament is complete
-                tournament.Status = TournamentStatus.Completed;
-                tournament.WinnerId = winners.First();
-                tournament.CompletedAt = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Tournament {TournamentId} completed. Winner: {WinnerId}", tournament.Id, winners.First());
-            }
-            else if (winners.Count > 1)
-            {
-                // Create next round matches
-                tournament.CurrentRound++;
-                tournament.CurrentRoundStatus = RoundStatus.Waiting;
-                
-                for (int i = 0; i < winners.Count; i += 2)
+                if (i + 1 < winners.Count)
                 {
-                    if (i + 1 < winners.Count)
+                    var nextMatch = new Match
                     {
-                        var nextMatch = new Match
-                        {
-                            TournamentId = tournament.Id,
-                            Round = tournament.CurrentRound,
-                            Player1Id = winners[i],
-                            Player2Id = winners[i + 1],
-                            Status = MatchStatus.Pending,
-                            CreatedAt = DateTime.UtcNow
-                        };
-                        _context.Matches.Add(nextMatch);
-                    }
+                        TournamentId = tournament.Id,
+                        Round = tournament.CurrentRound,
+                        Player1Id = winners[i],
+                        Player2Id = winners[i + 1],
+                        Status = MatchStatus.Pending,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    _context.Matches.Add(nextMatch);
                 }
-
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Tournament {TournamentId} advanced to round {Round}", tournament.Id, tournament.CurrentRound);
             }
+
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Tournament {TournamentId} advanced to round {Round}", tournament.Id, tournament.CurrentRound);
         }
     }
 
@@ -611,6 +623,9 @@ public class GameService : IGameService
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Results released for round {Round} in tournament {TournamentId}", tournament.CurrentRound, tournamentId);
+
+            // After releasing results, advance to next round
+            await AdvanceToNextRoundAsync(tournament);
 
             return new RoundControlResponse
             {
