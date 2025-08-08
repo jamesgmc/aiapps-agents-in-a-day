@@ -129,3 +129,62 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# .NET build artifacts
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+
+# .NET project files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio files
+.vs/
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# NuGet packages
+*.nupkg
+packages/
+**/packages/*
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# .NET Core
+project.assets.json
+*.deps.json
+*.runtimeconfig.json
+*.dll.config
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# MightyMoose
+*.mm.*
+AutoTest.Net/
+
+# Publish profiles
+PublishProfiles/
+*.pubxml
+*.azurePubxml
+*.publishproj
+
