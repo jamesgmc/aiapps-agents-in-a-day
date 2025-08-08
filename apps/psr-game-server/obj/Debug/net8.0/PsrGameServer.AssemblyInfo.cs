@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PsrGameServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e27ec11dc0e7829f48ca7040ee01b418fa971bc0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+460fce16025a0d5fa58e1601e363a01197d880b5")]
 [assembly: System.Reflection.AssemblyProductAttribute("PsrGameServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PsrGameServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
