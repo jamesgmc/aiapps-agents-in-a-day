@@ -1,0 +1,224 @@
+name: Deploy Azure Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+      location:
+        description: 'Azure region for deployment'
+        required: true
+        default: 'East US'
+        type: string
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+
+env:
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Bicep Templates
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Setup Azure CLI
+        uses: azure/CLI@v1
+        with:
+          azcliversion: latest
+
+      - name: Validate Bicep template
+        run: |
+          az bicep build --file infra/main.bicep
+          echo "Bicep template validation completed successfully"
+
+  preview:
+    runs-on: ubuntu-latest
+    name: Preview Infrastructure Changes
+    needs: validate
+    if: github.event_name == 'pull_request'
+    strategy:
+      matrix:
+        environment: [dev]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Resource Group if not exists
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-${{ matrix.environment }}"
+          LOCATION="${{ github.event.inputs.location || 'East US' }}"
+          
+          if ! az group show --name $RESOURCE_GROUP >/dev/null 2>&1; then
+            echo "Creating resource group $RESOURCE_GROUP"
+            az group create --name $RESOURCE_GROUP --location "$LOCATION"
+          else
+            echo "Resource group $RESOURCE_GROUP already exists"
+          fi
+
+      - name: Run What-If Analysis
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-${{ matrix.environment }}"
+          
+          az deployment group what-if \
+            --resource-group $RESOURCE_GROUP \
+            --template-file infra/main.bicep \
+            --parameters @infra/parameters.${{ matrix.environment }}.json
+
+  deploy-dev:
+    runs-on: ubuntu-latest
+    name: Deploy to Development
+    needs: validate
+    if: (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'dev') || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    environment: development
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Resource Group
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-dev"
+          LOCATION="${{ github.event.inputs.location || 'East US' }}"
+          
+          if ! az group show --name $RESOURCE_GROUP >/dev/null 2>&1; then
+            echo "Creating resource group $RESOURCE_GROUP"
+            az group create --name $RESOURCE_GROUP --location "$LOCATION"
+          else
+            echo "Resource group $RESOURCE_GROUP already exists"
+          fi
+
+      - name: Deploy Infrastructure
+        id: deploy
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-dev"
+          DEPLOYMENT_NAME="infra-deployment-$(date +%Y%m%d-%H%M%S)"
+          
+          az deployment group create \
+            --resource-group $RESOURCE_GROUP \
+            --template-file infra/main.bicep \
+            --parameters @infra/parameters.dev.json \
+            --name $DEPLOYMENT_NAME \
+            --verbose
+
+      - name: Get Deployment Outputs
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-dev"
+          
+          echo "Deployment completed. Resource outputs:"
+          az deployment group show \
+            --resource-group $RESOURCE_GROUP \
+            --name $(az deployment group list --resource-group $RESOURCE_GROUP --query "[0].name" -o tsv) \
+            --query "properties.outputs"
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    name: Deploy to Staging
+    needs: validate
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging'
+    environment: staging
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Resource Group
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-staging"
+          LOCATION="${{ github.event.inputs.location || 'East US' }}"
+          
+          if ! az group show --name $RESOURCE_GROUP >/dev/null 2>&1; then
+            echo "Creating resource group $RESOURCE_GROUP"
+            az group create --name $RESOURCE_GROUP --location "$LOCATION"
+          else
+            echo "Resource group $RESOURCE_GROUP already exists"
+          fi
+
+      - name: Deploy Infrastructure
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-staging"
+          DEPLOYMENT_NAME="infra-deployment-$(date +%Y%m%d-%H%M%S)"
+          
+          az deployment group create \
+            --resource-group $RESOURCE_GROUP \
+            --template-file infra/main.bicep \
+            --parameters @infra/parameters.staging.json \
+            --name $DEPLOYMENT_NAME \
+            --verbose
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    name: Deploy to Production
+    needs: validate
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod'
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Resource Group
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-prod"
+          LOCATION="${{ github.event.inputs.location || 'East US' }}"
+          
+          if ! az group show --name $RESOURCE_GROUP >/dev/null 2>&1; then
+            echo "Creating resource group $RESOURCE_GROUP"
+            az group create --name $RESOURCE_GROUP --location "$LOCATION"
+          else
+            echo "Resource group $RESOURCE_GROUP already exists"
+          fi
+
+      - name: Deploy Infrastructure
+        run: |
+          RESOURCE_GROUP="rg-agentic-ai-app-prod"
+          DEPLOYMENT_NAME="infra-deployment-$(date +%Y%m%d-%H%M%S)"
+          
+          az deployment group create \
+            --resource-group $RESOURCE_GROUP \
+            --template-file infra/main.bicep \
+            --parameters @infra/parameters.prod.json \
+            --name $DEPLOYMENT_NAME \
+            --verbose
