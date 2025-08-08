@@ -70,11 +70,60 @@
                             </div>
                         </div>
                         <div class="row mt-2">
+                            <div class="col-6">
+                                <strong>Round:</strong>
+                                <span id="round-info">1</span>
+                            </div>
+                            <div class="col-6">
+                                <strong>Round Status:</strong>
+                                <span id="round-status">Waiting</span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
                             <div class="col-12">
                                 <strong>Winner:</strong>
                                 <span id="winner-name">TBD</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Referee Controls -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Referee Controls</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-success" id="start-round-btn" disabled>
+                                Start Round
+                            </button>
+                            <button type="button" class="btn btn-warning" id="release-results-btn" disabled>
+                                Release Results
+                            </button>
+                        </div>
+                        <div id="referee-message" class="mt-3"></div>
+                    </div>
+                </div>
+
+                <!-- Auto Player Registration -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Quick Registration</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="auto-register-form">
+                            <div class="mb-3">
+                                <label for="player-count-input" class="form-label">Number of Players</label>
+                                <select class="form-control" id="player-count-input">
+                                    <option value="1">1 Player</option>
+                                    <option value="2">2 Players</option>
+                                    <option value="4">4 Players</option>
+                                    <option value="8" selected>8 Players</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-info w-100">Register Auto Players</button>
+                        </form>
                     </div>
                 </div>
 

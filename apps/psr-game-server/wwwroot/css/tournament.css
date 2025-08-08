@@ -89,6 +89,7 @@
 .move-paper::after { content: "📄"; }
 .move-scissors::after { content: "✂️"; }
 .move-none::after { content: "❓"; color: #6c757d; }
+.move-submitted::after { content: "✅"; color: #198754; }
 
 .bracket-connector {
     width: 40px;

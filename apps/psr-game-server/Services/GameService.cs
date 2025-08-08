@@ -7,9 +7,13 @@ namespace PsrGameServer.Services;
 public interface IGameService
 {
     Task<PlayerRegistrationResponse> RegisterPlayerAsync(PlayerRegistrationRequest request);
+    Task<BulkPlayerRegistrationResponse> RegisterPlayersAsync(BulkPlayerRegistrationRequest request);
     Task<MoveSubmissionResponse> SubmitMoveAsync(int playerId, PlayerMoveRequest request);
     Task<TournamentStateResponse?> GetTournamentStateAsync(int? tournamentId = null);
     Task<Match?> GetCurrentMatchForPlayerAsync(int playerId);
+    Task<RoundControlResponse> StartRoundAsync(int tournamentId);
+    Task<RoundControlResponse> ReleaseResultsAsync(int tournamentId);
+    string GenerateAutoPlayerName();
 }
 
 public class GameService : IGameService
@@ -214,6 +218,7 @@ public class GameService : IGameService
                 TournamentName = tournament.Name,
                 Status = tournament.Status,
                 CurrentRound = tournament.CurrentRound,
+                CurrentRoundStatus = tournament.CurrentRoundStatus,
                 Players = tournament.Players.Select(MapToPlayerDto).ToList(),
                 Matches = tournament.Matches.OrderBy(m => m.Round).ThenBy(m => m.Id).Select(MapToMatchDto).ToList(),
                 Winner = tournament.Winner != null ? MapToPlayerDto(tournament.Winner) : null,
@@ -252,6 +257,7 @@ public class GameService : IGameService
 
         tournament.Status = TournamentStatus.InProgress;
         tournament.StartedAt = DateTime.UtcNow;
+        tournament.CurrentRoundStatus = RoundStatus.Waiting;
 
         // Create first round matches (4 matches for 8 players)
         var players = tournament.Players.OrderBy(p => p.RegisteredAt).ToList();
@@ -312,48 +318,61 @@ public class GameService : IGameService
             .Where(m => m.TournamentId == tournament.Id && m.Round == tournament.CurrentRound)
             .ToListAsync();
 
-        // Check if all matches in current round are completed
+        // Only check if all matches are completed, but don't automatically advance
+        // Round advancement should be controlled by the referee via ReleaseResultsAsync
         if (currentRoundMatches.All(m => m.Status == MatchStatus.Completed))
         {
-            var winners = currentRoundMatches
-                .Where(m => m.WinnerId.HasValue)
-                .Select(m => m.WinnerId!.Value)
-                .ToList();
+            _logger.LogInformation("All matches completed for round {Round} in tournament {TournamentId}. Waiting for referee to release results.", 
+                tournament.CurrentRound, tournament.Id);
+        }
+    }
 
-            if (winners.Count == 1)
+    private async Task AdvanceToNextRoundAsync(Tournament tournament)
+    {
+        var currentRoundMatches = await _context.Matches
+            .Where(m => m.TournamentId == tournament.Id && m.Round == tournament.CurrentRound)
+            .ToListAsync();
+
+        var winners = currentRoundMatches
+            .Where(m => m.WinnerId.HasValue)
+            .Select(m => m.WinnerId!.Value)
+            .ToList();
+
+        if (winners.Count == 1)
+        {
+            // Tournament is complete
+            tournament.Status = TournamentStatus.Completed;
+            tournament.WinnerId = winners.First();
+            tournament.CompletedAt = DateTime.UtcNow;
+            tournament.CurrentRoundStatus = RoundStatus.Completed;
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Tournament {TournamentId} completed. Winner: {WinnerId}", tournament.Id, winners.First());
+        }
+        else if (winners.Count > 1)
+        {
+            // Create next round matches
+            tournament.CurrentRound++;
+            tournament.CurrentRoundStatus = RoundStatus.Waiting;
+            
+            for (int i = 0; i < winners.Count; i += 2)
             {
-                // Tournament is complete
-                tournament.Status = TournamentStatus.Completed;
-                tournament.WinnerId = winners.First();
-                tournament.CompletedAt = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Tournament {TournamentId} completed. Winner: {WinnerId}", tournament.Id, winners.First());
-            }
-            else if (winners.Count > 1)
-            {
-                // Create next round matches
-                tournament.CurrentRound++;
-                
-                for (int i = 0; i < winners.Count; i += 2)
+                if (i + 1 < winners.Count)
                 {
-                    if (i + 1 < winners.Count)
+                    var nextMatch = new Match
                     {
-                        var nextMatch = new Match
-                        {
-                            TournamentId = tournament.Id,
-                            Round = tournament.CurrentRound,
-                            Player1Id = winners[i],
-                            Player2Id = winners[i + 1],
-                            Status = MatchStatus.Pending,
-                            CreatedAt = DateTime.UtcNow
-                        };
-                        _context.Matches.Add(nextMatch);
-                    }
+                        TournamentId = tournament.Id,
+                        Round = tournament.CurrentRound,
+                        Player1Id = winners[i],
+                        Player2Id = winners[i + 1],
+                        Status = MatchStatus.Pending,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    _context.Matches.Add(nextMatch);
                 }
-
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Tournament {TournamentId} advanced to round {Round}", tournament.Id, tournament.CurrentRound);
             }
+
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Tournament {TournamentId} advanced to round {Round}", tournament.Id, tournament.CurrentRound);
         }
     }
 
@@ -397,5 +416,242 @@ public class GameService : IGameService
             CreatedAt = match.CreatedAt,
             CompletedAt = match.CompletedAt
         };
+    }
+
+    public async Task<BulkPlayerRegistrationResponse> RegisterPlayersAsync(BulkPlayerRegistrationRequest request)
+    {
+        try
+        {
+            var response = new BulkPlayerRegistrationResponse();
+            
+            // Find or create an active tournament that's accepting players
+            var activeTournament = await _context.Tournaments
+                .Include(t => t.Players)
+                .FirstOrDefaultAsync(t => t.Status == TournamentStatus.WaitingForPlayers && t.Players.Count < 8);
+
+            if (activeTournament == null)
+            {
+                // Create a new tournament
+                activeTournament = new Tournament
+                {
+                    Name = $"Tournament {DateTime.UtcNow:yyyy-MM-dd HH:mm}",
+                    Status = TournamentStatus.WaitingForPlayers,
+                    CreatedAt = DateTime.UtcNow,
+                    CurrentRound = 1,
+                    CurrentRoundStatus = RoundStatus.Waiting
+                };
+                _context.Tournaments.Add(activeTournament);
+                await _context.SaveChangesAsync();
+            }
+
+            response.TournamentId = activeTournament.Id;
+            
+            var namesToRegister = new List<string>();
+            if (request.UseAutoNames)
+            {
+                for (int i = 0; i < request.Count; i++)
+                {
+                    namesToRegister.Add(GenerateAutoPlayerName());
+                }
+            }
+            else if (request.Names.Any())
+            {
+                namesToRegister.AddRange(request.Names.Take(request.Count));
+            }
+            else
+            {
+                throw new ArgumentException("Either UseAutoNames must be true or Names must be provided");
+            }
+
+            foreach (var name in namesToRegister)
+            {
+                // Check current player count from database
+                var currentPlayerCount = await _context.Players.CountAsync(p => p.TournamentId == activeTournament.Id && p.IsActive);
+                if (currentPlayerCount >= 8)
+                    break;
+
+                var player = new Player
+                {
+                    Name = name.Trim(),
+                    TournamentId = activeTournament.Id,
+                    RegisteredAt = DateTime.UtcNow,
+                    IsActive = true
+                };
+
+                _context.Players.Add(player);
+                await _context.SaveChangesAsync();
+
+                response.Players.Add(new PlayerRegistrationResponse
+                {
+                    PlayerId = player.Id,
+                    PlayerName = player.Name,
+                    TournamentId = activeTournament.Id,
+                    Message = "Registered successfully"
+                });
+            }
+
+            // Check if we have 8 players to start the tournament
+            var playerCount = await _context.Players.CountAsync(p => p.TournamentId == activeTournament.Id && p.IsActive);
+            if (playerCount == 8)
+            {
+                await StartTournamentAsync(activeTournament.Id);
+                response.Message = "Tournament started! All players registered.";
+            }
+            else
+            {
+                response.Message = $"Registered {response.Players.Count} players. Waiting for {8 - playerCount} more players.";
+            }
+
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error registering bulk players");
+            throw;
+        }
+    }
+
+    public async Task<RoundControlResponse> StartRoundAsync(int tournamentId)
+    {
+        try
+        {
+            var tournament = await _context.Tournaments
+                .Include(t => t.Matches)
+                .FirstOrDefaultAsync(t => t.Id == tournamentId);
+
+            if (tournament == null)
+            {
+                return new RoundControlResponse
+                {
+                    Success = false,
+                    Message = "Tournament not found."
+                };
+            }
+
+            if (tournament.Status != TournamentStatus.InProgress)
+            {
+                return new RoundControlResponse
+                {
+                    Success = false,
+                    Message = "Tournament is not in progress."
+                };
+            }
+
+            if (tournament.CurrentRoundStatus != RoundStatus.Waiting)
+            {
+                return new RoundControlResponse
+                {
+                    Success = false,
+                    Message = $"Round {tournament.CurrentRound} is not waiting to start. Current status: {tournament.CurrentRoundStatus}"
+                };
+            }
+
+            // Start the round
+            tournament.CurrentRoundStatus = RoundStatus.InProgress;
+            
+            // Update all pending matches in current round to in-progress
+            var currentRoundMatches = await _context.Matches
+                .Where(m => m.TournamentId == tournamentId && m.Round == tournament.CurrentRound && m.Status == MatchStatus.Pending)
+                .ToListAsync();
+
+            foreach (var match in currentRoundMatches)
+            {
+                match.Status = MatchStatus.InProgress;
+            }
+
+            await _context.SaveChangesAsync();
+            
+            _logger.LogInformation("Round {Round} started for tournament {TournamentId}", tournament.CurrentRound, tournamentId);
+
+            return new RoundControlResponse
+            {
+                Success = true,
+                Message = $"Round {tournament.CurrentRound} started successfully!",
+                NewRoundStatus = tournament.CurrentRoundStatus,
+                CurrentRound = tournament.CurrentRound
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error starting round for tournament {TournamentId}", tournamentId);
+            throw;
+        }
+    }
+
+    public async Task<RoundControlResponse> ReleaseResultsAsync(int tournamentId)
+    {
+        try
+        {
+            var tournament = await _context.Tournaments
+                .Include(t => t.Matches)
+                .FirstOrDefaultAsync(t => t.Id == tournamentId);
+
+            if (tournament == null)
+            {
+                return new RoundControlResponse
+                {
+                    Success = false,
+                    Message = "Tournament not found."
+                };
+            }
+
+            if (tournament.CurrentRoundStatus != RoundStatus.InProgress)
+            {
+                return new RoundControlResponse
+                {
+                    Success = false,
+                    Message = $"Round {tournament.CurrentRound} is not in progress. Current status: {tournament.CurrentRoundStatus}"
+                };
+            }
+
+            // Check if all matches in current round are completed
+            var currentRoundMatches = await _context.Matches
+                .Where(m => m.TournamentId == tournamentId && m.Round == tournament.CurrentRound)
+                .ToListAsync();
+
+            if (!currentRoundMatches.All(m => m.Status == MatchStatus.Completed))
+            {
+                return new RoundControlResponse
+                {
+                    Success = false,
+                    Message = "Not all matches in current round are completed."
+                };
+            }
+
+            // Release results
+            tournament.CurrentRoundStatus = RoundStatus.ResultsAvailable;
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Results released for round {Round} in tournament {TournamentId}", tournament.CurrentRound, tournamentId);
+
+            // After releasing results, advance to next round
+            await AdvanceToNextRoundAsync(tournament);
+
+            return new RoundControlResponse
+            {
+                Success = true,
+                Message = $"Results for round {tournament.CurrentRound} have been released!",
+                NewRoundStatus = tournament.CurrentRoundStatus,
+                CurrentRound = tournament.CurrentRound
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error releasing results for tournament {TournamentId}", tournamentId);
+            throw;
+        }
+    }
+
+    public string GenerateAutoPlayerName()
+    {
+        var adjectives = new[] { "Swift", "Mighty", "Clever", "Bold", "Quick", "Strong", "Smart", "Brave", "Sharp", "Fast" };
+        var nouns = new[] { "Warrior", "Fighter", "Champion", "Player", "Ninja", "Master", "Hero", "Legend", "Ace", "Pro" };
+        
+        var random = new Random();
+        var adjective = adjectives[random.Next(adjectives.Length)];
+        var noun = nouns[random.Next(nouns.Length)];
+        var number = random.Next(100, 999);
+        
+        return $"{adjective}{noun}{number}";
     }
 }

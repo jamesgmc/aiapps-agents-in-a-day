@@ -26,16 +26,28 @@ class PSRGameClient:
         # Setup logging
         self.logger = logging.getLogger(__name__)
         
-    def register_player(self, name: str) -> bool:
+    def register_player(self, name: str = None, use_auto_name: bool = False) -> bool:
         """
         Register a new player for the tournament
         
         Args:
-            name: Player name
+            name: Player name (optional if use_auto_name is True)
+            use_auto_name: If True, get an auto-generated name from server
             
         Returns:
             bool: True if registration successful, False otherwise
         """
+        if use_auto_name and not name:
+            # Get auto-generated name from server
+            name = self.generate_auto_name()
+            if not name:
+                self.logger.error("Failed to generate auto name")
+                return False
+        
+        if not name:
+            self.logger.error("Player name is required")
+            return False
+            
         url = f"{self.base_url}/players/register"
         payload = {"name": name}
         
@@ -56,6 +68,59 @@ class PSRGameClient:
             
         except requests.RequestException as e:
             self.logger.error(f"Failed to register player: {e}")
+            return False
+    
+    def generate_auto_name(self) -> Optional[str]:
+        """
+        Generate an auto player name from the server
+        
+        Returns:
+            str: Generated name or None if error
+        """
+        url = f"{self.base_url}/players/generate-name"
+        
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+            return data.get("name")
+            
+        except requests.RequestException as e:
+            self.logger.error(f"Failed to generate auto name: {e}")
+            return None
+    
+    def register_bulk_players(self, count: int, use_auto_names: bool = True, names: list = None) -> bool:
+        """
+        Register multiple players for simulation
+        
+        Args:
+            count: Number of players to register
+            use_auto_names: Whether to use auto-generated names
+            names: List of custom names (if not using auto names)
+            
+        Returns:
+            bool: True if registration successful, False otherwise
+        """
+        url = f"{self.base_url}/players/register-bulk"
+        payload = {
+            "count": count,
+            "useAutoNames": use_auto_names,
+            "names": names or []
+        }
+        
+        try:
+            self.logger.info(f"Registering {count} players (auto names: {use_auto_names})")
+            response = requests.post(url, json=payload)
+            response.raise_for_status()
+            
+            data = response.json()
+            self.logger.info(f"Successfully registered {len(data['players'])} players")
+            self.logger.info(f"Message: {data.get('message', '')}")
+            
+            return True
+            
+        except requests.RequestException as e:
+            self.logger.error(f"Failed to register bulk players: {e}")
             return False
     
     def get_tournament_state(self) -> Optional[Dict[str, Any]]:
@@ -162,7 +227,7 @@ class PSRGameClient:
     
     def wait_for_round_to_start(self, expected_round: int) -> bool:
         """
-        Wait for a specific round to start
+        Wait for a specific round to start (round status = InProgress)
         
         Args:
             expected_round: The round number to wait for
@@ -173,16 +238,11 @@ class PSRGameClient:
         self.logger.info(f"Waiting for round {expected_round} to start...")
         
         for attempt in range(MAX_POLL_ATTEMPTS):
-            # Check if we have an active match
-            match = self.get_current_match()
-            if match and match.get("round") == expected_round and match.get("status") == 1:  # 1 = InProgress
-                self.logger.info(f"Round {expected_round} has started!")
-                return True
-            
-            # Check tournament state to see if we're still in the game
+            # Check tournament state to see current round status
             state = self.get_tournament_state()
             if state:
                 current_round = state.get("currentRound", 1)
+                current_round_status = state.get("currentRoundStatus", 0)
                 players = state.get("players", [])
                 
                 # Check if we're still an active player
@@ -195,8 +255,16 @@ class PSRGameClient:
                 if current_round > expected_round:
                     self.logger.warning(f"Missed round {expected_round}, tournament is now on round {current_round}")
                     return False
-                    
-                self.logger.info(f"Current round: {current_round}, waiting for round {expected_round}")
+                
+                # Check if our expected round is in progress (status = 1)
+                if current_round == expected_round and current_round_status == 1:
+                    # Also check if we have an active match
+                    match = self.get_current_match()
+                    if match and match.get("round") == expected_round and match.get("status") == 1:  # 1 = InProgress
+                        self.logger.info(f"Round {expected_round} has started!")
+                        return True
+                
+                self.logger.info(f"Current round: {current_round} (status: {current_round_status}), waiting for round {expected_round}")
             
             time.sleep(POLL_INTERVAL_SECONDS)
         
@@ -345,3 +413,41 @@ class PSRGameClient:
         
         self.logger.error("Timeout waiting for match completion")
         return False
+    
+    def auto_play_strategy(self, round_num: int, match: dict) -> str:
+        """
+        Simple auto-play strategy that randomly chooses moves
+        
+        Args:
+            round_num: Current round number
+            match: Match information
+            
+        Returns:
+            str: Move choice ('rock', 'paper', or 'scissors')
+        """
+        import random
+        moves = ["rock", "paper", "scissors"]
+        choice = random.choice(moves)
+        self.logger.info(f"Auto-play choosing: {choice}")
+        return choice
+    
+    def simulate_tournament_participation(self, player_count: int = 8) -> bool:
+        """
+        Simulate tournament participation by registering multiple auto players
+        
+        Args:
+            player_count: Number of players to register for simulation
+            
+        Returns:
+            bool: True if simulation setup successful, False otherwise
+        """
+        if player_count > 8:
+            self.logger.error("Maximum 8 players allowed per tournament")
+            return False
+        
+        # Register bulk players with auto names
+        if not self.register_bulk_players(player_count, use_auto_names=True):
+            return False
+        
+        self.logger.info(f"Simulation started with {player_count} players")
+        return True

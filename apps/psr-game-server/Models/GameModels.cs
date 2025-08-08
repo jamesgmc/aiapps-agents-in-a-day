@@ -24,6 +24,14 @@ public enum TournamentStatus
     Completed = 2
 }
 
+public enum RoundStatus
+{
+    Waiting = 0,
+    InProgress = 1,
+    ResultsAvailable = 2,
+    Completed = 3
+}
+
 public class Player
 {
     public int Id { get; set; }
@@ -63,6 +71,8 @@ public class Tournament
     public List<Match> Matches { get; set; } = new();
     
     public int CurrentRound { get; set; } = 1;
+    
+    public RoundStatus CurrentRoundStatus { get; set; } = RoundStatus.Waiting;
     
     public bool IsAcceptingPlayers => Status == TournamentStatus.WaitingForPlayers && Players.Count < 8;
 }
@@ -105,6 +115,21 @@ public class PlayerRegistrationRequest
     public string Name { get; set; } = string.Empty;
 }
 
+public class BulkPlayerRegistrationRequest
+{
+    [Range(1, 8)]
+    public int Count { get; set; } = 1;
+    
+    public bool UseAutoNames { get; set; } = true;
+    
+    public List<string> Names { get; set; } = new();
+}
+
+public class RoundControlRequest
+{
+    public int TournamentId { get; set; }
+}
+
 public class PlayerMoveRequest
 {
     [Required]
@@ -117,6 +142,7 @@ public class TournamentStateResponse
     public string TournamentName { get; set; } = string.Empty;
     public TournamentStatus Status { get; set; }
     public int CurrentRound { get; set; }
+    public RoundStatus CurrentRoundStatus { get; set; }
     public List<PlayerDto> Players { get; set; } = new();
     public List<MatchDto> Matches { get; set; } = new();
     public PlayerDto? Winner { get; set; }
@@ -160,4 +186,19 @@ public class MoveSubmissionResponse
     public bool Success { get; set; }
     public string Message { get; set; } = string.Empty;
     public MatchDto? CurrentMatch { get; set; }
+}
+
+public class BulkPlayerRegistrationResponse
+{
+    public List<PlayerRegistrationResponse> Players { get; set; } = new();
+    public int TournamentId { get; set; }
+    public string Message { get; set; } = string.Empty;
+}
+
+public class RoundControlResponse
+{
+    public bool Success { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public RoundStatus NewRoundStatus { get; set; }
+    public int CurrentRound { get; set; }
 }
