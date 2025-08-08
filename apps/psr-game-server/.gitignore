@@ -1,0 +1,26 @@
+# Build artifacts
+bin/
+obj/
+
+# Dependencies
+node_modules/
+
+# IDE files
+.vs/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Runtime files
+*.dll
+*.exe
+*.pdb
+
+
+bin/
+obj/

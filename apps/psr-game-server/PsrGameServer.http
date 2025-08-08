@@ -1,0 +1,6 @@
+@PsrGameServer_HostAddress = http://localhost:5096
+
+GET {{PsrGameServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
