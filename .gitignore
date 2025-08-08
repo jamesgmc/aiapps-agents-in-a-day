@@ -188,3 +188,5 @@ PublishProfiles/
 *.azurePubxml
 *.publishproj
 
+# Bicep build artifacts
+*.json.arm
