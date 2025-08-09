@@ -1,3 +1,4 @@
+ # Number of players required for the tournament
 #!/usr/bin/env python3
 """
 Demo script showing PSR Game Client functionality
@@ -7,6 +8,7 @@ import time
 import random
 from psr_game_client import PSRGameClient
 
+MAX_PLAYERS = 2 
 
 def random_move():
     """Generate random move for demo"""
@@ -21,6 +23,7 @@ def demo_client_features():
     # Initialize client
     client = PSRGameClient()
     print(f"📡 Connected to server: {client.server_url}")
+    players = []  # Array to keep track of registered players
     
     # Demo 1: Tournament Status Check
     print("\n1️⃣ Checking Tournament Status...")
@@ -29,7 +32,7 @@ def demo_client_features():
         status_names = ['WaitingForPlayers', 'InProgress', 'Completed']
         print(f"   Tournament ID: {state.get('tournamentId')}")
         print(f"   Status: {status_names[state.get('status', 0)]}")
-        print(f"   Players: {len(state.get('players', []))}/8")
+        print(f"   Players: {len(state.get('players', []))}/{MAX_PLAYERS}")
         print(f"   Current Round: {state.get('currentRound', 1)}")
     else:
         print("   No active tournament found")
@@ -44,80 +47,79 @@ def demo_client_features():
     
     # Demo 3: Player Registration (with choice)
     print("\n3️⃣ Registering Demo Player...")
-    use_auto = input("   Use auto-generated name? (y/n): ").lower().startswith('y')
     
-    if use_auto:
-        if client.register_player(use_auto_name=True):
-            print(f"   ✅ Successfully registered as '{client.player_name}'")
-            print(f"   Player ID: {client.player_id}")
-            print(f"   Tournament ID: {client.tournament_id}")
-        else:
-            print("   ❌ Registration failed")
-            return
+    if client.register_player(use_auto_name=True):
+        print(f"   ✅ Successfully registered as '{client.player_name}'")
+        print(f"   Player ID: {client.player_id}")
+        print(f"   Tournament ID: {client.tournament_id}")
+        players.append({'name': client.player_name, 'id': client.player_id})
     else:
-        player_name = f"DemoPlayer_{int(time.time())}"
-        if client.register_player(player_name):
-            print(f"   ✅ Successfully registered as '{player_name}'")
-            print(f"   Player ID: {client.player_id}")
-            print(f"   Tournament ID: {client.tournament_id}")
-        else:
-            print("   ❌ Registration failed")
-            return
+        print("   ❌ Registration failed")
+        return
     
     # Demo 4: Updated Tournament Status
     print("\n4️⃣ Updated Tournament Status...")
     state = client.get_tournament_state()
     if state:
-        print(f"   Players now: {len(state.get('players', []))}/8")
+        print(f"   Players now: {len(state.get('players', []))}/{MAX_PLAYERS}")
         print(f"   Round Status: {state.get('currentRoundStatus', 0)} (0=Waiting, 1=InProgress, 2=ResultsAvailable)")
-        players_needed = 8 - len(state.get('players', []))
+        players_needed = MAX_PLAYERS - len(state.get('players', []))
         if players_needed > 0:
             print(f"   Waiting for {players_needed} more players to start tournament")
-            
-            # Demo 5: Bulk Registration Option
-            print("\n5️⃣ Bulk Registration Option...")
-            auto_fill = input(f"   Auto-register {players_needed} players to start tournament? (y/n): ").lower().startswith('y')
-            if auto_fill:
-                if client.register_bulk_players(count=players_needed, use_auto_names=True):
-                    print(f"   ✅ Successfully registered {players_needed} auto players")
-                    print("   Tournament should start automatically!")
-                    time.sleep(2)  # Wait for tournament to start
-                    state = client.get_tournament_state()
-                    if state:
-                        status_names = ['WaitingForPlayers', 'InProgress', 'Completed']
-                        print(f"   Updated Status: {status_names[state.get('status', 0)]}")
-                else:
-                    print("   ❌ Bulk registration failed")
         else:
             print("   Tournament ready to start!")
+
+    # Loop through the player array and print details
+    if players:
+        print("\n👥 Registered Players:")
+        for idx, p in enumerate(players, 1):
+            print(f"   {idx}. {p['name']} (ID: {p['id']})")
     
-    # Demo 6: Current Match Check
-    print("\n6️⃣ Checking for Current Match...")
-    match = client.get_current_match()
-    if match:
-        print(f"   Active match found: Round {match.get('round')}")
-        print(f"   Match ID: {match.get('id')}")
-        opponent = match.get('player2') if match.get('player1', {}).get('id') == client.player_id else match.get('player1')
-        if opponent:
-            print(f"   Opponent: {opponent.get('name')}")
-    else:
-        print("   No active match (expected - tournament not started)")
+    # Demo 6: Current Match Check for all registered players
+    print("\n6️⃣ Checking for Current Match for all registered players...")
+    for p in players:
+        # Temporarily set the client player_id to the player's id to check their match
+        original_player_id = client.player_id
+        original_player_name = client.player_name
+        client.player_id = p['id']
+        client.player_name = p['name']
+        print(f"   Player: {p['name']} (ID: {p['id']})")
+        while True:
+            state = client.get_tournament_state()
+            if not state or state.get('status', 0) == 2:  # 2 = Completed
+                print("      Tournament completed or not found.")
+                break
+            match = client.get_current_match()
+            if match:
+                round_status = state.get('currentRoundStatus', 0)
+                print(f"      Active match found: Round {match.get('round')}")
+                print(f"      Match ID: {match.get('id')}")
+                opponent = match.get('player2') if match.get('player1', {}).get('id') == client.player_id else match.get('player1')
+                if opponent:
+                    print(f"      Opponent: {opponent.get('name')}")
+                # Wait for round to be InProgress (1)
+                if round_status == 1:
+                    # Submit move (vote)
+                    move = random_move()
+                    print(f"      Voting move: {move}")
+                    client.submit_move(move)
+                    # Wait for round to finish
+                    while True:
+                        state = client.get_tournament_state()
+                        if state.get('currentRoundStatus', 0) != 1:
+                            print("      Round finished. Checking for next round...")
+                            break
+                        time.sleep(1)
+                else:
+                    print("      Waiting for round to start...")
+                    time.sleep(1)
+            else:
+                print("      No active match (expected - tournament not started or between rounds)")
+                time.sleep(1)
+        # Restore original client player_id and name
+        client.player_id = original_player_id
+        client.player_name = original_player_name
     
-    # Demo 7: Move Validation
-    print("\n7️⃣ Testing Move Validation...")
-    valid_moves = ['rock', 'paper', 'scissors']
-    test_move = random.choice(valid_moves)
-    print(f"   Testing move: {test_move}")
-    result = client.submit_move(test_move)
-    if result:
-        print("   ✅ Move accepted")
-    else:
-        print("   ❌ Move rejected (expected if no active match or round not started)")
-    
-    # Demo 8: Invalid move test
-    print("\n8️⃣ Testing Invalid Move Handling...")
-    result = client.submit_move('invalid_move')
-    print(f"   Invalid move result: {'❌ Properly rejected' if not result else '⚠️ Unexpected acceptance'}")
     
     print("\n🎉 Demo completed successfully!")
     print(f"\nNext steps:")

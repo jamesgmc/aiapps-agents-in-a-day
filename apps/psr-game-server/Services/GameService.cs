@@ -1,8 +1,14 @@
+
 using Microsoft.EntityFrameworkCore;
 using PsrGameServer.Data;
 using PsrGameServer.Models;
 
 namespace PsrGameServer.Services;
+
+public static class GameConstants
+{
+    public const int TotalPlayerCount = 2;
+}
 
 public interface IGameService
 {
@@ -34,7 +40,7 @@ public class GameService : IGameService
             // Find or create an active tournament that's accepting players
             var activeTournament = await _context.Tournaments
                 .Include(t => t.Players)
-                .FirstOrDefaultAsync(t => t.Status == TournamentStatus.WaitingForPlayers && t.Players.Count < 8);
+                    .FirstOrDefaultAsync(t => t.Status == TournamentStatus.WaitingForPlayers && t.Players.Count < GameConstants.TotalPlayerCount);
 
             if (activeTournament == null)
             {
@@ -64,7 +70,7 @@ public class GameService : IGameService
 
             // Check if we have 8 players to start the tournament
             var playerCount = await _context.Players.CountAsync(p => p.TournamentId == activeTournament.Id && p.IsActive);
-            if (playerCount == 8)
+            if (playerCount == GameConstants.TotalPlayerCount)
             {
                 await StartTournamentAsync(activeTournament.Id);
             }
@@ -74,7 +80,7 @@ public class GameService : IGameService
                 PlayerId = player.Id,
                 PlayerName = player.Name,
                 TournamentId = activeTournament.Id,
-                Message = playerCount == 8 ? "Tournament started! First round is ready." : $"Registered successfully. Waiting for {8 - playerCount} more players."
+                Message = playerCount == GameConstants.TotalPlayerCount ? "Tournament started! First round is ready." : $"Registered successfully. Waiting for {GameConstants.TotalPlayerCount - playerCount} more players."
             };
         }
         catch (Exception ex)
@@ -252,7 +258,7 @@ public class GameService : IGameService
             .Include(t => t.Players)
             .FirstOrDefaultAsync(t => t.Id == tournamentId);
 
-        if (tournament == null || tournament.Players.Count != 8)
+    if (tournament == null || tournament.Players.Count != GameConstants.TotalPlayerCount)
             return;
 
         tournament.Status = TournamentStatus.InProgress;
@@ -427,7 +433,7 @@ public class GameService : IGameService
             // Find or create an active tournament that's accepting players
             var activeTournament = await _context.Tournaments
                 .Include(t => t.Players)
-                .FirstOrDefaultAsync(t => t.Status == TournamentStatus.WaitingForPlayers && t.Players.Count < 8);
+                .FirstOrDefaultAsync(t => t.Status == TournamentStatus.WaitingForPlayers && t.Players.Count < GameConstants.TotalPlayerCount);
 
             if (activeTournament == null)
             {
@@ -467,7 +473,7 @@ public class GameService : IGameService
             {
                 // Check current player count from database
                 var currentPlayerCount = await _context.Players.CountAsync(p => p.TournamentId == activeTournament.Id && p.IsActive);
-                if (currentPlayerCount >= 8)
+                if (currentPlayerCount >= GameConstants.TotalPlayerCount)
                     break;
 
                 var player = new Player
@@ -492,14 +498,14 @@ public class GameService : IGameService
 
             // Check if we have 8 players to start the tournament
             var playerCount = await _context.Players.CountAsync(p => p.TournamentId == activeTournament.Id && p.IsActive);
-            if (playerCount == 8)
+            if (playerCount == GameConstants.TotalPlayerCount)
             {
                 await StartTournamentAsync(activeTournament.Id);
                 response.Message = "Tournament started! All players registered.";
             }
             else
             {
-                response.Message = $"Registered {response.Players.Count} players. Waiting for {8 - playerCount} more players.";
+                response.Message = $"Registered {response.Players.Count} players. Waiting for {GameConstants.TotalPlayerCount - playerCount} more players.";
             }
 
             return response;
