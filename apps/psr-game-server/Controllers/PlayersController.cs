@@ -148,7 +148,9 @@ public class PlayersController : ControllerBase
                     RegisteredAt = match.Player2.RegisteredAt
                 } : null,
                 Player1Move = match.Player1Move,
+                Player1MoveSubmittedAt = match.Player1MoveSubmittedAt,
                 Player2Move = match.Player2Move,
+                Player2MoveSubmittedAt = match.Player2MoveSubmittedAt,
                 Winner = match.Winner != null ? new PlayerDto
                 {
                     Id = match.Winner.Id,

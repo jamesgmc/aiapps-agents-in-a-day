@@ -1,3 +1,13 @@
+import sys
+# Force UTF-8 encoding for stdout if not already set
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+else:
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
  # Number of players required for the tournament
 #!/usr/bin/env python3
 """

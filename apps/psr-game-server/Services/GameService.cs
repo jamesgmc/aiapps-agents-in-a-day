@@ -251,7 +251,7 @@ public class GameService : IGameService
                     .Include(m => m.Player2)
                     .Include(m => m.Winner)
                     .Include(m => m.Tournament)
-                    .FirstOrDefaultAsync(m =>
+                    .LastOrDefaultAsync(m =>
                         (m.Player1Id == playerId || m.Player2Id == playerId) &&
                         m.Status == MatchStatus.Completed);
         }
