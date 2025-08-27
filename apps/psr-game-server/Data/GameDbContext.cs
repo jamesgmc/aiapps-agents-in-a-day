@@ -52,7 +52,9 @@ public class GameDbContext : DbContext
             entity.HasKey(m => m.Id);
             entity.Property(m => m.Round).IsRequired();
             entity.Property(m => m.Player1Move).IsRequired();
+            entity.Property(m => m.Player1MoveSubmittedAt).IsRequired(false);
             entity.Property(m => m.Player2Move).IsRequired();
+            entity.Property(m => m.Player2MoveSubmittedAt).IsRequired(false);
             entity.Property(m => m.Status).IsRequired();
             entity.Property(m => m.CreatedAt).IsRequired();
             

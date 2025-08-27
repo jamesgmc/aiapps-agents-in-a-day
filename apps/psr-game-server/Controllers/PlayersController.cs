@@ -59,7 +59,7 @@ public class PlayersController : ControllerBase
             }
 
             var result = await _gameService.SubmitMoveAsync(playerId, request);
-            
+
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -123,7 +123,7 @@ public class PlayersController : ControllerBase
         try
         {
             var match = await _gameService.GetCurrentMatchForPlayerAsync(playerId);
-            
+
             if (match == null)
             {
                 return NotFound(new { message = "No active match found for player." });
@@ -149,6 +149,61 @@ public class PlayersController : ControllerBase
                 } : null,
                 Player1Move = match.Player1Move,
                 Player2Move = match.Player2Move,
+                Winner = match.Winner != null ? new PlayerDto
+                {
+                    Id = match.Winner.Id,
+                    Name = match.Winner.Name,
+                    IsActive = match.Winner.IsActive,
+                    RegisteredAt = match.Winner.RegisteredAt
+                } : null,
+                Status = match.Status,
+                CreatedAt = match.CreatedAt,
+                CompletedAt = match.CompletedAt
+            };
+
+            return Ok(matchDto);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting current match for player {PlayerId}", playerId);
+            return StatusCode(500, new { error = "Internal server error occurred while getting current match." });
+        }
+    }
+    
+    [HttpGet("{playerId}/current-match-completed")]
+    public async Task<ActionResult<MatchDto>> GetCurrentMatchCompleted(int playerId)
+    {
+        try
+        {
+            var match = await _gameService.GetCurrentMatchForPlayerAsync(playerId, true);
+            
+            if (match == null)
+            {
+                return NotFound(new { message = "No active match found for player." });
+            }
+
+            var matchDto = new MatchDto
+            {
+                Id = match.Id,
+                Round = match.Round,
+                Player1 = match.Player1 != null ? new PlayerDto
+                {
+                    Id = match.Player1.Id,
+                    Name = match.Player1.Name,
+                    IsActive = match.Player1.IsActive,
+                    RegisteredAt = match.Player1.RegisteredAt
+                } : null,
+                Player2 = match.Player2 != null ? new PlayerDto
+                {
+                    Id = match.Player2.Id,
+                    Name = match.Player2.Name,
+                    IsActive = match.Player2.IsActive,
+                    RegisteredAt = match.Player2.RegisteredAt
+                } : null,
+                Player1Move = match.Player1Move,
+                Player1MoveSubmittedAt = match.Player1MoveSubmittedAt,
+                Player2Move = match.Player2Move,
+                Player2MoveSubmittedAt = match.Player2MoveSubmittedAt,
                 Winner = match.Winner != null ? new PlayerDto
                 {
                     Id = match.Winner.Id,

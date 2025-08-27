@@ -7,7 +7,7 @@ namespace PsrGameServer.Services;
 
 public static class GameConstants
 {
-    public const int TotalPlayerCount = 2;
+    public const int TotalPlayerCount = 8;
 }
 
 public interface IGameService
@@ -16,7 +16,7 @@ public interface IGameService
     Task<BulkPlayerRegistrationResponse> RegisterPlayersAsync(BulkPlayerRegistrationRequest request);
     Task<MoveSubmissionResponse> SubmitMoveAsync(int playerId, PlayerMoveRequest request);
     Task<TournamentStateResponse?> GetTournamentStateAsync(int? tournamentId = null);
-    Task<Match?> GetCurrentMatchForPlayerAsync(int playerId);
+    Task<Match?> GetCurrentMatchForPlayerAsync(int playerId, bool completed = false);
     Task<RoundControlResponse> StartRoundAsync(int tournamentId);
     Task<RoundControlResponse> ReleaseResultsAsync(int tournamentId);
     string GenerateAutoPlayerName();
@@ -129,6 +129,7 @@ public class GameService : IGameService
                     };
                 }
                 currentMatch.Player1Move = request.Move;
+                currentMatch.Player1MoveSubmittedAt = DateTime.Now;
             }
             else if (currentMatch.Player2Id == playerId)
             {
@@ -141,6 +142,7 @@ public class GameService : IGameService
                     };
                 }
                 currentMatch.Player2Move = request.Move;
+                currentMatch.Player2MoveSubmittedAt = DateTime.Now;
             }
             else
             {
@@ -240,16 +242,30 @@ public class GameService : IGameService
         }
     }
 
-    public async Task<Match?> GetCurrentMatchForPlayerAsync(int playerId)
+    public async Task<Match?> GetCurrentMatchForPlayerAsync(int playerId, bool completed = false)
     {
-        return await _context.Matches
-            .Include(m => m.Player1)
-            .Include(m => m.Player2)
-            .Include(m => m.Winner)
-            .Include(m => m.Tournament)
-            .FirstOrDefaultAsync(m => 
-                (m.Player1Id == playerId || m.Player2Id == playerId) && 
-                m.Status != MatchStatus.Completed);
+        if (completed)
+        {
+            return await _context.Matches
+                    .Include(m => m.Player1)
+                    .Include(m => m.Player2)
+                    .Include(m => m.Winner)
+                    .Include(m => m.Tournament)
+                    .FirstOrDefaultAsync(m =>
+                        (m.Player1Id == playerId || m.Player2Id == playerId) &&
+                        m.Status == MatchStatus.Completed);
+        }
+        else
+        { 
+            return await _context.Matches
+                    .Include(m => m.Player1)
+                    .Include(m => m.Player2)
+                    .Include(m => m.Winner)
+                    .Include(m => m.Tournament)
+                    .FirstOrDefaultAsync(m =>
+                        (m.Player1Id == playerId || m.Player2Id == playerId) &&
+                        m.Status != MatchStatus.Completed);
+        }
     }
 
     private async Task StartTournamentAsync(int tournamentId)
@@ -258,8 +274,8 @@ public class GameService : IGameService
             .Include(t => t.Players)
             .FirstOrDefaultAsync(t => t.Id == tournamentId);
 
-    if (tournament == null || tournament.Players.Count != GameConstants.TotalPlayerCount)
-            return;
+        if (tournament == null || tournament.Players.Count != GameConstants.TotalPlayerCount)
+                return;
 
         tournament.Status = TournamentStatus.InProgress;
         tournament.StartedAt = DateTime.UtcNow;
@@ -297,7 +313,7 @@ public class GameService : IGameService
             return;
 
         // Determine winner based on rock-paper-scissors rules
-        var winner = DetermineWinner(match.Player1Move, match.Player2Move);
+        var winner = DetermineWinner(match.Player1Move, match.Player1MoveSubmittedAt, match.Player2Move, match.Player2MoveSubmittedAt);
         
         if (winner == 1)
         {
@@ -382,10 +398,13 @@ public class GameService : IGameService
         }
     }
 
-    private static int DetermineWinner(Move player1Move, Move player2Move)
+    private static int DetermineWinner(Move player1Move, DateTime? Player1MoveSubmittedAt, Move player2Move, DateTime? Player2MoveSubmittedAt)
     {
         if (player1Move == player2Move)
-            return 0; // Tie
+        {
+            // When moves are the same, the player who submitted first wins
+            return Player1MoveSubmittedAt < Player2MoveSubmittedAt ? 1 : 2;
+        }
 
         return (player1Move, player2Move) switch
         {

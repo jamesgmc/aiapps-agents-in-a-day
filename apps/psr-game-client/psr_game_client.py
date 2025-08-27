@@ -153,6 +153,33 @@ class PSRGameClient:
             return None
             
         url = f"{self.base_url}/players/{self.player_id}/current-match"
+        self.logger.info(f"get_current_match={url}")
+        
+        try:
+            response = requests.get(url)
+            if response.status_code == 404:
+                return None  # No active match
+            response.raise_for_status()
+            return response.json()
+            
+        except requests.RequestException as e:
+            self.logger.error(f"Failed to get current match: {e}")
+            return None
+        
+        
+    def get_current_match_completed(self) -> Optional[Dict[str, Any]]:
+        """
+        Get current match for this player
+        
+        Returns:
+            Dict containing match info or None if no match/error
+        """
+        if not self.player_id:
+            self.logger.error("Cannot get current match - player not registered")
+            return None
+            
+        url = f"{self.base_url}/players/{self.player_id}/current-match-completed"
+        self.logger.info(f"get_current_match_completed={url}")
         
         try:
             response = requests.get(url)
@@ -332,32 +359,18 @@ class PSRGameClient:
             # Wait for match to complete
             if not self._wait_for_match_completion(match["id"]):
                 return False
-            
-            # Check if we won and advance to next round
-            updated_match = self.get_current_match()
-            if updated_match and updated_match.get("winner"):
-                winner = updated_match["winner"]
-                if winner["id"] == self.player_id:
-                    self.logger.info(f"Won Round {current_round}!")
-                    
-                    # Check if tournament is complete
-                    state = self.get_tournament_state()
-                    if state and state.get("status") == 2:  # 2 = Completed
-                        tournament_winner = state.get("winner")
-                        if tournament_winner and tournament_winner["id"] == self.player_id:
-                            self.logger.info("🎉 WON THE TOURNAMENT! 🎉")
-                        else:
-                            self.logger.info("Tournament completed.")
-                        return True
-                    
-                    current_round += 1
+         
+            # Check if tournament is complete
+            state = self.get_tournament_state()
+            if state and state.get("status") == 2:  # 2 = Completed
+                tournament_winner = state.get("winner")
+                if tournament_winner and tournament_winner["id"] == self.player_id:
+                    self.logger.info("🎉 WON THE TOURNAMENT! 🎉")
                 else:
-                    self.logger.info(f"Lost Round {current_round} to {winner['name']}")
-                    self.logger.info("Eliminated from tournament")
-                    return True
-            else:
-                self.logger.error("Could not determine match winner")
-                return False
+                    self.logger.info("Tournament completed.")
+                return True
+            
+            current_round += 1
     
     def _get_move_from_user(self) -> Optional[str]:
         """Get move choice from user input"""
@@ -387,10 +400,11 @@ class PSRGameClient:
     
     def _wait_for_match_completion(self, match_id: int) -> bool:
         """Wait for match to complete"""
-        self.logger.info("Waiting for match to complete...")
+        self.logger.info(f"Waiting for match to complete...match_id={match_id}")
         
         for attempt in range(MAX_POLL_ATTEMPTS):
-            match = self.get_current_match()
+            match = self.get_current_match_completed()
+            self.logger.info(f"_wait_for_match_completion={match}")
             if match and match["id"] == match_id and match.get("status") == 2:  # 2 = Completed
                 self.logger.info("Match completed!")
                 
@@ -407,7 +421,14 @@ class PSRGameClient:
                 self.logger.info(f"  {player2.get('name', 'Player2')}: {p2_move}")
                 self.logger.info(f"  Winner: {winner.get('name', 'Unknown')}")
                 
-                return True
+                # Check if winner name matches player name
+                winner_name = winner.get('name', '')
+                if winner_name == self.player_name:
+                    self.logger.info(f"Match Results: win")
+                    return True
+                else:
+                    self.logger.info(f"Match Results: lost")
+                    return False
             
             time.sleep(POLL_INTERVAL_SECONDS)
         

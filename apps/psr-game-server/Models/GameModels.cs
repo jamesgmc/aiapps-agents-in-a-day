@@ -94,7 +94,11 @@ public class Match
     
     public Move Player1Move { get; set; } = Move.None;
     
+    public DateTime? Player1MoveSubmittedAt { get; set; }
+    
     public Move Player2Move { get; set; } = Move.None;
+    
+    public DateTime? Player2MoveSubmittedAt { get; set; }
     
     public int? WinnerId { get; set; }
     public Player? Winner { get; set; }
@@ -166,7 +170,9 @@ public class MatchDto
     public PlayerDto? Player1 { get; set; }
     public PlayerDto? Player2 { get; set; }
     public Move Player1Move { get; set; }
+    public DateTime? Player1MoveSubmittedAt { get; set; }
     public Move Player2Move { get; set; }
+    public DateTime? Player2MoveSubmittedAt { get; set; }
     public PlayerDto? Winner { get; set; }
     public MatchStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
