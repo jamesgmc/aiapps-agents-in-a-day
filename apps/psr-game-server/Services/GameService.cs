@@ -18,7 +18,9 @@ public interface IGameService
     Task<TournamentStateResponse?> GetTournamentStateAsync(int? tournamentId = null);
     Task<Match?> GetCurrentMatchForPlayerAsync(int playerId, bool completed = false);
     Task<RoundControlResponse> StartRoundAsync(int tournamentId);
-    Task<RoundControlResponse> ReleaseResultsAsync(int tournamentId);
+    Task<RoundControlResponse> ReleaseMatchResultsAsync(int tournamentId);
+    Task<MatchRoundControlResponse> StartMatchRoundAsync(int matchId);
+    Task<MatchRoundControlResponse> ReleaseMatchRoundResultsAsync(int matchId);
     string GenerateAutoPlayerName();
 }
 
@@ -117,32 +119,54 @@ public class GameService : IGameService
                 };
             }
 
-            // Update the player's move
+            if (currentMatch.CurrentRoundStatus != MatchRoundStatus.InProgress)
+            {
+                return new MoveSubmissionResponse
+                {
+                    Success = false,
+                    Message = "Current round is not in progress."
+                };
+            }
+
+            // Get or create the current round
+            var currentRound = await _context.MatchRounds
+                .FirstOrDefaultAsync(r => r.MatchId == currentMatch.Id && r.RoundNumber == currentMatch.CurrentRoundNumber);
+
+            if (currentRound == null)
+            {
+                return new MoveSubmissionResponse
+                {
+                    Success = false,
+                    Message = "Current round not found. Round may not be started yet."
+                };
+            }
+
+            // Update the player's move for the current round
             if (currentMatch.Player1Id == playerId)
             {
-                if (currentMatch.Player1Move != Move.None)
+                if (currentRound.Player1Move != Move.None)
                 {
                     return new MoveSubmissionResponse
                     {
                         Success = false,
-                        Message = "Move already submitted for this match."
+                        Message = "Move already submitted for this round."
                     };
                 }
-                currentMatch.Player1Move = request.Move;
-                currentMatch.Player1MoveSubmittedAt = DateTime.Now;
+                currentRound.Player1Move = request.Move;
+                currentRound.Player1MoveSubmittedAt = DateTime.UtcNow;
             }
             else if (currentMatch.Player2Id == playerId)
             {
-                if (currentMatch.Player2Move != Move.None)
+                if (currentRound.Player2Move != Move.None)
                 {
                     return new MoveSubmissionResponse
                     {
                         Success = false,
-                        Message = "Move already submitted for this match."
+                        Message = "Move already submitted for this round."
                     };
                 }
-                currentMatch.Player2Move = request.Move;
-                currentMatch.Player2MoveSubmittedAt = DateTime.Now;
+                currentRound.Player2Move = request.Move;
+                currentRound.Player2MoveSubmittedAt = DateTime.UtcNow;
             }
             else
             {
@@ -156,23 +180,13 @@ public class GameService : IGameService
             currentMatch.Status = MatchStatus.InProgress;
             await _context.SaveChangesAsync();
 
-            // Check if both players have submitted moves
-            if (currentMatch.BothPlayersSubmitted)
-            {
-                await ProcessMatchResultAsync(currentMatch.Id);
-            }
-
-            var updatedMatch = await _context.Matches
-                .Include(m => m.Player1)
-                .Include(m => m.Player2)
-                .Include(m => m.Winner)
-                .FirstOrDefaultAsync(m => m.Id == currentMatch.Id);
+            var updatedMatch = await GetMatchDtoAsync(currentMatch.Id);
 
             return new MoveSubmissionResponse
             {
                 Success = true,
-                Message = currentMatch.BothPlayersSubmitted ? "Match completed!" : "Move submitted. Waiting for opponent.",
-                CurrentMatch = MapToMatchDto(updatedMatch!)
+                Message = currentRound.BothPlayersSubmitted ? "Round moves submitted! Waiting for referee to release results." : "Move submitted. Waiting for opponent.",
+                CurrentMatch = updatedMatch
             };
         }
         catch (Exception ex)
@@ -198,6 +212,9 @@ public class GameService : IGameService
                         .ThenInclude(m => m.Player2)
                     .Include(t => t.Matches)
                         .ThenInclude(m => m.Winner)
+                    .Include(t => t.Matches)
+                        .ThenInclude(m => m.MatchRounds)
+                            .ThenInclude(r => r.Winner)
                     .Include(t => t.Winner)
                     .FirstOrDefaultAsync(t => t.Id == tournamentId.Value);
             }
@@ -212,6 +229,9 @@ public class GameService : IGameService
                         .ThenInclude(m => m.Player2)
                     .Include(t => t.Matches)
                         .ThenInclude(m => m.Winner)
+                    .Include(t => t.Matches)
+                        .ThenInclude(m => m.MatchRounds)
+                            .ThenInclude(r => r.Winner)
                     .Include(t => t.Winner)
                     .OrderByDescending(t => t.CreatedAt)
                     .FirstOrDefaultAsync();
@@ -251,6 +271,7 @@ public class GameService : IGameService
                     .Include(m => m.Player2)
                     .Include(m => m.Winner)
                     .Include(m => m.Tournament)
+                    .Include(m => m.MatchRounds)
                     .LastOrDefaultAsync(m =>
                         (m.Player1Id == playerId || m.Player2Id == playerId) &&
                         m.Status == MatchStatus.Completed);
@@ -262,6 +283,7 @@ public class GameService : IGameService
                     .Include(m => m.Player2)
                     .Include(m => m.Winner)
                     .Include(m => m.Tournament)
+                    .Include(m => m.MatchRounds)
                     .FirstOrDefaultAsync(m =>
                         (m.Player1Id == playerId || m.Player2Id == playerId) &&
                         m.Status != MatchStatus.Completed);
@@ -341,7 +363,7 @@ public class GameService : IGameService
             .ToListAsync();
 
         // Only check if all matches are completed, but don't automatically advance
-        // Round advancement should be controlled by the referee via ReleaseResultsAsync
+        // Round advancement should be controlled by the referee via ReleaseMatchResultsAsync
         if (currentRoundMatches.All(m => m.Status == MatchStatus.Completed))
         {
             _logger.LogInformation("All matches completed for round {Round} in tournament {TournamentId}. Waiting for referee to release results.", 
@@ -435,11 +457,28 @@ public class GameService : IGameService
             Player1 = match.Player1 != null ? MapToPlayerDto(match.Player1) : null,
             Player2 = match.Player2 != null ? MapToPlayerDto(match.Player2) : null,
             Player1Move = match.Player1Move,
+            Player1MoveSubmittedAt = match.Player1MoveSubmittedAt,
             Player2Move = match.Player2Move,
+            Player2MoveSubmittedAt = match.Player2MoveSubmittedAt,
             Winner = match.Winner != null ? MapToPlayerDto(match.Winner) : null,
             Status = match.Status,
             CreatedAt = match.CreatedAt,
-            CompletedAt = match.CompletedAt
+            CompletedAt = match.CompletedAt,
+            CurrentRoundNumber = match.CurrentRoundNumber,
+            CurrentRoundStatus = match.CurrentRoundStatus,
+            MatchRounds = match.MatchRounds?.Select(r => new MatchRoundDto
+            {
+                Id = r.Id,
+                RoundNumber = r.RoundNumber,
+                Player1Move = r.Player1Move,
+                Player1MoveSubmittedAt = r.Player1MoveSubmittedAt,
+                Player2Move = r.Player2Move,
+                Player2MoveSubmittedAt = r.Player2MoveSubmittedAt,
+                Winner = r.Winner != null ? MapToPlayerDto(r.Winner) : null,
+                Status = r.Status,
+                CreatedAt = r.CreatedAt,
+                CompletedAt = r.CompletedAt
+            }).ToList() ?? new List<MatchRoundDto>()
         };
     }
 
@@ -603,7 +642,7 @@ public class GameService : IGameService
         }
     }
 
-    public async Task<RoundControlResponse> ReleaseResultsAsync(int tournamentId)
+    public async Task<RoundControlResponse> ReleaseMatchResultsAsync(int tournamentId)
     {
         try
         {
@@ -665,6 +704,232 @@ public class GameService : IGameService
             _logger.LogError(ex, "Error releasing results for tournament {TournamentId}", tournamentId);
             throw;
         }
+    }
+
+    public async Task<MatchRoundControlResponse> StartMatchRoundAsync(int matchId)
+    {
+        try
+        {
+            var match = await _context.Matches
+                .Include(m => m.MatchRounds)
+                .Include(m => m.Player1)
+                .Include(m => m.Player2)
+                .FirstOrDefaultAsync(m => m.Id == matchId);
+
+            if (match == null)
+            {
+                return new MatchRoundControlResponse
+                {
+                    Success = false,
+                    Message = "Match not found."
+                };
+            }
+
+            if (match.Status == MatchStatus.Completed)
+            {
+                return new MatchRoundControlResponse
+                {
+                    Success = false,
+                    Message = "Match is already completed."
+                };
+            }
+
+            if (match.CurrentRoundStatus != MatchRoundStatus.Waiting)
+            {
+                return new MatchRoundControlResponse
+                {
+                    Success = false,
+                    Message = $"Round {match.CurrentRoundNumber} is not waiting to start. Current status: {match.CurrentRoundStatus}"
+                };
+            }
+
+            // Create the match round if it doesn't exist
+            var existingRound = match.MatchRounds.FirstOrDefault(r => r.RoundNumber == match.CurrentRoundNumber);
+            if (existingRound == null)
+            {
+                var matchRound = new MatchRound
+                {
+                    MatchId = match.Id,
+                    RoundNumber = match.CurrentRoundNumber,
+                    Status = MatchRoundStatus.InProgress,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.MatchRounds.Add(matchRound);
+            }
+
+            // Start the round
+            match.CurrentRoundStatus = MatchRoundStatus.InProgress;
+            await _context.SaveChangesAsync();
+
+            var updatedMatch = await GetMatchDtoAsync(match.Id);
+
+            _logger.LogInformation("Round {RoundNumber} started for match {MatchId}", match.CurrentRoundNumber, matchId);
+
+            return new MatchRoundControlResponse
+            {
+                Success = true,
+                Message = $"Round {match.CurrentRoundNumber} started successfully!",
+                NewRoundStatus = match.CurrentRoundStatus,
+                CurrentRoundNumber = match.CurrentRoundNumber,
+                UpdatedMatch = updatedMatch
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error starting round for match {MatchId}", matchId);
+            throw;
+        }
+    }
+
+    public async Task<MatchRoundControlResponse> ReleaseMatchRoundResultsAsync(int matchId)
+    {
+        try
+        {
+            var match = await _context.Matches
+                .Include(m => m.MatchRounds)
+                .Include(m => m.Player1)
+                .Include(m => m.Player2)
+                .FirstOrDefaultAsync(m => m.Id == matchId);
+
+            if (match == null)
+            {
+                return new MatchRoundControlResponse
+                {
+                    Success = false,
+                    Message = "Match not found."
+                };
+            }
+
+            if (match.CurrentRoundStatus != MatchRoundStatus.InProgress)
+            {
+                return new MatchRoundControlResponse
+                {
+                    Success = false,
+                    Message = $"Round {match.CurrentRoundNumber} is not in progress. Current status: {match.CurrentRoundStatus}"
+                };
+            }
+
+            var currentRound = match.MatchRounds.FirstOrDefault(r => r.RoundNumber == match.CurrentRoundNumber);
+            if (currentRound == null || !currentRound.BothPlayersSubmitted)
+            {
+                return new MatchRoundControlResponse
+                {
+                    Success = false,
+                    Message = "Not all players have submitted moves for this round."
+                };
+            }
+
+            // Mark the round as completed
+            currentRound.Status = MatchRoundStatus.Completed;
+            currentRound.CompletedAt = DateTime.UtcNow;
+
+            // Determine round winner
+            var roundWinner = DetermineWinner(currentRound.Player1Move, currentRound.Player1MoveSubmittedAt, 
+                                            currentRound.Player2Move, currentRound.Player2MoveSubmittedAt);
+            if (roundWinner == 1)
+            {
+                currentRound.WinnerId = match.Player1Id;
+            }
+            else if (roundWinner == 2)
+            {
+                currentRound.WinnerId = match.Player2Id;
+            }
+
+            // Check if match is complete (best of 3)
+            var player1Wins = match.MatchRounds.Count(r => r.WinnerId == match.Player1Id && r.Status == MatchRoundStatus.Completed);
+            var player2Wins = match.MatchRounds.Count(r => r.WinnerId == match.Player2Id && r.Status == MatchRoundStatus.Completed);
+
+            if (player1Wins >= 2)
+            {
+                // Player 1 wins the match
+                match.WinnerId = match.Player1Id;
+                match.Status = MatchStatus.Completed;
+                match.CompletedAt = DateTime.UtcNow;
+            }
+            else if (player2Wins >= 2)
+            {
+                // Player 2 wins the match
+                match.WinnerId = match.Player2Id;
+                match.Status = MatchStatus.Completed;
+                match.CompletedAt = DateTime.UtcNow;
+            }
+            else if (match.CurrentRoundNumber < 3)
+            {
+                // Advance to next round
+                match.CurrentRoundNumber++;
+                match.CurrentRoundStatus = MatchRoundStatus.Waiting;
+            }
+            else
+            {
+                // This shouldn't happen in best of 3, but handle edge case
+                match.Status = MatchStatus.Completed;
+                match.CompletedAt = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+
+            var updatedMatch = await GetMatchDtoAsync(match.Id);
+
+            _logger.LogInformation("Round {RoundNumber} results released for match {MatchId}", currentRound.RoundNumber, matchId);
+
+            return new MatchRoundControlResponse
+            {
+                Success = true,
+                Message = $"Round {currentRound.RoundNumber} results released!",
+                NewRoundStatus = match.CurrentRoundStatus,
+                CurrentRoundNumber = match.CurrentRoundNumber,
+                UpdatedMatch = updatedMatch
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error releasing round results for match {MatchId}", matchId);
+            throw;
+        }
+    }
+
+    private async Task<MatchDto?> GetMatchDtoAsync(int matchId)
+    {
+        var match = await _context.Matches
+            .Include(m => m.Player1)
+            .Include(m => m.Player2)
+            .Include(m => m.Winner)
+            .Include(m => m.MatchRounds)
+                .ThenInclude(r => r.Winner)
+            .FirstOrDefaultAsync(m => m.Id == matchId);
+
+        if (match == null) return null;
+
+        return new MatchDto
+        {
+            Id = match.Id,
+            Round = match.Round,
+            Player1 = match.Player1 != null ? new PlayerDto { Id = match.Player1.Id, Name = match.Player1.Name, IsActive = match.Player1.IsActive, RegisteredAt = match.Player1.RegisteredAt } : null,
+            Player2 = match.Player2 != null ? new PlayerDto { Id = match.Player2.Id, Name = match.Player2.Name, IsActive = match.Player2.IsActive, RegisteredAt = match.Player2.RegisteredAt } : null,
+            Player1Move = match.Player1Move,
+            Player1MoveSubmittedAt = match.Player1MoveSubmittedAt,
+            Player2Move = match.Player2Move,
+            Player2MoveSubmittedAt = match.Player2MoveSubmittedAt,
+            Winner = match.Winner != null ? new PlayerDto { Id = match.Winner.Id, Name = match.Winner.Name, IsActive = match.Winner.IsActive, RegisteredAt = match.Winner.RegisteredAt } : null,
+            Status = match.Status,
+            CreatedAt = match.CreatedAt,
+            CompletedAt = match.CompletedAt,
+            CurrentRoundNumber = match.CurrentRoundNumber,
+            CurrentRoundStatus = match.CurrentRoundStatus,
+            MatchRounds = match.MatchRounds.Select(r => new MatchRoundDto
+            {
+                Id = r.Id,
+                RoundNumber = r.RoundNumber,
+                Player1Move = r.Player1Move,
+                Player1MoveSubmittedAt = r.Player1MoveSubmittedAt,
+                Player2Move = r.Player2Move,
+                Player2MoveSubmittedAt = r.Player2MoveSubmittedAt,
+                Winner = r.Winner != null ? new PlayerDto { Id = r.Winner.Id, Name = r.Winner.Name, IsActive = r.Winner.IsActive, RegisteredAt = r.Winner.RegisteredAt } : null,
+                Status = r.Status,
+                CreatedAt = r.CreatedAt,
+                CompletedAt = r.CompletedAt
+            }).ToList()
+        };
     }
 
     public string GenerateAutoPlayerName()

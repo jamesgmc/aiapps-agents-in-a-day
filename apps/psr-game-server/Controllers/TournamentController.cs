@@ -80,7 +80,7 @@ public class TournamentController : ControllerBase
     /// <param name="request">Round control request with tournament ID</param>
     /// <returns>Round control result</returns>
     [HttpPost("release-results")]
-    public async Task<ActionResult<RoundControlResponse>> ReleaseResults([FromBody] RoundControlRequest request)
+    public async Task<ActionResult<RoundControlResponse>> ReleaseMatchResults([FromBody] RoundControlRequest request)
     {
         try
         {
@@ -89,7 +89,7 @@ public class TournamentController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var result = await _gameService.ReleaseResultsAsync(request.TournamentId);
+            var result = await _gameService.ReleaseMatchResultsAsync(request.TournamentId);
             
             if (!result.Success)
             {
@@ -102,6 +102,68 @@ public class TournamentController : ControllerBase
         {
             _logger.LogError(ex, "Error releasing results for tournament {TournamentId}", request.TournamentId);
             return StatusCode(500, new { error = "Internal server error occurred while releasing results." });
+        }
+    }
+
+    /// <summary>
+    /// Start a match round (referee control)
+    /// </summary>
+    /// <param name="request">Match round control request with match ID</param>
+    /// <returns>Match round control result</returns>
+    [HttpPost("start-match-round")]
+    public async Task<ActionResult<MatchRoundControlResponse>> StartMatchRound([FromBody] MatchRoundControlRequest request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _gameService.StartMatchRoundAsync(request.MatchId);
+            
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error starting match round for match {MatchId}", request.MatchId);
+            return StatusCode(500, new { error = "Internal server error occurred while starting match round." });
+        }
+    }
+
+    /// <summary>
+    /// Release match round results (referee control)
+    /// </summary>
+    /// <param name="request">Match round control request with match ID</param>
+    /// <returns>Match round control result</returns>
+    [HttpPost("release-match-round-results")]
+    public async Task<ActionResult<MatchRoundControlResponse>> ReleaseMatchRoundResults([FromBody] MatchRoundControlRequest request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _gameService.ReleaseMatchRoundResultsAsync(request.MatchId);
+            
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error releasing match round results for match {MatchId}", request.MatchId);
+            return StatusCode(500, new { error = "Internal server error occurred while releasing match round results." });
         }
     }
     [HttpGet("results")]
