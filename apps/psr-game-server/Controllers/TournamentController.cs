@@ -124,4 +124,24 @@ public class TournamentController : ControllerBase
             return StatusCode(500, new { error = "Internal server error occurred while getting tournament results." });
         }
     }
+
+    /// <summary>
+    /// Get all match records
+    /// </summary>
+    /// <param name="tournamentId">Optional tournament ID. If not provided, returns matches from all tournaments.</param>
+    /// <returns>List of all match records</returns>
+    [HttpGet("matches")]
+    public async Task<ActionResult<List<MatchDto>>> GetAllMatches([FromQuery] int? tournamentId = null)
+    {
+        try
+        {
+            var matches = await _gameService.GetAllMatchesAsync(tournamentId);
+            return Ok(matches);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting all matches for tournament {TournamentId}", tournamentId);
+            return StatusCode(500, new { error = "Internal server error occurred while getting matches." });
+        }
+    }
 }

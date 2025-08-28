@@ -17,6 +17,7 @@ public interface IGameService
     Task<MoveSubmissionResponse> SubmitMoveAsync(int playerId, PlayerMoveRequest request);
     Task<TournamentStateResponse?> GetTournamentStateAsync(int? tournamentId = null);
     Task<Match?> GetCurrentMatchForPlayerAsync(int playerId, bool completed = false);
+    Task<List<MatchDto>> GetAllMatchesAsync(int? tournamentId = null);
     Task<RoundControlResponse> StartRoundAsync(int tournamentId);
     Task<RoundControlResponse> ReleaseResultsAsync(int tournamentId);
     string GenerateAutoPlayerName();
@@ -268,6 +269,29 @@ public class GameService : IGameService
         }
     }
 
+    public async Task<List<MatchDto>> GetAllMatchesAsync(int? tournamentId = null)
+    {
+        var query = _context.Matches
+            .Include(m => m.Player1)
+            .Include(m => m.Player2)
+            .Include(m => m.Winner)
+            .Include(m => m.Tournament)
+            .AsQueryable();
+
+        if (tournamentId.HasValue)
+        {
+            query = query.Where(m => m.TournamentId == tournamentId.Value);
+        }
+
+        var matches = await query
+            .OrderBy(m => m.TournamentId)
+            .ThenBy(m => m.Round)
+            .ThenBy(m => m.CreatedAt)
+            .ToListAsync();
+
+        return matches.Select(MapToMatchDto).ToList();
+    }
+
     private async Task StartTournamentAsync(int tournamentId)
     {
         var tournament = await _context.Tournaments
@@ -431,6 +455,7 @@ public class GameService : IGameService
         return new MatchDto
         {
             Id = match.Id,
+            TournamentId = match.TournamentId,
             Round = match.Round,
             Player1 = match.Player1 != null ? MapToPlayerDto(match.Player1) : null,
             Player2 = match.Player2 != null ? MapToPlayerDto(match.Player2) : null,

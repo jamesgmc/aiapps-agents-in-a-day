@@ -132,6 +132,7 @@ public class PlayersController : ControllerBase
             var matchDto = new MatchDto
             {
                 Id = match.Id,
+                TournamentId = match.TournamentId,
                 Round = match.Round,
                 Player1 = match.Player1 != null ? new PlayerDto
                 {
@@ -187,6 +188,7 @@ public class PlayersController : ControllerBase
             var matchDto = new MatchDto
             {
                 Id = match.Id,
+                TournamentId = match.TournamentId,
                 Round = match.Round,
                 Player1 = match.Player1 != null ? new PlayerDto
                 {

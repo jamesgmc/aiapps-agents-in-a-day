@@ -567,6 +567,104 @@ class TournamentApp {
     }
 }
 
+// Navigation functions
+function showTournament() {
+    document.getElementById('tournament-page').style.display = 'block';
+    document.getElementById('matches-page').style.display = 'none';
+    
+    // Update navigation active state
+    document.getElementById('nav-tournament').classList.add('active');
+    document.getElementById('nav-matches').classList.remove('active');
+}
+
+function showMatches() {
+    document.getElementById('tournament-page').style.display = 'none';
+    document.getElementById('matches-page').style.display = 'block';
+    
+    // Update navigation active state
+    document.getElementById('nav-tournament').classList.remove('active');
+    document.getElementById('nav-matches').classList.add('active');
+    
+    // Load matches data
+    loadMatchesData();
+}
+
+// Load matches data from API
+async function loadMatchesData() {
+    const loadingElement = document.getElementById('matches-loading');
+    const errorElement = document.getElementById('matches-error');
+    const tableBody = document.getElementById('matches-table-body');
+    
+    try {
+        // Show loading spinner
+        loadingElement.style.display = 'block';
+        errorElement.style.display = 'none';
+        tableBody.innerHTML = '';
+        
+        const response = await fetch('/api/tournament/matches');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const matches = await response.json();
+        
+        // Hide loading spinner
+        loadingElement.style.display = 'none';
+        
+        // Populate table
+        tableBody.innerHTML = matches.map(match => {
+            const formatMove = (move) => {
+                switch (move) {
+                    case 1: return '🪨 Rock';
+                    case 2: return '📄 Paper';
+                    case 3: return '✂️ Scissors';
+                    default: return '-';
+                }
+            };
+            
+            const formatStatus = (status) => {
+                switch (status) {
+                    case 0: return '<span class="badge bg-secondary">Pending</span>';
+                    case 1: return '<span class="badge bg-warning">In Progress</span>';
+                    case 2: return '<span class="badge bg-success">Completed</span>';
+                    default: return '<span class="badge bg-light">Unknown</span>';
+                }
+            };
+            
+            const formatDate = (dateString) => {
+                if (!dateString) return '-';
+                return new Date(dateString).toLocaleString();
+            };
+            
+            return `
+                <tr>
+                    <td>${match.id}</td>
+                    <td>${match.tournamentId}</td>
+                    <td>${match.round}</td>
+                    <td>${match.player1?.name || 'TBD'}</td>
+                    <td>${formatMove(match.player1Move)}</td>
+                    <td>${match.player2?.name || 'TBD'}</td>
+                    <td>${formatMove(match.player2Move)}</td>
+                    <td>${match.winner?.name || '-'}</td>
+                    <td>${formatStatus(match.status)}</td>
+                    <td>${formatDate(match.createdAt)}</td>
+                    <td>${formatDate(match.completedAt)}</td>
+                </tr>
+            `;
+        }).join('');
+        
+        if (matches.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="11" class="text-center">No matches found</td></tr>';
+        }
+        
+    } catch (error) {
+        console.error('Error loading matches:', error);
+        loadingElement.style.display = 'none';
+        errorElement.style.display = 'block';
+        errorElement.textContent = 'Error loading match data: ' + error.message;
+    }
+}
+
 // Initialize the application when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     window.tournamentApp = new TournamentApp();
