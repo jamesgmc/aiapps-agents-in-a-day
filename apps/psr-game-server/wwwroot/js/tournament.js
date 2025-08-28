@@ -60,8 +60,16 @@ class TournamentApp {
             await this.startRound();
         });
 
+        document.getElementById('start-match-round-btn').addEventListener('click', async () => {
+            await this.startMatchRound();
+        });
+
+        document.getElementById('release-match-round-results-btn').addEventListener('click', async () => {
+            await this.releaseMatchRoundResults();
+        });
+
         document.getElementById('release-results-btn').addEventListener('click', async () => {
-            await this.releaseResults();
+            await this.releaseMatchResults();
         });
 
         // Move buttons
@@ -173,7 +181,7 @@ class TournamentApp {
         }
     }
 
-    async releaseResults() {
+    async releaseMatchResults() {
         if (!this.currentTournament) {
             this.showRefereeMessage('No active tournament found', 'danger');
             return;
@@ -196,12 +204,89 @@ class TournamentApp {
                 await this.loadTournamentState();
             } else {
                 const error = await response.json();
-                this.showRefereeMessage(error.message || 'Failed to release results', 'danger');
+                this.showRefereeMessage(error.message || 'Failed to release match results', 'danger');
             }
         } catch (error) {
-            console.error('Release results error:', error);
-            this.showRefereeMessage('Network error during result release', 'danger');
+            console.error('Release match results error:', error);
+            this.showRefereeMessage('Network error during match result release', 'danger');
         }
+    }
+
+    async startMatchRound() {
+        const selectedMatch = this.getSelectedMatch();
+        if (!selectedMatch) {
+            this.showRefereeMessage('Please select a match to start a round', 'warning');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/tournament/start-match-round', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    matchId: selectedMatch.id 
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                this.showRefereeMessage(result.message, 'success');
+                await this.loadTournamentState();
+            } else {
+                const error = await response.json();
+                this.showRefereeMessage(error.message || 'Failed to start match round', 'danger');
+            }
+        } catch (error) {
+            console.error('Start match round error:', error);
+            this.showRefereeMessage('Network error during match round start', 'danger');
+        }
+    }
+
+    async releaseMatchRoundResults() {
+        const selectedMatch = this.getSelectedMatch();
+        if (!selectedMatch) {
+            this.showRefereeMessage('Please select a match to release round results', 'warning');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/tournament/release-match-round-results', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    matchId: selectedMatch.id 
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                this.showRefereeMessage(result.message, 'success');
+                await this.loadTournamentState();
+            } else {
+                const error = await response.json();
+                this.showRefereeMessage(error.message || 'Failed to release round results', 'danger');
+            }
+        } catch (error) {
+            console.error('Release match round results error:', error);
+            this.showRefereeMessage('Network error during round result release', 'danger');
+        }
+    }
+
+    getSelectedMatch() {
+        // For now, return the first active match found
+        // In a more sophisticated UI, this would be based on user selection
+        if (!this.currentTournament || !this.currentTournament.matches) {
+            return null;
+        }
+
+        return this.currentTournament.matches.find(match => 
+            match.status !== 2 && // Not completed
+            match.currentRoundStatus !== undefined
+        );
     }
 
     async submitMove(move) {
@@ -410,47 +495,82 @@ class TournamentApp {
             }
         };
 
-        // Check if moves should be visible based on round status
-        const shouldShowMoves = () => {
-            if (!this.currentTournament) return false;
-            
-            // Show moves only if:
-            // 1. Match is completed AND
-            // 2. Results have been released (ResultsAvailable or Completed) OR tournament is finished
-            return match.status === 2 && 
-                   (this.currentTournament.currentRoundStatus >= 2 || this.currentTournament.status === 2);
+        const getMoveSymbol = (move) => {
+            switch (move) {
+                case 1: return '🪨';
+                case 2: return '📄';
+                case 3: return '✂️';
+                default: return '';
+            }
         };
 
-        const getPlayerHTML = (player, move, isWinner = false) => {
+        const getPlayerHTML = (player, isWinner = false) => {
             if (!player) {
                 return `
                     <div class="player">
                         <span class="player-name">TBD</span>
-                        <span class="player-move move-none"></span>
                     </div>
                 `;
             }
 
-            const moveDisplay = shouldShowMoves() ? getMoveClass(move) : 
-                                (move !== 0 ? 'move-submitted' : 'move-none');
-
             return `
                 <div class="player ${isWinner ? 'winner' : ''}">
                     <span class="player-name">${player.name}</span>
-                    <span class="player-move ${moveDisplay}"></span>
                 </div>
             `;
         };
 
+        // Generate rounds display
+        let roundsHTML = '';
+        if (match.matchRounds && match.matchRounds.length > 0) {
+            roundsHTML = `
+                <div class="match-rounds">
+                    <div class="rounds-header">Rounds (Best of 3)</div>
+                    <div class="rounds-grid">
+                        ${match.matchRounds.map(round => `
+                            <div class="round ${round.status === 2 ? 'completed' : ''}">
+                                <div class="round-header">Round ${round.roundNumber}</div>
+                                <div class="round-moves">
+                                    <div class="move">${round.status === 2 ? getMoveSymbol(round.player1Move) : (round.player1Move !== 0 ? '✓' : '')}</div>
+                                    <div class="vs">vs</div>
+                                    <div class="move">${round.status === 2 ? getMoveSymbol(round.player2Move) : (round.player2Move !== 0 ? '✓' : '')}</div>
+                                </div>
+                                ${round.status === 2 && round.winner ? 
+                                    `<div class="round-winner">Winner: ${round.winner.name}</div>` : 
+                                    ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Current round status
+        let currentRoundStatus = '';
+        if (match.status !== 2) {
+            currentRoundStatus = `
+                <div class="current-round-status">
+                    Current Round: ${match.currentRoundNumber}/3
+                    <span class="status-badge ${match.currentRoundStatus === 0 ? 'waiting' : match.currentRoundStatus === 1 ? 'in-progress' : 'completed'}">
+                        ${match.currentRoundStatus === 0 ? 'Waiting' : match.currentRoundStatus === 1 ? 'In Progress' : 'Completed'}
+                    </span>
+                </div>
+            `;
+        }
+
         return `
             <div class="match ${getStatusClass()}" data-match-id="${match.id}">
-                ${getPlayerHTML(match.player1, match.player1Move, match.winner?.id === match.player1?.id)}
-                <div style="text-align: center; margin: 5px 0; font-size: 0.8em; color: #6c757d;">
-                    vs
+                <div class="match-header">
+                    ${getPlayerHTML(match.player1, match.winner?.id === match.player1?.id)}
+                    <div style="text-align: center; margin: 5px 0; font-size: 0.8em; color: #6c757d;">
+                        vs
+                    </div>
+                    ${getPlayerHTML(match.player2, match.winner?.id === match.player2?.id)}
                 </div>
-                ${getPlayerHTML(match.player2, match.player2Move, match.winner?.id === match.player2?.id)}
-                ${match.status === 2 && match.winner && shouldShowMoves() ? 
-                    `<div class="text-center mt-2"><small class="text-success">Winner: ${match.winner.name}</small></div>` : 
+                ${currentRoundStatus}
+                ${roundsHTML}
+                ${match.status === 2 && match.winner ? 
+                    `<div class="text-center mt-2"><strong class="text-success">Match Winner: ${match.winner.name}</strong></div>` : 
                     ''}
             </div>
         `;
@@ -507,19 +627,23 @@ class TournamentApp {
 
     updateRefereeControls(tournament) {
         const startRoundBtn = document.getElementById('start-round-btn');
+        const startMatchRoundBtn = document.getElementById('start-match-round-btn');
+        const releaseMatchRoundResultsBtn = document.getElementById('release-match-round-results-btn');
         const releaseResultsBtn = document.getElementById('release-results-btn');
         
         // Reset button states
         startRoundBtn.disabled = true;
+        startMatchRoundBtn.disabled = true;
+        releaseMatchRoundResultsBtn.disabled = true;
         releaseResultsBtn.disabled = true;
         
         if (tournament.status !== 1) { // Not in progress
             return;
         }
         
-        // Check current round status to determine which buttons to enable
+        // Check current tournament round status
         switch (tournament.currentRoundStatus) {
-            case 0: // Waiting - can start round
+            case 0: // Waiting - can start tournament round
                 startRoundBtn.disabled = false;
                 break;
             case 1: // InProgress - check if all matches are completed
@@ -527,11 +651,31 @@ class TournamentApp {
                 if (currentRoundMatches.length > 0 && currentRoundMatches.every(m => m.status === 2)) {
                     releaseResultsBtn.disabled = false;
                 }
+                
+                // Check for matches with rounds that can be started or have results to release
+                currentRoundMatches.forEach(match => {
+                    if (match.status !== 2) { // Match not completed
+                        if (match.currentRoundStatus === 0) { // Round waiting
+                            startMatchRoundBtn.disabled = false;
+                        } else if (match.currentRoundStatus === 1) { // Round in progress
+                            // Check if current round is ready for results
+                            const currentRound = match.matchRounds?.find(r => r.roundNumber === match.currentRoundNumber);
+                            if (currentRound && this.isRoundReadyForResults(currentRound)) {
+                                releaseMatchRoundResultsBtn.disabled = false;
+                            }
+                        }
+                    }
+                });
                 break;
             case 2: // ResultsAvailable - results have been released
                 // Could advance to next round automatically or wait for referee action
                 break;
         }
+    }
+
+    isRoundReadyForResults(round) {
+        // Check if both players have submitted moves for this round
+        return round.player1Move !== 0 && round.player2Move !== 0; // Move.None = 0
     }
 
     startPeriodicUpdates() {

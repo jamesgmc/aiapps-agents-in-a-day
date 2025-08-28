@@ -32,6 +32,13 @@ public enum RoundStatus
     Completed = 3
 }
 
+public enum MatchRoundStatus
+{
+    Waiting = 0,
+    InProgress = 1,
+    Completed = 2
+}
+
 public class Player
 {
     public int Id { get; set; }
@@ -109,6 +116,41 @@ public class Match
     
     public DateTime? CompletedAt { get; set; }
     
+    public List<MatchRound> MatchRounds { get; set; } = new();
+    
+    public int CurrentRoundNumber { get; set; } = 1;
+    
+    public MatchRoundStatus CurrentRoundStatus { get; set; } = MatchRoundStatus.Waiting;
+    
+    public bool BothPlayersSubmitted => Player1Move != Move.None && Player2Move != Move.None;
+}
+
+public class MatchRound
+{
+    public int Id { get; set; }
+    
+    public int MatchId { get; set; }
+    public Match Match { get; set; } = null!;
+    
+    public int RoundNumber { get; set; }
+    
+    public Move Player1Move { get; set; } = Move.None;
+    
+    public DateTime? Player1MoveSubmittedAt { get; set; }
+    
+    public Move Player2Move { get; set; } = Move.None;
+    
+    public DateTime? Player2MoveSubmittedAt { get; set; }
+    
+    public int? WinnerId { get; set; }
+    public Player? Winner { get; set; }
+    
+    public MatchRoundStatus Status { get; set; } = MatchRoundStatus.Waiting;
+    
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    
+    public DateTime? CompletedAt { get; set; }
+    
     public bool BothPlayersSubmitted => Player1Move != Move.None && Player2Move != Move.None;
 }
 
@@ -178,6 +220,23 @@ public class MatchDto
     public MatchStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? CompletedAt { get; set; }
+    public List<MatchRoundDto> MatchRounds { get; set; } = new();
+    public int CurrentRoundNumber { get; set; }
+    public MatchRoundStatus CurrentRoundStatus { get; set; }
+}
+
+public class MatchRoundDto
+{
+    public int Id { get; set; }
+    public int RoundNumber { get; set; }
+    public Move Player1Move { get; set; }
+    public DateTime? Player1MoveSubmittedAt { get; set; }
+    public Move Player2Move { get; set; }
+    public DateTime? Player2MoveSubmittedAt { get; set; }
+    public PlayerDto? Winner { get; set; }
+    public MatchRoundStatus Status { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? CompletedAt { get; set; }
 }
 
 public class PlayerRegistrationResponse
@@ -208,4 +267,18 @@ public class RoundControlResponse
     public string Message { get; set; } = string.Empty;
     public RoundStatus NewRoundStatus { get; set; }
     public int CurrentRound { get; set; }
+}
+
+public class MatchRoundControlRequest
+{
+    public int MatchId { get; set; }
+}
+
+public class MatchRoundControlResponse
+{
+    public bool Success { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public MatchRoundStatus NewRoundStatus { get; set; }
+    public int CurrentRoundNumber { get; set; }
+    public MatchDto? UpdatedMatch { get; set; }
 }
