@@ -165,37 +165,96 @@ Round 3: The Championship
 
 
 
-## Game Process
+## 🎮 Game Process
 
-### Starting game
-- run server side here #file:apps/psr-game-server in dotnet, and make sure the frontend webpage is accessable
-- run #file:apps/psr-game-client/main.py multiple times to simulate 4 players in the game, the clients should all be able register themselves to the tournament
-- once all 4 players are registered, psr-game-server's web page should be ready to start the round. [Start Round] button should be enabled.
+### 🚀 Starting the Tournament
 
-### Round 1
-- click [Start Round 1] button to start Round 1. [Start Match] button should be enabled. 
-- then click [Start Match] button to start Match 1 in the Round 1
-- once [Start Match] button is clicked, the players can send their results for Match 1.
-- when all players have sent their results, the [Release Match Results] button should be enabled. 
-- click [Release Match Results] will then display the winners of the match.
+- Run the server side in `#file:apps/psr-game-server` using dotnet, and ensure the frontend webpage is accessible
+- Run `#file:apps/psr-game-client/main.py` multiple times to simulate 8 players in the tournament
+- All clients should be able to register themselves to the tournament
+- Once all 8 players are registered, the psr-game-server's web page should be ready to start the tournament
+- The **[Start Round 1]** button should be enabled
 
-#### Match 2 and Match 3 in Round 1
-- repeat the same process for Match 2 and Match 3 in Round 1
-- whoever wins most is the winner of the round.
-- once all 3 matches are played, [Release Round Results] button should be enabled. 
-- click [Release Round Results] will show all the winners of the round
+### 🥊 Round 1: The Opening Battles (8 Players → 4 Winners)
 
-### Round 2
-- the player clients need to know if they are going into next round of the tournament. if they are not winner, just stop the client
-- for the winners of Round 1, they will go into the Round 2 of the tournament.
-- click [Start Round 2] button to start Round 2. 
-- click [Start Match] button to start Match 1 in Round 2. 
-- repeat the steps in Round 1 for all 3 matches in Round 2
-- the winners of Round 2 will go into the final of the tournament.
+Round 1 consists of **4 simultaneous matches** where each pair of players competes in a **best-of-3 series**:
 
-### Round 3
-- for Round 3, repeat the same process for rounds and games.
-- the winner should be displayed in the end of round 3.
+#### 🎯 Match Structure in Round 1
+
+- **Match 1**: Player 1 vs Player 2
+- **Match 2**: Player 3 vs Player 4  
+- **Match 3**: Player 5 vs Player 6
+- **Match 4**: Player 7 vs Player 8
+
+#### 🎲 Best-of-3 Series Process
+
+Each match consists of 3 individual Rock-Paper-Scissors games:
+
+**Starting Match 1:**
+
+1. Click **[Start Round 1]** button to begin the round
+2. Click **[Start Match]** button to start Game 1 of Match 1
+3. Once **[Start Match]** is clicked, Player 1 and Player 2 can submit their moves for Game 1
+4. When both players have submitted moves, **[Release Match Results]** button becomes enabled
+5. Click **[Release Match Results]** to display the winner of Game 1
+
+**Continuing the Best-of-3:**
+
+6. Repeat steps 2-5 for Game 2 of Match 1
+7. Repeat steps 2-5 for Game 3 of Match 1 (if needed)
+8. The player who wins 2 out of 3 games wins Match 1
+
+**Completing All Matches:**
+
+9. Repeat the entire best-of-3 process for Match 2 (Player 3 vs Player 4)
+10. Repeat the entire best-of-3 process for Match 3 (Player 5 vs Player 6)
+11. Repeat the entire best-of-3 process for Match 4 (Player 7 vs Player 8)
+12. Once all 4 matches are completed, **[Release Round Results]** button becomes enabled
+13. Click **[Release Round Results]** to show the 4 winners advancing to Round 2
+
+### 🏆 Round 2: The Semi-Finals (4 Players → 2 Winners)
+
+Round 2 consists of **2 simultaneous matches** where the Round 1 winners compete:
+
+#### 🎯 Match Structure in Round 2
+
+- **Match 1**: Round 1 Winner A vs Round 1 Winner B
+- **Match 2**: Round 1 Winner C vs Round 1 Winner D
+
+#### 🔄 Player Client Behavior
+
+- Player clients check if they advanced from Round 1
+- If a player is not a winner, their client stops/exits
+- Winners from Round 1 continue to Round 2
+
+#### 🎲 Best-of-3 Series Process for Round 2
+
+1. Click **[Start Round 2]** button to begin Round 2
+2. Follow the same best-of-3 process as Round 1 for Match 1
+3. Follow the same best-of-3 process as Round 1 for Match 2
+4. The 2 match winners advance to the finals (Round 3)
+
+### 🏅 Round 3: The Championship Final (2 Players → 1 Champion)
+
+Round 3 consists of **1 final match** between the 2 remaining players:
+
+#### 🎯 Match Structure in Round 3
+
+- **Championship Match**: Round 2 Winner 1 vs Round 2 Winner 2
+
+#### 🎲 Best-of-3 Championship Series
+
+1. Click **[Start Round 3]** button to begin the final round
+2. Follow the same best-of-3 process as previous rounds
+3. The winner of this final match becomes the tournament champion
+4. The champion should be displayed prominently at the end of Round 3
+
+### 📊 Match Results Summary
+
+- **Round 1**: 4 matches × 3 games each = up to 12 individual games
+- **Round 2**: 2 matches × 3 games each = up to 6 individual games  
+- **Round 3**: 1 match × 3 games = up to 3 individual games
+- **Total**: Up to 21 individual Rock-Paper-Scissors games per tournament
 
 
 
