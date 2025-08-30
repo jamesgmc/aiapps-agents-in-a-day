@@ -57,15 +57,15 @@ class TournamentApp {
 
         // Referee controls
         document.getElementById('start-match-btn').addEventListener('click', async () => {
-            await this.startRound();
+            await this.startMatch();
         });
 
         document.getElementById('start-round-btn').addEventListener('click', async () => {
-            await this.startMatchRound();
+            await this.startRound();
         });
 
         document.getElementById('release-round-results-btn').addEventListener('click', async () => {
-            await this.releaseMatchRoundResults();
+            await this.releaseRoundResults();
         });
 
         document.getElementById('release-match-results-btn').addEventListener('click', async () => {
@@ -150,7 +150,7 @@ class TournamentApp {
         }
     }
 
-    async startRound() {
+    async startMatch() {
         if (!this.currentTournament) {
             this.showRefereeMessage('No active tournament found', 'danger');
             return;
@@ -212,7 +212,7 @@ class TournamentApp {
         }
     }
 
-    async startMatchRound() {
+    async startRound() {
         const selectedMatch = this.getSelectedMatch();
         if (!selectedMatch) {
             this.showRefereeMessage('Please select a match to start a round', 'warning');
@@ -244,7 +244,7 @@ class TournamentApp {
         }
     }
 
-    async releaseMatchRoundResults() {
+    async releaseRoundResults() {
         const selectedMatch = this.getSelectedMatch();
         if (!selectedMatch) {
             this.showRefereeMessage('Please select a match to release round results', 'warning');
@@ -626,15 +626,15 @@ class TournamentApp {
     }
 
     updateRefereeControls(tournament) {
-        const startRoundBtn = document.getElementById('start-match-btn');
-        const startMatchRoundBtn = document.getElementById('start-round-btn');
-        const releaseMatchRoundResultsBtn = document.getElementById('release-round-results-btn');
+        const startMatchBtn = document.getElementById('start-match-btn');
+        const startRoundBtn = document.getElementById('start-round-btn');
+        const releaseRoundResultsBtn = document.getElementById('release-round-results-btn');
         const releaseResultsBtn = document.getElementById('release-match-results-btn');
         
         // Reset button states
+        startMatchBtn.disabled = true;
         startRoundBtn.disabled = true;
-        startMatchRoundBtn.disabled = true;
-        releaseMatchRoundResultsBtn.disabled = true;
+        releaseRoundResultsBtn.disabled = true;
         releaseResultsBtn.disabled = true;
         
         if (tournament.status !== 1) { // Not in progress
@@ -644,7 +644,7 @@ class TournamentApp {
         // Check current tournament round status
         switch (tournament.currentRoundStatus) {
             case 0: // Waiting - can start tournament round
-                startRoundBtn.disabled = false;
+                startMatchBtn.disabled = false;
                 break;
             case 1: // InProgress - check if all matches are completed
                 const currentRoundMatches = tournament.matches.filter(m => m.round === tournament.currentRound);
@@ -656,12 +656,12 @@ class TournamentApp {
                 currentRoundMatches.forEach(match => {
                     if (match.status !== 2) { // Match not completed
                         if (match.currentRoundStatus === 0) { // Round waiting
-                            startMatchRoundBtn.disabled = false;
+                            startRoundBtn.disabled = false;
                         } else if (match.currentRoundStatus === 1) { // Round in progress
                             // Check if current round is ready for results
                             const currentRound = match.matchRounds?.find(r => r.roundNumber === match.currentRoundNumber);
                             if (currentRound && this.isRoundReadyForResults(currentRound)) {
-                                releaseMatchRoundResultsBtn.disabled = false;
+                                releaseRoundResultsBtn.disabled = false;
                             }
                         }
                     }
