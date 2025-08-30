@@ -7,7 +7,7 @@ namespace PsrGameServer.Services;
 
 public static class GameConstants
 {
-    public const int TotalPlayerCount = 8;
+    public const int TotalPlayerCount = 4;
 }
 
 public interface IGameService

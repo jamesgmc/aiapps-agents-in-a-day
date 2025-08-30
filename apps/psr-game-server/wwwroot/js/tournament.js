@@ -56,19 +56,19 @@ class TournamentApp {
         });
 
         // Referee controls
-        document.getElementById('start-round-btn').addEventListener('click', async () => {
+        document.getElementById('start-match-btn').addEventListener('click', async () => {
             await this.startRound();
         });
 
-        document.getElementById('start-match-round-btn').addEventListener('click', async () => {
+        document.getElementById('start-round-btn').addEventListener('click', async () => {
             await this.startMatchRound();
         });
 
-        document.getElementById('release-match-round-results-btn').addEventListener('click', async () => {
+        document.getElementById('release-round-results-btn').addEventListener('click', async () => {
             await this.releaseMatchRoundResults();
         });
 
-        document.getElementById('release-results-btn').addEventListener('click', async () => {
+        document.getElementById('release-match-results-btn').addEventListener('click', async () => {
             await this.releaseMatchResults();
         });
 
@@ -626,10 +626,10 @@ class TournamentApp {
     }
 
     updateRefereeControls(tournament) {
-        const startRoundBtn = document.getElementById('start-round-btn');
-        const startMatchRoundBtn = document.getElementById('start-match-round-btn');
-        const releaseMatchRoundResultsBtn = document.getElementById('release-match-round-results-btn');
-        const releaseResultsBtn = document.getElementById('release-results-btn');
+        const startRoundBtn = document.getElementById('start-match-btn');
+        const startMatchRoundBtn = document.getElementById('start-round-btn');
+        const releaseMatchRoundResultsBtn = document.getElementById('release-round-results-btn');
+        const releaseResultsBtn = document.getElementById('release-match-results-btn');
         
         // Reset button states
         startRoundBtn.disabled = true;

@@ -3,7 +3,7 @@
 
 
 # Run 4 instances of main.py in parallel (do not wait for each to finish)
-for ($i = 1; $i -le 7; $i++) {
+for ($i = 1; $i -le 3; $i++) {
     Write-Host "Starting Run #$i in background"
     Start-Process python -ArgumentList 'main.py', 'auto', "bot$i"
     Start-Sleep -Seconds 3
