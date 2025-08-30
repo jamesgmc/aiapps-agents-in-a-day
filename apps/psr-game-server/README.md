@@ -12,16 +12,6 @@ A complete tournament-style Paper Scissors Rock game server built with ASP.NET C
 - **Responsive UI**: Bootstrap-based frontend with tournament bracket display
 - **Real-time Updates**: SignalR integration for live tournament updates
 
-## API Endpoints
-
-### Player Management
-- `POST /api/players/register` - Register a new player
-- `POST /api/players/{id}/move` - Submit a move for a player
-- `GET /api/players/{id}/current-match` - Get current match for a player
-
-### Tournament Information
-- `GET /api/tournament/state` - Get current tournament state
-- `GET /api/tournament/results` - Get tournament results
 
 ## Game Flow
 
@@ -40,39 +30,6 @@ A complete tournament-style Paper Scissors Rock game server built with ASP.NET C
 - **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
 - **API Documentation**: Swagger/OpenAPI
 
-## Quick Start
-
-```bash
-# Navigate to the project directory
-cd apps/psr-game-server
-
-# Run the server
-dotnet run
-
-# Open web interface
-# Navigate to http://localhost:5096
-```
-
-## API Usage Examples
-
-### Register a Player
-```bash
-curl -X POST "http://localhost:5096/api/players/register" \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Alice"}'
-```
-
-### Submit a Move
-```bash
-curl -X POST "http://localhost:5096/api/players/1/move" \
-  -H "Content-Type: application/json" \
-  -d '{"move": 1}'  # 1=Rock, 2=Paper, 3=Scissors
-```
-
-### Get Tournament State
-```bash
-curl -X GET "http://localhost:5096/api/tournament/state"
-```
 
 ## Game Rules
 
