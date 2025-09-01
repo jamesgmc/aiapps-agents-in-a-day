@@ -56,12 +56,12 @@ class TournamentApp {
         });
 
         // Referee controls
-        document.getElementById('start-match-btn').addEventListener('click', async () => {
-            await this.startMatch();
+        document.getElementById('start-round-btn').addEventListener('click', async () => {
+            await this.startMatch(); // This calls /api/tournament/start-round (starts tournament round)
         });
 
-        document.getElementById('start-round-btn').addEventListener('click', async () => {
-            await this.startRound();
+        document.getElementById('start-match-btn').addEventListener('click', async () => {
+            await this.startRound(); // This calls /api/tournament/start-match-round (starts match round)
         });
 
         document.getElementById('release-round-results-btn').addEventListener('click', async () => {
@@ -344,7 +344,7 @@ class TournamentApp {
 
         // Update tournament info
         document.getElementById('tournament-title').textContent = tournament.tournamentName || 'Tournament';
-        document.getElementById('player-count').textContent = `${tournament.players.length}/8`;
+        document.getElementById('player-count').textContent = `${tournament.players.length}/4`;
         document.getElementById('current-round').textContent = `Round ${tournament.currentRound}`;
         document.getElementById('round-info').textContent = tournament.currentRound;
         
@@ -631,6 +631,9 @@ class TournamentApp {
         const releaseRoundResultsBtn = document.getElementById('release-round-results-btn');
         const releaseResultsBtn = document.getElementById('release-match-results-btn');
         
+        // Update button text to show current round
+        startRoundBtn.textContent = `Start Round ${tournament.currentRound}`;
+        
         // Reset button states
         startMatchBtn.disabled = true;
         startRoundBtn.disabled = true;
@@ -644,7 +647,7 @@ class TournamentApp {
         // Check current tournament round status
         switch (tournament.currentRoundStatus) {
             case 0: // Waiting - can start tournament round
-                startMatchBtn.disabled = false;
+                startRoundBtn.disabled = false; // Enable "Start Round" to start tournament round
                 break;
             case 1: // InProgress - check if all matches are completed
                 const currentRoundMatches = tournament.matches.filter(m => m.round === tournament.currentRound);
@@ -656,7 +659,7 @@ class TournamentApp {
                 currentRoundMatches.forEach(match => {
                     if (match.status !== 2) { // Match not completed
                         if (match.currentRoundStatus === 0) { // Round waiting
-                            startRoundBtn.disabled = false;
+                            startMatchBtn.disabled = false; // Enable "Start Match" to start match round
                         } else if (match.currentRoundStatus === 1) { // Round in progress
                             // Check if current round is ready for results
                             const currentRound = match.matchRounds?.find(r => r.roundNumber === match.currentRoundNumber);
