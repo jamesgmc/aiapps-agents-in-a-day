@@ -1,7 +1,0 @@
-
-
-{'id': 1, 'round': 1, 'player1': {'id': 1, 'name': 'bot1', 'isActive': True, 'registeredAt': '2025-08-27T00:05:47.4511108Z'}, 'player2': {'id': 2, 'name': 'bot2', 'isActive': True, 'registeredAt': '2025-08-27T00:05:48.0601504Z'}, 'player1Move': 2, 'player2Move': 0, 'winner': None, 'status': 1, 'createdAt': '2025-08-27T00:05:53.8927353Z', 'completedAt': None}
-
-{'id': 3, 'round': 2, 'player1': {'id': 1, 'name': 'bot1', 'isActive': True, 'registeredAt': '2025-08-27T00:05:47.4511108Z'}, 'player2': {'id': 3, 'name': 'bot3', 'isActive': True, 'registeredAt': '2025-08-27T00:05:50.9388451Z'}, 'player1Move': 0, 'player2Move': 0, 'winner': None, 'status': 0, 'createdAt': '2025-08-27T00:06:10.6986096Z', 'completedAt': None}
-
-
