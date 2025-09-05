@@ -21,7 +21,7 @@
                 {
                     <p>Current Round: @Model.CurrentRound / @PsrGameServer.Models.Tournament.MaxRounds</p>
                     
-                    @if (Model.Rounds.Any() && Model.CurrentRound <= Model.Rounds.Count)
+                    @if (Model.Rounds.Any() && Model.CurrentRound <= PsrGameServer.Models.Tournament.MaxRounds)
                     {
                         var currentRound = Model.Rounds.FirstOrDefault(r => r.RoundNumber == Model.CurrentRound);
                         if (currentRound != null)
@@ -31,17 +31,10 @@
                                 
                                 @if (currentRound.Status == PsrGameServer.Models.RoundStatus.Pending)
                                 {
+                                    <p>Click to start round @currentRound.RoundNumber with a random question.</p>
                                     <form method="post" asp-action="StartRound" class="mt-2">
                                         <input type="hidden" name="roundNumber" value="@currentRound.RoundNumber" />
-                                        <div class="mb-2">
-                                            <label for="question" class="form-label">Question:</label>
-                                            <input type="text" class="form-control" name="question" required />
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="correctAnswer" class="form-label">Correct Answer:</label>
-                                            <input type="text" class="form-control" name="correctAnswer" required />
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Start Round @currentRound.RoundNumber</button>
+                                        <button type="submit" class="btn btn-success">Start Round @currentRound.RoundNumber</button>
                                     </form>
                                 }
                                 else if (currentRound.Status == PsrGameServer.Models.RoundStatus.InProgress)
@@ -57,20 +50,15 @@
                                         <button type="submit" class="btn btn-warning">End Round @currentRound.RoundNumber</button>
                                     </form>
                                 }
-                                else if (currentRound.Status == PsrGameServer.Models.RoundStatus.Completed)
-                                {
-                                    if (Model.CurrentRound < PsrGameServer.Models.Tournament.MaxRounds)
-                                    {
-                                        <p>Round @currentRound.RoundNumber completed. Ready for next round.</p>
-                                    }
-                                    else
-                                    {
-                                        <p>All rounds completed!</p>
-                                        <form method="post" asp-action="EndTournament" class="mt-2">
-                                            <button type="submit" class="btn btn-danger">End Tournament</button>
-                                        </form>
-                                    }
-                                }
+                            </div>
+                        }
+                        else if (Model.CurrentRound > PsrGameServer.Models.Tournament.MaxRounds)
+                        {
+                            <div class="mt-3">
+                                <p>All rounds completed!</p>
+                                <form method="post" asp-action="EndTournament" class="mt-2">
+                                    <button type="submit" class="btn btn-danger">End Tournament</button>
+                                </form>
                             </div>
                         }
                     }

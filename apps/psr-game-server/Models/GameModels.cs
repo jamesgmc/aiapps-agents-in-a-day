@@ -1,5 +1,7 @@
 namespace PsrGameServer.Models;
 
+public record QuestionAnswer(string Question, string Answer);
+
 public enum TournamentStatus
 {
     Pending,

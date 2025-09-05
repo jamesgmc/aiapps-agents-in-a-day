@@ -13,7 +13,7 @@ public interface ITournamentService
     bool EndTournament();
     
     // Round management
-    bool StartRound(int roundNumber, string question, string correctAnswer);
+    bool StartRound(int roundNumber, string? question = null, string? correctAnswer = null);
     bool EndRound(int roundNumber);
     Round? GetCurrentRound();
     
