@@ -1,0 +1,17 @@
+{
+  "name": "psr-game-client",
+  "version": "1.0.0",
+  "description": "Paper-Scissors-Rock Game Client - A Node.js web client for the PSR tournament game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["game", "client", "psr", "tournament"],
+  "author": "PSR Game Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0"
+  }
+}
