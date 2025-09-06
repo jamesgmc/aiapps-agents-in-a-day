@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-// Game state
+// Game state - now supports multiple sessions
 let gameState = {
     playerId: null,
     playerName: '',
@@ -23,6 +23,9 @@ let gameState = {
     gameActive: false,
     results: []
 };
+
+// Multiple session support
+let sessions = new Map(); // sessionId -> gameState
 
 // Move enum matching server
 const Move = {
@@ -139,19 +142,34 @@ app.get('/', (req, res) => {
 
 app.post('/register', async (req, res) => {
     try {
-        const { playerName } = req.body;
+        const { playerName, sessionId } = req.body;
         
         if (!playerName) {
             return res.status(400).json({ error: 'Player name is required' });
         }
 
+        if (!sessionId) {
+            return res.status(400).json({ error: 'Session ID is required' });
+        }
+
         const result = await GameClient.registerPlayer(playerName);
         
-        gameState.playerId = result.playerId;
-        gameState.playerName = playerName;
-        gameState.isRegistered = true;
+        // Create session state
+        const sessionState = {
+            playerId: result.playerId,
+            playerName: playerName,
+            isRegistered: true,
+            currentRound: 0,
+            tournamentStatus: 'Pending',
+            roundStatus: null,
+            currentQuestion: '',
+            gameActive: false,
+            results: []
+        };
         
-        console.log(`Player ${playerName} registered with ID: ${result.PlayerId}`);
+        sessions.set(sessionId, sessionState);
+        
+        console.log(`Player ${playerName} registered with ID: ${result.playerId} (Session: ${sessionId})`);
         
         res.json({ 
             success: true, 
@@ -159,8 +177,8 @@ app.post('/register', async (req, res) => {
             message: result.message 
         });
 
-        // Start monitoring game state
-        startGameMonitoring();
+        // Start monitoring game state for this session
+        startGameMonitoring(sessionId);
         
     } catch (error) {
         res.status(500).json({ 
@@ -170,17 +188,98 @@ app.post('/register', async (req, res) => {
     }
 });
 
+app.post('/reconnect', async (req, res) => {
+    try {
+        const { playerId, sessionId } = req.body;
+        
+        if (!playerId) {
+            return res.status(400).json({ error: 'Player ID is required' });
+        }
+
+        if (!sessionId) {
+            return res.status(400).json({ error: 'Session ID is required' });
+        }
+
+        // Try to get player status to verify the player exists
+        const status = await GameClient.getStatus(playerId);
+        
+        // Get player name from results or use a default
+        let playerName = `Player ${playerId}`;
+        try {
+            const results = await GameClient.getResults(playerId);
+            if (results && results.length > 0) {
+                // We can't get player name from results, so keep the default
+                playerName = `Player ${playerId}`;
+            }
+        } catch (error) {
+            // If results fail, player might not exist or have no results yet
+        }
+        
+        // Create session state for reconnection
+        const sessionState = {
+            playerId: playerId,
+            playerName: playerName,
+            isRegistered: true,
+            currentRound: status.currentRound || 0,
+            tournamentStatus: status.tournamentStatus || 'Pending',
+            roundStatus: status.currentRoundStatus,
+            currentQuestion: status.currentQuestion || '',
+            gameActive: status.tournamentStatus === 1,
+            results: []
+        };
+        
+        sessions.set(sessionId, sessionState);
+        
+        console.log(`Player ${playerName} reconnected with ID: ${playerId} (Session: ${sessionId})`);
+        
+        res.json({ 
+            success: true, 
+            playerId: playerId,
+            playerName: playerName,
+            message: 'Reconnected successfully!' 
+        });
+
+        // Start monitoring game state for this session
+        startGameMonitoring(sessionId);
+        
+    } catch (error) {
+        res.status(500).json({ 
+            error: 'Reconnection failed', 
+            details: error.response?.data?.message || error.message 
+        });
+    }
+});
+
 app.get('/status', (req, res) => {
-    res.json(gameState);
+    const sessionId = req.query.sessionId || req.headers['session-id'];
+    if (sessionId && sessions.has(sessionId)) {
+        const sessionState = sessions.get(sessionId);
+        res.json(sessionState);
+    } else {
+        // Return default state if no session found
+        res.json({
+            isRegistered: false,
+            playerId: null,
+            playerName: '',
+            tournamentStatus: 0,
+            currentRound: 0,
+            roundStatus: null,
+            currentQuestion: '',
+            gameActive: false
+        });
+    }
 });
 
 app.get('/results', async (req, res) => {
     try {
-        if (!gameState.playerId) {
+        const sessionId = req.query.sessionId || req.headers['session-id'];
+        const sessionState = sessions.get(sessionId);
+        
+        if (!sessionState || !sessionState.playerId) {
             return res.status(400).json({ error: 'Player not registered' });
         }
 
-        const results = await GameClient.getResults(gameState.playerId);
+        const results = await GameClient.getResults(sessionState.playerId);
         res.json(results);
     } catch (error) {
         res.status(500).json({ 
@@ -190,74 +289,115 @@ app.get('/results', async (req, res) => {
     }
 });
 
-// Game monitoring and automation
-let monitoringInterval = null;
+app.post('/submit-answer', async (req, res) => {
+    try {
+        const { playerId, roundNumber, answer, move, sessionId } = req.body;
+        
+        if (!playerId || !roundNumber || !answer || move === null || move === undefined) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const result = await GameClient.submitAnswer(playerId, roundNumber, answer, move);
+        
+        console.log(`Manual submission for player ${playerId}, round ${roundNumber}: ${answer}, ${MoveNames[move]}`);
+        
+        res.json({ 
+            success: true, 
+            message: result.message || 'Answer submitted successfully'
+        });
+        
+    } catch (error) {
+        res.status(500).json({ 
+            error: 'Failed to submit answer', 
+            details: error.response?.data?.message || error.message 
+        });
+    }
+});
+
+app.get('/final-results', async (req, res) => {
+    try {
+        const sessionId = req.query.sessionId || req.headers['session-id'];
+        const sessionState = sessions.get(sessionId);
+        
+        if (!sessionState || !sessionState.playerId) {
+            return res.status(400).json({ error: 'Player not registered' });
+        }
+
+        // Get tournament status first
+        const status = await GameClient.getStatus(sessionState.playerId);
+        
+        if (status.tournamentStatus !== 2) { // Not completed
+            return res.json({ success: false, error: 'Tournament not completed yet' });
+        }
+
+        // Get player results
+        const results = await GameClient.getResults(sessionState.playerId);
+        const totalScore = results.reduce((sum, result) => sum + result.Score, 0);
+        
+        // For final results, we would need an endpoint from the server to get all players' rankings
+        // Since we don't have that, we'll simulate it based on the player's score
+        // In a real implementation, this would come from the server
+        
+        res.json({
+            success: true,
+            finalResults: true,
+            playerRank: 1, // Would come from server
+            totalPlayers: 5, // Would come from server  
+            playerScore: totalScore
+        });
+        
+    } catch (error) {
+        res.status(500).json({ 
+            error: 'Failed to get final results', 
+            details: error.message 
+        });
+    }
+});
+
+// Game monitoring and manual submission support
+let monitoringIntervals = new Map(); // sessionId -> interval
 let hasSubmittedForRound = {};
 
-function startGameMonitoring() {
-    if (monitoringInterval) {
-        clearInterval(monitoringInterval);
+function startGameMonitoring(sessionId) {
+    // Clear existing interval for this session
+    if (monitoringIntervals.has(sessionId)) {
+        clearInterval(monitoringIntervals.get(sessionId));
     }
 
-    console.log('Starting game monitoring...');
+    console.log(`Starting game monitoring for session ${sessionId}...`);
     
-    monitoringInterval = setInterval(async () => {
+    const interval = setInterval(async () => {
         try {
-            if (!gameState.playerId) return;
+            const sessionState = sessions.get(sessionId);
+            if (!sessionState || !sessionState.playerId) return;
 
-            const status = await GameClient.getStatus(gameState.playerId);
+            const status = await GameClient.getStatus(sessionState.playerId);
             
-            // Update game state
-            gameState.tournamentStatus = status.tournamentStatus;
-            gameState.currentRound = status.currentRound;
-            gameState.roundStatus = status.currentRoundStatus;
-            gameState.currentQuestion = status.currentQuestion;
-            gameState.gameActive = status.tournamentStatus === 1; // InProgress
+            // Update session state
+            sessionState.tournamentStatus = status.tournamentStatus;
+            sessionState.currentRound = status.currentRound;
+            sessionState.roundStatus = status.currentRoundStatus;
+            sessionState.currentQuestion = status.currentQuestion;
+            sessionState.gameActive = status.tournamentStatus === 1; // InProgress
 
-            console.log(`Status: Tournament=${status.tournamentStatus}, Round=${status.currentRound}, RoundStatus=${status.currentRoundStatus}`);
+            console.log(`Session ${sessionId}: Tournament=${status.tournamentStatus}, Round=${status.currentRound}, RoundStatus=${status.currentRoundStatus}`);
 
-            // If round is in progress and we can submit
-            if (status.currentRoundStatus === 1 && status.canSubmit && status.currentQuestion) { // InProgress
-                const roundKey = `${status.currentRound}`;
-                
-                if (!hasSubmittedForRound[roundKey]) {
-                    console.log(`Round ${status.currentRound} started with question: ${status.currentQuestion}`);
-                    
-                    // Attempt to answer the question
-                    const answer = attemptAnswerQuestion(status.currentQuestion);
-                    const move = getRandomMove();
-                    const moveNames = ['Rock', 'Paper', 'Scissors'];
-                    
-                    console.log(`Submitting answer: "${answer}" and move: ${moveNames[move]}`);
-                    
-                    try {
-                        const result = await GameClient.submitAnswer(
-                            gameState.playerId,
-                            status.currentRound,
-                            answer,
-                            move
-                        );
-                        
-                        hasSubmittedForRound[roundKey] = true;
-                        console.log(`Submission successful: ${result.message}`);
-                        
-                    } catch (submitError) {
-                        console.error('Failed to submit answer:', submitError.response?.data || submitError.message);
-                    }
-                }
-            }
+            // Note: We removed the auto-submission logic here
+            // The client will now manually submit through the confirmation popup
 
             // Stop monitoring if tournament is completed
             if (status.tournamentStatus === 2) { // Completed
-                console.log('Tournament completed, stopping monitoring');
-                clearInterval(monitoringInterval);
-                monitoringInterval = null;
+                console.log(`Tournament completed for session ${sessionId}, stopping monitoring`);
+                clearInterval(interval);
+                monitoringIntervals.delete(sessionId);
             }
 
         } catch (error) {
-            console.error('Monitoring error:', error.message);
+            console.error(`Monitoring error for session ${sessionId}:`, error.message);
         }
     }, 2000); // Check every 2 seconds
+    
+    monitoringIntervals.set(sessionId, interval);
 }
 
 // Start server
@@ -269,8 +409,11 @@ app.listen(PORT, () => {
 // Graceful shutdown
 process.on('SIGINT', () => {
     console.log('\nShutting down game client...');
-    if (monitoringInterval) {
-        clearInterval(monitoringInterval);
-    }
+    // Clear all monitoring intervals
+    monitoringIntervals.forEach((interval, sessionId) => {
+        clearInterval(interval);
+        console.log(`Stopped monitoring for session ${sessionId}`);
+    });
+    monitoringIntervals.clear();
     process.exit(0);
 });
