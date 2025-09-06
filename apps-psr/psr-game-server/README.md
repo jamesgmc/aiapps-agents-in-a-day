@@ -42,7 +42,7 @@ A complete ASP.NET Core 8 web application for managing Paper-Scissors-Rock tourn
 ### Steps
 1. Navigate to the project directory:
    ```bash
-   cd apps/psr-game-server
+   cd apps-psr/psr-game-server
    ```
 
 2. Run the application:

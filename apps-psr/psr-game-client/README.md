@@ -43,7 +43,7 @@ The client communicates with the PSR game server via these REST endpoints:
 
 1. Navigate to the client directory:
    ```bash
-   cd apps/psr-game-client
+   cd apps-psr/psr-game-client
    ```
 
 2. Install dependencies:
@@ -75,8 +75,8 @@ The client communicates with the PSR game server via these REST endpoints:
 
 To test the complete game flow:
 
-1. Start the PSR game server (`cd apps/psr-game-server && dotnet run`)
-2. Start this client (`cd apps/psr-game-client && npm start`)
+1. Start the PSR game server (`cd apps-psr/psr-game-server && dotnet run`)
+2. Start this client (`cd apps-psr/psr-game-client && npm start`)
 3. Open the client in browser (http://localhost:3000)
 4. Enter player name and register
 5. Use the server web interface (http://localhost:5000) to start tournament and rounds

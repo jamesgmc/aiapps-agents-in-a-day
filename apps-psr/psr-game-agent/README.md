@@ -28,7 +28,7 @@ A Python web application that acts as an autonomous player for the Paper-Scissor
 
 1. Navigate to the agent directory:
    ```bash
-   cd apps/psr-game-agent
+   cd apps-psr/psr-game-agent
    ```
 
 2. Install dependencies:
@@ -46,7 +46,7 @@ A Python web application that acts as an autonomous player for the Paper-Scissor
 
 2. In a new terminal, start the agent:
    ```bash
-   cd apps/psr-game-agent
+   cd apps-psr/psr-game-agent
    python app.py
    ```
 
