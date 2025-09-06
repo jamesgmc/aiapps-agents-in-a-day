@@ -101,10 +101,87 @@
         .hidden {
             display: none;
         }
-        .loading {
+        .player-id {
+            background-color: #ffeb3b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #333;
+            border: 2px solid #fbc02d;
+        }
+        .reconnect-section {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 2px solid #2196f3;
+        }
+        .confirmation-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+        }
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+        .popup-buttons {
             text-align: center;
-            color: #666;
-            font-style: italic;
+            margin-top: 20px;
+        }
+        .popup-buttons button {
+            margin: 0 10px;
+        }
+        .medal {
+            font-size: 2em;
+            margin: 0 10px;
+        }
+        .final-results {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .rank-display {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .move-selection {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+        .move-option {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            background: white;
+            min-width: 80px;
+        }
+        .move-option:hover {
+            border-color: #4CAF50;
+            background-color: #f0f8f0;
+        }
+        .move-option.selected {
+            border-color: #4CAF50;
+            background-color: #e8f5e8;
         }
     </style>
 </head>
@@ -115,10 +192,25 @@
         <!-- Registration Section -->
         <div id="registration-section" class="game-section">
             <h3>Player Registration</h3>
-            <div>
-                <input type="text" id="playerName" placeholder="Enter your player name" maxlength="50">
-                <button onclick="registerPlayer()">Register</button>
+            
+            <!-- New Player Registration -->
+            <div id="new-player-section">
+                <h4>New Player</h4>
+                <div>
+                    <input type="text" id="playerName" placeholder="Enter your player name" maxlength="50">
+                    <button onclick="registerPlayer()">Register</button>
+                </div>
             </div>
+            
+            <!-- Reconnect Section -->
+            <div class="reconnect-section">
+                <h4>Reconnect with Player ID</h4>
+                <div>
+                    <input type="text" id="reconnectPlayerId" placeholder="Enter your Player ID" maxlength="50">
+                    <button onclick="reconnectPlayer()">Reconnect</button>
+                </div>
+            </div>
+            
             <div id="registration-message"></div>
         </div>
 
@@ -139,18 +231,56 @@
             <div id="results-content" class="results"></div>
         </div>
 
+        <!-- Final Tournament Results -->
+        <div id="final-results-section" class="game-section hidden">
+            <div id="final-results-content" class="final-results"></div>
+        </div>
+
+        <!-- Confirmation Popup -->
+        <div id="confirmation-popup" class="confirmation-popup">
+            <div class="popup-content">
+                <h3>Confirm Your Submission</h3>
+                <div id="popup-question"></div>
+                <div>
+                    <label for="popup-answer">Your Answer:</label>
+                    <input type="text" id="popup-answer" style="width: 100%; margin: 10px 0;">
+                </div>
+                <div>
+                    <label>Your Move:</label>
+                    <div class="move-selection">
+                        <div class="move-option" data-move="0" onclick="selectMove(0)">
+                            🪨<br>Rock
+                        </div>
+                        <div class="move-option" data-move="1" onclick="selectMove(1)">
+                            📄<br>Paper
+                        </div>
+                        <div class="move-option" data-move="2" onclick="selectMove(2)">
+                            ✂️<br>Scissors
+                        </div>
+                    </div>
+                </div>
+                <div class="popup-buttons">
+                    <button onclick="submitConfirmedAnswer()">Submit</button>
+                    <button onclick="closeConfirmationPopup()" style="background-color: #f44336;">Cancel</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Instructions -->
         <div class="game-section">
             <h3>How to Play</h3>
             <ol>
-                <li><strong>Register:</strong> Enter your name and click Register</li>
+                <li><strong>Register:</strong> Enter your name and click Register, or reconnect with your Player ID</li>
                 <li><strong>Wait:</strong> Wait for the tournament to start (referee controls this)</li>
-                <li><strong>Auto-Play:</strong> The client will automatically participate in all 5 rounds</li>
-                <li><strong>Questions:</strong> Client attempts to answer questions automatically</li>
-                <li><strong>Moves:</strong> Client randomly selects Rock, Paper, or Scissors</li>
+                <li><strong>Manual Play:</strong> When a round starts, you'll see a confirmation popup</li>
+                <li><strong>Answer Questions:</strong> Review and modify the suggested answer if needed</li>
+                <li><strong>Choose Move:</strong> Select Rock, Paper, or Scissors for your move</li>
+                <li><strong>Submit:</strong> Confirm your submission or cancel to wait</li>
                 <li><strong>Results:</strong> View your results after each round</li>
+                <li><strong>Final Results:</strong> See your final ranking with medals for top 3!</li>
             </ol>
             <p><strong>Note:</strong> Make sure the game server is running on <code>http://localhost:5289</code></p>
+            <p><strong>Multi-Window:</strong> You can open multiple browser windows to play as different players</p>
         </div>
     </div>
 
@@ -159,7 +289,15 @@
         let gameState = {
             isRegistered: false,
             playerId: null,
-            playerName: ''
+            playerName: '',
+            sessionId: Date.now() // Unique session ID for multi-window support
+        };
+        
+        let pendingSubmission = {
+            question: '',
+            answer: '',
+            move: null,
+            roundNumber: 0
         };
 
         // Tournament Status enum
@@ -194,36 +332,70 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ playerName })
+                    body: JSON.stringify({ playerName, sessionId: gameState.sessionId })
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
-                    gameState.isRegistered = true;
-                    gameState.playerId = result.playerId;
-                    gameState.playerName = playerName;
-                    
-                    showMessage(messageDiv, result.message, 'success');
-                    
-                    // Hide registration, show game sections
-                    document.getElementById('registration-section').classList.add('hidden');
-                    document.getElementById('game-section').classList.remove('hidden');
-                    document.getElementById('results-section').classList.remove('hidden');
-                    
-                    // Update player info
-                    document.getElementById('player-info').innerHTML = 
-                        `<strong>Player:</strong> ${playerName} (ID: ${result.playerId})`;
-                    
-                    // Start status updates
-                    startStatusUpdates();
-                    
+                    completePlayerSetup(result.playerId, playerName, result.message, messageDiv);
                 } else {
                     showMessage(messageDiv, result.error || 'Registration failed', 'error');
                 }
             } catch (error) {
                 showMessage(messageDiv, 'Network error: ' + error.message, 'error');
             }
+        }
+
+        async function reconnectPlayer() {
+            const playerId = document.getElementById('reconnectPlayerId').value.trim();
+            const messageDiv = document.getElementById('registration-message');
+            
+            if (!playerId) {
+                showMessage(messageDiv, 'Please enter a Player ID', 'error');
+                return;
+            }
+
+            try {
+                // Try to get status with this player ID to verify it exists
+                const response = await fetch(`/reconnect`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ playerId, sessionId: gameState.sessionId })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    completePlayerSetup(playerId, result.playerName, 'Reconnected successfully!', messageDiv);
+                } else {
+                    showMessage(messageDiv, result.error || 'Reconnection failed', 'error');
+                }
+            } catch (error) {
+                showMessage(messageDiv, 'Network error: ' + error.message, 'error');
+            }
+        }
+
+        function completePlayerSetup(playerId, playerName, message, messageDiv) {
+            gameState.isRegistered = true;
+            gameState.playerId = playerId;
+            gameState.playerName = playerName;
+            
+            showMessage(messageDiv, message, 'success');
+            
+            // Hide registration, show game sections
+            document.getElementById('registration-section').classList.add('hidden');
+            document.getElementById('game-section').classList.remove('hidden');
+            document.getElementById('results-section').classList.remove('hidden');
+            
+            // Update player info with highlighted player ID
+            document.getElementById('player-info').innerHTML = 
+                `<strong>Player:</strong> ${playerName} | <strong>ID:</strong> <span class="player-id">${playerId}</span>`;
+            
+            // Start status updates
+            startStatusUpdates();
         }
 
         function showMessage(element, message, type) {
@@ -237,7 +409,7 @@
 
             updateInterval = setInterval(async () => {
                 try {
-                    const response = await fetch('/status');
+                    const response = await fetch(`/status?sessionId=${gameState.sessionId}`);
                     const status = await response.json();
                     updateGameDisplay(status);
                 } catch (error) {
@@ -247,7 +419,7 @@
 
             // Initial update
             try {
-                const response = await fetch('/status');
+                const response = await fetch(`/status?sessionId=${gameState.sessionId}`);
                 const status = await response.json();
                 updateGameDisplay(status);
             } catch (error) {
@@ -278,16 +450,189 @@
                 questionDiv.classList.add('hidden');
             }
 
-            // Game activity
+            // Game activity and check for manual submission
             let activity = '';
-            if (status.gameActive) {
-                activity = '<div class="loading">🎮 Game is active - participating automatically...</div>';
+            if (status.gameActive && status.currentRoundStatus === 1 && status.canSubmit && status.currentQuestion) {
+                // Show popup for manual submission if not already shown
+                if (!document.getElementById('confirmation-popup').style.display || 
+                    document.getElementById('confirmation-popup').style.display === 'none') {
+                    showConfirmationPopup(status.currentQuestion, status.currentRound);
+                }
+                activity = '<div class="loading">🎮 Round in progress - waiting for your submission...</div>';
+            } else if (status.gameActive) {
+                activity = '<div class="loading">🎮 Game is active - waiting for round to start...</div>';
             } else if (status.tournamentStatus === 0) {
                 activity = '<div class="loading">⏳ Waiting for tournament to start...</div>';
             } else if (status.tournamentStatus === 2) {
                 activity = '<div class="success">🏁 Tournament completed! Check your results below.</div>';
+                // Show final results
+                loadFinalResults();
             }
             document.getElementById('game-activity').innerHTML = activity;
+        }
+
+        function showConfirmationPopup(question, roundNumber) {
+            pendingSubmission.question = question;
+            pendingSubmission.roundNumber = roundNumber;
+            
+            // Pre-fill with suggested answer
+            const suggestedAnswer = attemptAnswerQuestion(question);
+            
+            document.getElementById('popup-question').innerHTML = `<strong>Question:</strong> ${question}`;
+            document.getElementById('popup-answer').value = suggestedAnswer;
+            document.getElementById('confirmation-popup').style.display = 'block';
+            
+            // Reset move selection
+            document.querySelectorAll('.move-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Pre-select a random move
+            const randomMove = Math.floor(Math.random() * 3);
+            selectMove(randomMove);
+        }
+
+        function selectMove(moveIndex) {
+            document.querySelectorAll('.move-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-move="${moveIndex}"]`).classList.add('selected');
+            pendingSubmission.move = moveIndex;
+        }
+
+        function closeConfirmationPopup() {
+            document.getElementById('confirmation-popup').style.display = 'none';
+        }
+
+        async function submitConfirmedAnswer() {
+            const answer = document.getElementById('popup-answer').value.trim();
+            
+            if (!answer) {
+                alert('Please enter an answer');
+                return;
+            }
+            
+            if (pendingSubmission.move === null) {
+                alert('Please select a move (Rock, Paper, or Scissors)');
+                return;
+            }
+
+            try {
+                const response = await fetch('/submit-answer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        playerId: gameState.playerId,
+                        roundNumber: pendingSubmission.roundNumber,
+                        answer: answer,
+                        move: pendingSubmission.move,
+                        sessionId: gameState.sessionId
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    closeConfirmationPopup();
+                    showMessage(document.getElementById('game-activity'), 
+                              `✅ Answer submitted for Round ${pendingSubmission.roundNumber}!`, 'success');
+                    // Refresh results
+                    setTimeout(loadResults, 1000);
+                } else {
+                    alert('Submission failed: ' + (result.error || 'Unknown error'));
+                }
+                
+            } catch (error) {
+                alert('Network error: ' + error.message);
+            }
+        }
+
+        // Simple question answering logic (same as server)
+        function attemptAnswerQuestion(question) {
+            const q = question.toLowerCase();
+            
+            const patterns = {
+                '2+2': '4',
+                '2 + 2': '4',
+                'capital of australia': 'canberra',
+                'largest planet': 'jupiter',
+                'world war ii end': '1945',
+                'chemical symbol for gold': 'au',
+                'continents': '7',
+                'how many continents': '7',
+                'smallest prime': '2',
+                'currency of japan': 'yen',
+                '10 squared': '100',
+                'longest river': 'nile',
+                'freezing point': '0',
+                'programming language': 'c#',
+                'http stand': 'hypertext transfer protocol',
+                'speed of light': '299792458',
+                'largest ocean': 'pacific',
+                'hexagon': '6',
+                'square root of 64': '8',
+                'capital of france': 'paris',
+                'plants absorb': 'carbon dioxide',
+                '15% of 200': '30'
+            };
+
+            for (const [key, value] of Object.entries(patterns)) {
+                if (q.includes(key)) {
+                    return value;
+                }
+            }
+
+            // Default fallback answers
+            if (q.includes('what is') && q.includes('+')) return '4';
+            if (q.includes('capital')) return 'unknown';
+            if (q.includes('year')) return '2000';
+            if (q.includes('how many')) return '1';
+            
+            return 'unknown';
+        }
+
+        async function loadFinalResults() {
+            try {
+                const response = await fetch(`/final-results?sessionId=${gameState.sessionId}`);
+                const result = await response.json();
+
+                if (result.success && result.finalResults) {
+                    const playerRank = result.playerRank;
+                    const totalPlayers = result.totalPlayers;
+                    const playerScore = result.playerScore;
+                    
+                    let medal = '';
+                    let rankClass = '';
+                    
+                    if (playerRank === 1) {
+                        medal = '<span class="medal">🥇</span>';
+                        rankClass = 'gold';
+                    } else if (playerRank === 2) {
+                        medal = '<span class="medal">🥈</span>';
+                        rankClass = 'silver';
+                    } else if (playerRank === 3) {
+                        medal = '<span class="medal">🥉</span>';
+                        rankClass = 'bronze';
+                    }
+
+                    const finalResultsHtml = `
+                        <h3>🏆 Final Tournament Results</h3>
+                        <div class="rank-display ${rankClass}">
+                            ${medal}
+                            <div>You finished <strong>#${playerRank}</strong> out of ${totalPlayers} players!</div>
+                            <div>Final Score: <strong>${playerScore} points</strong></div>
+                        </div>
+                        ${playerRank <= 3 ? '<div style="font-size: 1.2em; margin-top: 15px;">🎉 Congratulations! You\'re in the top 3! 🎉</div>' : ''}
+                    `;
+                    
+                    document.getElementById('final-results-content').innerHTML = finalResultsHtml;
+                    document.getElementById('final-results-section').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading final results:', error);
+            }
         }
 
         async function loadResults() {
@@ -296,7 +641,7 @@
             try {
                 resultsDiv.innerHTML = '<div class="loading">Loading results...</div>';
                 
-                const response = await fetch('/results');
+                const response = await fetch(`/results?sessionId=${gameState.sessionId}`);
                 const results = await response.json();
 
                 if (results.error) {
@@ -312,10 +657,13 @@
                 let html = '';
                 let totalScore = 0;
                 
-                results.forEach(result => {
-                    totalScore += result.score;
-                    const moveText = result.move !== null ? MoveNames[result.move] : 'N/A';
-                    const answerCorrect = result.answerCorrect ? '✅' : '❌';
+                // Sort results by round number in descending order (most recent first)
+                const sortedResults = results.sort((a, b) => b.RoundNumber - a.RoundNumber);
+                
+                sortedResults.forEach(result => {
+                    totalScore += result.Score;
+                    const moveText = result.Move !== null ? MoveNames[result.Move] : 'N/A';
+                    const answerCorrect = result.AnswerCorrect ? '✅' : '❌';
                     
                     html += `
                         <div class="round-result">
@@ -343,10 +691,16 @@
             }
         }, 10000);
 
-        // Allow Enter key to register
+        // Allow Enter key to register or reconnect
         document.getElementById('playerName').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 registerPlayer();
+            }
+        });
+        
+        document.getElementById('reconnectPlayerId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                reconnectPlayer();
             }
         });
     </script>
