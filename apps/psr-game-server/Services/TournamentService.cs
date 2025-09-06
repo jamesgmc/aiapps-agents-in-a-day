@@ -107,6 +107,29 @@ public class TournamentService : ITournamentService
         }
     }
 
+    public bool ResetTournament()
+    {
+        lock (_lock)
+        {
+            // Reset tournament state but keep players
+            _tournament.Status = TournamentStatus.Pending;
+            _tournament.CurrentRound = 1;
+            _tournament.StartedAt = null;
+            _tournament.EndedAt = null;
+            
+            // Reset all player scores but keep the players registered
+            foreach (var player in _tournament.Players)
+            {
+                player.TotalScore = 0;
+            }
+            
+            // Clear all rounds
+            _tournament.Rounds.Clear();
+            
+            return true;
+        }
+    }
+
     public bool StartRound(int roundNumber, string? question = null, string? correctAnswer = null)
     {
         lock (_lock)

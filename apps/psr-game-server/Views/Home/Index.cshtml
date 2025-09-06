@@ -12,10 +12,12 @@
             <div class="card-body">
                 @if (Model.Status == PsrGameServer.Models.TournamentStatus.Pending)
                 {
-                    <p>Players registered: @Model.Players.Count</p>
-                    <form method="post" asp-action="StartTournament">
-                        <button type="submit" class="btn btn-success">Start Tournament</button>
-                    </form>
+                    <div class="text-center">
+                        <p class="lead">Tournament is waiting for players to join!</p>
+                        <a href="/Home/TournamentWaiting" class="btn btn-primary btn-lg">
+                            <i class="fas fa-users"></i> View Tournament Lobby
+                        </a>
+                    </div>
                 }
                 else if (Model.Status == PsrGameServer.Models.TournamentStatus.InProgress)
                 {
@@ -65,8 +67,15 @@
                 }
                 else if (Model.Status == PsrGameServer.Models.TournamentStatus.Completed)
                 {
-                    <p>Tournament completed!</p>
-                    <a href="/Home/Results" class="btn btn-info">View Final Results</a>
+                    <div class="text-center">
+                        <h4 class="text-success">🏆 Tournament Complete! 🏆</h4>
+                        <a href="/Home/GrandFinish" class="btn btn-warning btn-lg me-2">
+                            <i class="fas fa-crown"></i> View Champions
+                        </a>
+                        <a href="/Home/Results" class="btn btn-info btn-lg">
+                            <i class="fas fa-chart-bar"></i> Detailed Results
+                        </a>
+                    </div>
                 }
             </div>
         </div>

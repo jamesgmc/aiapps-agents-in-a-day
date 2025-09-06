@@ -1,0 +1,192 @@
+@model PsrGameServer.Models.Tournament
+@{
+    ViewData["Title"] = "Tournament Champions";
+}
+
+<link rel="stylesheet" href="~/css/grand-finish.css" />
+
+<div class="container-fluid grand-finish-container">
+    <div class="confetti-canvas"></div>
+    
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="grand-finish-header">
+                <h1 class="display-1 text-white tournament-title">🏆 TOURNAMENT COMPLETE! 🏆</h1>
+                <p class="lead text-white">Congratulations to all our champions!</p>
+            </div>
+        </div>
+    </div>
+
+    @{
+        var finalStandings = Model.Players
+            .OrderByDescending(p => p.TotalScore)
+            .ThenBy(p => p.Name)
+            .ToList();
+        
+        var topThree = finalStandings.Take(3).ToList();
+        var others = finalStandings.Skip(3).ToList();
+    }
+
+    <!-- Podium Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="podium-container">
+                <h2 class="text-center mb-4">🥇 CHAMPIONS PODIUM 🥇</h2>
+                <div class="podium">
+                    @if (topThree.Count >= 2)
+                    {
+                        <!-- Second Place -->
+                        <div class="podium-position second-place" style="animation-delay: 0.5s">
+                            <div class="champion-card">
+                                <div class="champion-avatar">
+                                    <i class="fas fa-user-crown fa-4x"></i>
+                                </div>
+                                <div class="champion-details">
+                                    <h3>@topThree[1].Name</h3>
+                                    <div class="medal">🥈</div>
+                                    <div class="score">@topThree[1].TotalScore points</div>
+                                </div>
+                            </div>
+                            <div class="podium-base silver">
+                                <div class="podium-number">2</div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (topThree.Count >= 1)
+                    {
+                        <!-- First Place -->
+                        <div class="podium-position first-place" style="animation-delay: 0.2s">
+                            <div class="champion-card winner">
+                                <div class="champion-avatar">
+                                    <i class="fas fa-crown fa-5x"></i>
+                                </div>
+                                <div class="champion-details">
+                                    <h2>@topThree[0].Name</h2>
+                                    <div class="medal winner-medal">🥇</div>
+                                    <div class="score winner-score">@topThree[0].TotalScore points</div>
+                                    <div class="winner-badge">CHAMPION</div>
+                                </div>
+                            </div>
+                            <div class="podium-base gold">
+                                <div class="podium-number">1</div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (topThree.Count >= 3)
+                    {
+                        <!-- Third Place -->
+                        <div class="podium-position third-place" style="animation-delay: 0.8s">
+                            <div class="champion-card">
+                                <div class="champion-avatar">
+                                    <i class="fas fa-user-medal fa-4x"></i>
+                                </div>
+                                <div class="champion-details">
+                                    <h3>@topThree[2].Name</h3>
+                                    <div class="medal">🥉</div>
+                                    <div class="score">@topThree[2].TotalScore points</div>
+                                </div>
+                            </div>
+                            <div class="podium-base bronze">
+                                <div class="podium-number">3</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other Players Section -->
+    @if (others.Any())
+    {
+        <div class="row mt-5">
+            <div class="col-md-8 mx-auto">
+                <div class="card shadow-lg other-players-card">
+                    <div class="card-header bg-secondary text-white text-center">
+                        <h4><i class="fas fa-users"></i> All Participants</h4>
+                        <p class="mb-0">Thank you for playing!</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @for (int i = 0; i < others.Count; i++)
+                            {
+                                var player = others[i];
+                                var position = i + 4; // Starting from 4th place
+                                
+                                <div class="col-md-6 mb-3" style="animation-delay: @((i + 3) * 0.1)s">
+                                    <div class="participant-item">
+                                        <div class="participant-rank">@position</div>
+                                        <div class="participant-info">
+                                            <h5>@player.Name</h5>
+                                            <span class="participant-score">@player.TotalScore pts</span>
+                                        </div>
+                                        <div class="participant-badge">
+                                            <i class="fas fa-trophy text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Controls Section -->
+    <div class="row mt-5 mb-5">
+        <div class="col-12 text-center">
+            <div class="final-controls">
+                <a href="/Home/Results" class="btn btn-info btn-lg me-3">
+                    <i class="fas fa-chart-bar"></i> View Detailed Results
+                </a>
+                <a href="/Home/Grid" class="btn btn-secondary btn-lg me-3">
+                    <i class="fas fa-table"></i> Results Grid
+                </a>
+                <form method="post" asp-action="ResetTournament" class="d-inline">
+                    <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Start a new tournament? This will reset all scores but keep the players.')">
+                        <i class="fas fa-redo"></i> New Tournament
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Confetti animation
+document.addEventListener('DOMContentLoaded', function() {
+    createConfetti();
+});
+
+function createConfetti() {
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa726', '#ab47bc'];
+    const confettiContainer = document.querySelector('.confetti-canvas');
+    
+    for (let i = 0; i < 150; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'absolute';
+            confetti.style.width = Math.random() * 10 + 5 + 'px';
+            confetti.style.height = confetti.style.width;
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confetti.style.opacity = Math.random() * 0.8 + 0.2;
+            confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+            confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear infinite`;
+            
+            confettiContainer.appendChild(confetti);
+            
+            setTimeout(() => {
+                confetti.remove();
+            }, 5000);
+        }, i * 50);
+    }
+}
+
+// Continuous confetti
+setInterval(createConfetti, 5000);
+</script>

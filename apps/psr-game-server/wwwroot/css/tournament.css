@@ -1,0 +1,226 @@
+/* Tournament Page Animations and Styles */
+
+/* Tournament Waiting Styles */
+.tournament-waiting-header {
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin: -1rem -15px 0 -15px;
+    border-radius: 0 0 20px 20px;
+}
+
+.player-card {
+    animation: slideInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+@keyframes slideInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.waiting-slot {
+    opacity: 0.6;
+}
+
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 10px;
+}
+
+.loading-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+    } 40% {
+        transform: scale(1);
+    }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.player-counter {
+    animation: countUp 1s ease-out;
+}
+
+@keyframes countUp {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.referee-controls {
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 15px;
+}
+
+/* Round Complete Styles */
+.round-complete-header {
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    margin: -1rem -15px 0 -15px;
+    border-radius: 0 0 20px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.leaderboard-container {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    background: white;
+    transition: all 0.3s ease;
+    animation: slideInRight 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateX(100px);
+    position: relative;
+    overflow: hidden;
+}
+
+.leaderboard-item.gold {
+    border-color: #ffd700;
+    background: linear-gradient(135deg, #fff9c4 0%, #fffbeb 100%);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.leaderboard-item.silver {
+    border-color: #c0c0c0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    box-shadow: 0 4px 15px rgba(192, 192, 192, 0.3);
+}
+
+.leaderboard-item.bronze {
+    border-color: #cd7f32;
+    background: linear-gradient(135deg, #fdf2e9 0%, #ffffff 100%);
+    box-shadow: 0 4px 15px rgba(205, 127, 50, 0.3);
+}
+
+@keyframes slideInRight {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.rank-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 1rem;
+    min-width: 60px;
+}
+
+.rank-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #495057;
+}
+
+.medal {
+    font-size: 1.5rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounceIcon {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.player-info {
+    flex: 1;
+}
+
+.player-name {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #495057;
+}
+
+.score-details {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.round-score {
+    background: #28a745;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    animation: scorePopIn 1s ease-out;
+}
+
+@keyframes scorePopIn {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.total-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #495057;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.continue-controls {
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 15px;
+}

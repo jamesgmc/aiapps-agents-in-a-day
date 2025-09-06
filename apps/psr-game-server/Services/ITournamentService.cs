@@ -11,6 +11,7 @@ public interface ITournamentService
     Tournament GetTournament();
     bool StartTournament();
     bool EndTournament();
+    bool ResetTournament();
     
     // Round management
     bool StartRound(int roundNumber, string? question = null, string? correctAnswer = null);
