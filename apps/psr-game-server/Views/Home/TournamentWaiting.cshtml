@@ -48,8 +48,11 @@
                             </div>
                         }
                         
-                        @* Show empty slots for more players *@
-                        @for (int i = Model.Players.Count; i < 12; i++)
+                        @* Show empty slots for more players - initially 3 slots, then add one by one after 3 players *@
+                        @{
+                            int totalSlots = Math.Max(3, Model.Players.Count + 1);
+                        }
+                        @for (int i = Model.Players.Count; i < totalSlots; i++)
                         {
                             <div class="col-md-6 col-lg-4 mb-3">
                                 <div class="card border-secondary h-100 waiting-slot">
