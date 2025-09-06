@@ -1,0 +1,140 @@
+@model PsrGameServer.Models.Tournament
+@{
+    ViewData["Title"] = "Tournament Dashboard";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Tournament Status: @Model.Status</h3>
+            </div>
+            <div class="card-body">
+                @if (Model.Status == PsrGameServer.Models.TournamentStatus.Pending)
+                {
+                    <p>Players registered: @Model.Players.Count</p>
+                    <form method="post" asp-action="StartTournament">
+                        <button type="submit" class="btn btn-success">Start Tournament</button>
+                    </form>
+                }
+                else if (Model.Status == PsrGameServer.Models.TournamentStatus.InProgress)
+                {
+                    <p>Current Round: @Model.CurrentRound / @PsrGameServer.Models.Tournament.MaxRounds</p>
+                    
+                    @if (Model.Rounds.Any() && Model.CurrentRound <= PsrGameServer.Models.Tournament.MaxRounds)
+                    {
+                        var currentRound = Model.Rounds.FirstOrDefault(r => r.RoundNumber == Model.CurrentRound);
+                        if (currentRound != null)
+                        {
+                            <div class="mt-3">
+                                <h5>Round @currentRound.RoundNumber Status: @currentRound.Status</h5>
+                                
+                                @if (currentRound.Status == PsrGameServer.Models.RoundStatus.Pending)
+                                {
+                                    <p>Click to start round @currentRound.RoundNumber with a random question.</p>
+                                    <form method="post" asp-action="StartRound" class="mt-2">
+                                        <input type="hidden" name="roundNumber" value="@currentRound.RoundNumber" />
+                                        <button type="submit" class="btn btn-success">Start Round @currentRound.RoundNumber</button>
+                                    </form>
+                                }
+                                else if (currentRound.Status == PsrGameServer.Models.RoundStatus.InProgress)
+                                {
+                                    <p><strong>Question:</strong> @currentRound.Question</p>
+                                    <p><strong>Server Move:</strong> @currentRound.ServerMove</p>
+                                    
+                                    var submittedCount = currentRound.PlayerResults.Count(pr => pr.HasSubmitted);
+                                    <p>Players submitted: @submittedCount / @Model.Players.Count</p>
+                                    
+                                    <form method="post" asp-action="EndRound" class="mt-2">
+                                        <input type="hidden" name="roundNumber" value="@currentRound.RoundNumber" />
+                                        <button type="submit" class="btn btn-warning">End Round @currentRound.RoundNumber</button>
+                                    </form>
+                                }
+                            </div>
+                        }
+                        else if (Model.CurrentRound > PsrGameServer.Models.Tournament.MaxRounds)
+                        {
+                            <div class="mt-3">
+                                <p>All rounds completed!</p>
+                                <form method="post" asp-action="EndTournament" class="mt-2">
+                                    <button type="submit" class="btn btn-danger">End Tournament</button>
+                                </form>
+                            </div>
+                        }
+                    }
+                }
+                else if (Model.Status == PsrGameServer.Models.TournamentStatus.Completed)
+                {
+                    <p>Tournament completed!</p>
+                    <a href="/Home/Results" class="btn btn-info">View Final Results</a>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Registered Players (@Model.Players.Count)</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Players.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var player in Model.Players)
+                        {
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>@player.Name</span>
+                                <span class="badge bg-primary">@player.TotalScore pts</span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted">No players registered yet.</p>
+                }
+            </div>
+        </div>
+        
+        @if (Model.Status == PsrGameServer.Models.TournamentStatus.InProgress && Model.CurrentRound < PsrGameServer.Models.Tournament.MaxRounds - 1)
+        {
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>Current Leaderboard</h5>
+                </div>
+                <div class="card-body">
+                    @{
+                        var leaderboard = Model.Players.OrderByDescending(p => p.TotalScore).ThenBy(p => p.Name).ToList();
+                    }
+                    @if (leaderboard.Any())
+                    {
+                        <ol class="list-group list-group-numbered">
+                            @foreach (var player in leaderboard.Take(5))
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">@player.Name</div>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">@player.TotalScore</span>
+                                </li>
+                            }
+                        </ol>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    // Auto-refresh every 5 seconds during tournament
+    @if (Model.Status == PsrGameServer.Models.TournamentStatus.InProgress)
+    {
+        <text>
+        setInterval(function() {
+            location.reload();
+        }, 5000);
+        </text>
+    }
+</script>

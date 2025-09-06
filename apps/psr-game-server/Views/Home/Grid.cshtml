@@ -1,0 +1,120 @@
+@model PsrGameServer.Controllers.GridViewModel
+@{
+    ViewData["Title"] = "Grid View - All Results";
+}
+
+<h2>📊 Tournament Grid - All Player Results</h2>
+
+@if (Model.Players.Any() && Model.Rounds.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Player</th>
+                    @foreach (var round in Model.Rounds.OrderBy(r => r.RoundNumber))
+                    {
+                        <th class="text-center">Round @round.RoundNumber</th>
+                    }
+                    <th class="text-center bg-warning">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var player in Model.Players.OrderByDescending(p => p.TotalScore).ThenBy(p => p.Name))
+                {
+                    <tr>
+                        <td class="fw-bold">@player.Name</td>
+                        @foreach (var round in Model.Rounds.OrderBy(r => r.RoundNumber))
+                        {
+                            var playerResult = round.PlayerResults.FirstOrDefault(pr => pr.PlayerId == player.Id);
+                            <td class="text-center">
+                                @if (playerResult != null && playerResult.HasSubmitted)
+                                {
+                                    <div class="small">
+                                        <div>
+                                            @if (playerResult.AnswerCorrect)
+                                            {
+                                                <span class="badge bg-success">✓</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">✗</span>
+                                            }
+                                            @(playerResult.Move?.ToString() ?? "?")
+                                        </div>
+                                        <div class="text-muted">vs @round.ServerMove</div>
+                                        @if (playerResult.Move.HasValue)
+                                        {
+                                            @if (playerResult.Move.Value == round.ServerMove)
+                                            {
+                                                <span class="badge bg-warning">Tie</span>
+                                            }
+                                            else if ((playerResult.Move.Value == PsrGameServer.Models.Move.Rock && round.ServerMove == PsrGameServer.Models.Move.Scissors) ||
+                                                    (playerResult.Move.Value == PsrGameServer.Models.Move.Paper && round.ServerMove == PsrGameServer.Models.Move.Rock) ||
+                                                    (playerResult.Move.Value == PsrGameServer.Models.Move.Scissors && round.ServerMove == PsrGameServer.Models.Move.Paper))
+                                            {
+                                                <span class="badge bg-success">Win</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Loss</span>
+                                            }
+                                        }
+                                        <div class="fw-bold text-primary">@playerResult.Score pts</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No submission</span>
+                                }
+                            </td>
+                        }
+                        <td class="text-center bg-light">
+                            <strong class="fs-5">@player.TotalScore</strong>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Legend</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Answer Scoring:</strong></p>
+                        <ul>
+                            <li><span class="badge bg-success">✓</span> Correct Answer: +10 points</li>
+                            <li><span class="badge bg-danger">✗</span> Wrong Answer: +0 points</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Rock-Paper-Scissors Scoring:</strong></p>
+                        <ul>
+                            <li><span class="badge bg-success">Win</span> Beat server: +20 points</li>
+                            <li><span class="badge bg-warning">Tie</span> Same as server: +10 points</li>
+                            <li><span class="badge bg-danger">Loss</span> Lost to server: +0 points</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-muted"><strong>Maximum per round:</strong> 30 points (correct answer + win RPS)</p>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <p>No completed rounds to display yet.</p>
+        <p>Once players start submitting answers and rounds are completed, the detailed grid will appear here.</p>
+    </div>
+}
+
+<div class="mt-4">
+    <a href="/" class="btn btn-primary">Back to Dashboard</a>
+    <a href="/Home/Results" class="btn btn-secondary">Results View</a>
+</div>

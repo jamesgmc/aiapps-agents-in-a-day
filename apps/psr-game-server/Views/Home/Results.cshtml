@@ -1,0 +1,174 @@
+@model PsrGameServer.Models.Tournament
+@{
+    ViewData["Title"] = "Tournament Results";
+}
+
+<h2>Tournament Results</h2>
+
+@if (Model.Status == PsrGameServer.Models.TournamentStatus.Completed)
+{
+    <div class="alert alert-success">
+        <h4>🏆 Tournament Completed!</h4>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>🥇 Top 3 Winners</h3>
+                </div>
+                <div class="card-body">
+                    @{
+                        var finalLeaderboard = Model.Players.OrderByDescending(p => p.TotalScore).ThenBy(p => p.Name).Take(3).ToList();
+                    }
+                    @if (finalLeaderboard.Any())
+                    {
+                        <div class="row text-center">
+                            @for (int i = 0; i < finalLeaderboard.Count; i++)
+                            {
+                                var player = finalLeaderboard[i];
+                                var position = i + 1;
+                                var badgeClass = position switch 
+                                {
+                                    1 => "bg-warning",
+                                    2 => "bg-secondary", 
+                                    3 => "bg-info",
+                                    _ => "bg-primary"
+                                };
+                                var medal = position switch
+                                {
+                                    1 => "🥇",
+                                    2 => "🥈", 
+                                    3 => "🥉",
+                                    _ => ""
+                                };
+                                
+                                <div class="col-4">
+                                    <div class="card border-@(position == 1 ? "warning" : position == 2 ? "secondary" : "info")">
+                                        <div class="card-body">
+                                            <h1>@medal</h1>
+                                            <h5>@player.Name</h5>
+                                            <span class="badge @badgeClass fs-6">@player.TotalScore points</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>📊 Final Standings</h3>
+                </div>
+                <div class="card-body">
+                    @{
+                        var allPlayers = Model.Players.OrderByDescending(p => p.TotalScore).ThenBy(p => p.Name).ToList();
+                    }
+                    <ol class="list-group list-group-numbered">
+                        @foreach (var player in allPlayers)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">@player.Name</div>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">@player.TotalScore</span>
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        Tournament is @Model.Status.ToString().ToLower(). Results will be available when the tournament is completed.
+    </div>
+}
+
+@if (Model.Rounds.Any(r => r.Status == PsrGameServer.Models.RoundStatus.Completed))
+{
+    <div class="mt-4">
+        <h3>Round Results</h3>
+        @foreach (var round in Model.Rounds.Where(r => r.Status == PsrGameServer.Models.RoundStatus.Completed).OrderBy(r => r.RoundNumber))
+        {
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>Round @round.RoundNumber</h5>
+                    <small class="text-muted">Question: @round.Question | Answer: @round.CorrectAnswer | Server Move: @round.ServerMove</small>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Answer</th>
+                                    <th>Correct?</th>
+                                    <th>Move</th>
+                                    <th>Result</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var result in round.PlayerResults.OrderByDescending(pr => pr.Score))
+                                {
+                                    var player = Model.Players.FirstOrDefault(p => p.Id == result.PlayerId);
+                                    <tr>
+                                        <td>@player?.Name</td>
+                                        <td>@(result.Answer ?? "No answer")</td>
+                                        <td>
+                                            @if (result.AnswerCorrect)
+                                            {
+                                                <span class="badge bg-success">✓</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">✗</span>
+                                            }
+                                        </td>
+                                        <td>@(result.Move?.ToString() ?? "No move")</td>
+                                        <td>
+                                            @if (result.Move.HasValue)
+                                            {
+                                                if (result.Move.Value == round.ServerMove)
+                                                {
+                                                    <span class="badge bg-warning">Tie</span>
+                                                }
+                                                else if ((result.Move.Value == PsrGameServer.Models.Move.Rock && round.ServerMove == PsrGameServer.Models.Move.Scissors) ||
+                                                        (result.Move.Value == PsrGameServer.Models.Move.Paper && round.ServerMove == PsrGameServer.Models.Move.Rock) ||
+                                                        (result.Move.Value == PsrGameServer.Models.Move.Scissors && round.ServerMove == PsrGameServer.Models.Move.Paper))
+                                                {
+                                                    <span class="badge bg-success">Win</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">Loss</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">No submission</span>
+                                            }
+                                        </td>
+                                        <td><strong>@result.Score</strong></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<div class="mt-4">
+    <a href="/" class="btn btn-primary">Back to Dashboard</a>
+    <a href="/Home/Grid" class="btn btn-secondary">Grid View</a>
+</div>
