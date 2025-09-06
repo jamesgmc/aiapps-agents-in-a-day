@@ -281,6 +281,9 @@
             </ol>
             <p><strong>Note:</strong> Make sure the game server is running on <code>http://localhost:5289</code></p>
             <p><strong>Multi-Window:</strong> You can open multiple browser windows to play as different players</p>
+            
+            <!-- Demo button for testing popup -->
+            <button onclick="showTestPopup()" style="background-color: #2196F3; margin-top: 10px;">🧪 Demo Confirmation Popup</button>
         </div>
     </div>
 
@@ -703,6 +706,24 @@
                 reconnectPlayer();
             }
         });
+
+        // Test function to demonstrate confirmation popup
+        function showTestPopup() {
+            pendingSubmission.question = "What is 2 + 2?";
+            pendingSubmission.roundNumber = 1;
+            
+            document.getElementById('popup-question').innerHTML = `<strong>Question:</strong> What is 2 + 2?`;
+            document.getElementById('popup-answer').value = "4";
+            document.getElementById('confirmation-popup').style.display = 'block';
+            
+            // Reset move selection
+            document.querySelectorAll('.move-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Pre-select Rock
+            selectMove(0);
+        }
     </script>
 </body>
 </html>
