@@ -23,7 +23,7 @@ def index():
                              round_status=game_agent.round_status,
                              current_round=game_agent.current_round,
                              is_running=game_agent.is_running,
-                             status_log=game_agent.status_log[-20:],  # Show last 20 messages
+                             status_log=game_agent.status_log[-20:][::-1],  # Show last 20 messages, latest first
                              results=game_agent.results)
 
 @app.route('/start', methods=['POST'])
@@ -113,7 +113,7 @@ def api_status():
         "tournament_status": game_agent.tournament_status,
         "round_status": game_agent.round_status,
         "current_round": game_agent.current_round,
-        "recent_log": game_agent.status_log[-5:] if game_agent.status_log else [],
+        "recent_log": game_agent.status_log[-5:][::-1] if game_agent.status_log else [],  # Last 5 messages, latest first
         "results_count": len(game_agent.results)
     })
 
