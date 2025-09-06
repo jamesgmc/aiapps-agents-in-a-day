@@ -1,4 +1,4 @@
-// Main bicep template for Agentic AI App infrastructure
+// Main bicep template for AI Apps and Agents infrastructure
 @description('Location for all resources')
 param location string = resourceGroup().location
 
@@ -464,7 +464,7 @@ resource aiFoundryWorkspace 'Microsoft.MachineLearningServices/workspaces@2023-0
   }
   properties: {
     friendlyName: aiFoundryWorkspaceName
-    description: 'AI Foundry workspace for Agentic AI App'
+    description: 'AI Foundry workspace for AI Apps and Agents'
     storageAccount: storageAccount.id
     keyVault: keyVault.id
     applicationInsights: appInsights.id

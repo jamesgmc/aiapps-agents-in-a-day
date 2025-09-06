@@ -1,6 +1,6 @@
-# Agentic AI App in a Day (Draft)
+# AI Apps and Agents in one day (Draft)
 
-![Agentic AI App in a Day Cover](res/workshop-cover.png)
+![AI Apps and Agents in one day Cover](res/workshop-cover.png)
 
 ## Overview
 - Duration: 9am to 4pm

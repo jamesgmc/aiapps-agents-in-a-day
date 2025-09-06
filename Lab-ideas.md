@@ -1,4 +1,4 @@
-# Agentic AI App in a Day (Lab)
+# AI Apps and Agents in one day (Lab)
 
 ## Lab Structure
 
