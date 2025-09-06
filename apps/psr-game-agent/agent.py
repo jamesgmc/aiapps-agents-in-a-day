@@ -17,6 +17,8 @@ class GameAgent:
         self.is_running = False
         self.status_log: List[str] = []
         self.results: List[Dict] = []
+        self.last_completed_round = 0
+        self.latest_score = 0
         
     def log_status(self, message: str):
         """Add a status message to the log"""
@@ -215,7 +217,14 @@ class GameAgent:
             move = latest_result.get("move")
             move_name = self.get_move_name(move) if move is not None else "None"
             
-            self.log_status(f"Round {round_num} result: {score} points, Answer: {'✓' if answer_correct else '✗'}, Move: {move_name}")
+            # Check if this is a new round completion
+            if round_num > self.last_completed_round:
+                self.last_completed_round = round_num
+                self.latest_score = score
+                self.log_status(f"🎉 Round {round_num} COMPLETED! Score: {score} points, Answer: {'✓' if answer_correct else '✗'}, Move: {move_name}")
+                self.log_status(f"✨ +{score} points added to total score!")
+            else:
+                self.log_status(f"Round {round_num} result: {score} points, Answer: {'✓' if answer_correct else '✗'}, Move: {move_name}")
     
     def get_final_results(self):
         """Get and display final results"""
