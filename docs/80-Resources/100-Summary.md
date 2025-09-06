@@ -3,7 +3,7 @@ title: "Summary"
 slug: /summary
 ---
 
-:::info Learn how to interact with OpenAI models
+:::info Learn how to build AI Apps and Agents
 We hope that in the last hour, you've learned what natural language generative AI models are and how they work and understand the power of prompt-engineering.
 :::
 

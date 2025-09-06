@@ -72,7 +72,7 @@ const config = {
       footer: {
         style: "dark",
         links: [],
-        copyright: `Copyright © ${new Date().getFullYear()} Learn how to interact with OpenAI models.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Learn how to build AI Apps and Agents.`,
       },
 
       prism: {
