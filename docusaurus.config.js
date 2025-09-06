@@ -56,10 +56,10 @@ const config = {
       },
 
       navbar: {
-        title: "Build AI Apps and Agents",
+        title: "Build AI Apps and Agents in one day",
         logo: {
           alt: "Workshop: Build AI Apps and Agents",
-          src: "img/logo-ws3.png",
+          src: "img/logo.png",
         },
         items: [
           {
