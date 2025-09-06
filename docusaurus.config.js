@@ -10,7 +10,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 const config = {
   title: "Agentic AI APP In a Day Hackathon",
   tagline:
-    "Accelerate Your AI Journey: Build an Agentic AI APP",
+    "Accelerate Your AI Journey: Build AI Apps and Agents",
   url: "https://github-insight-anz-lab.github.io",
   baseUrl: "/aiapp1day/",
 
@@ -56,9 +56,9 @@ const config = {
       },
 
       navbar: {
-        title: "Build an Agentic AI APP",
+        title: "Build AI Apps and Agents",
         logo: {
-          alt: "Workshop: Build an Agentic AI APP",
+          alt: "Workshop: Build AI Apps and Agents",
           src: "img/logo-ws3.png",
         },
         items: [
