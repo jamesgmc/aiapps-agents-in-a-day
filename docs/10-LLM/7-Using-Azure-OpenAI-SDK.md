@@ -12,10 +12,10 @@ In this lab, you will learn how to use the Azure OpenAI SDK to interact with Azu
 
 ![alt text](images/openterminal.png)
 
-2. **Create** a new directory `labs/01-LAB-01/7-Using-Azure-OpenAI-SDK/openai-nodejs` and navigate to the directory.
+2. **Create** a new directory `labs/10-LAB-01/7-Using-Azure-OpenAI-SDK/openai-nodejs` and navigate to the directory.
 
 ```bash
-cd labs/01-LAB-01/7-Using-Azure-OpenAI-SDK
+cd labs/10-LAB-01/7-Using-Azure-OpenAI-SDK
 mkdir openai-nodejs
 cd openai-nodejs
 ```
