@@ -276,6 +276,8 @@ public class TournamentService : ITournamentService
         lock (_lock)
         {
             var currentRound = GetCurrentRound();
+            var playerResult = currentRound?.PlayerResults.FirstOrDefault(pr => pr.PlayerId == playerId);
+            
             return new TournamentStatusResponse
             {
                 TournamentStatus = _tournament.Status,
@@ -283,7 +285,8 @@ public class TournamentService : ITournamentService
                 CurrentRoundStatus = currentRound?.Status,
                 CurrentQuestion = currentRound?.Status == RoundStatus.InProgress ? currentRound.Question : null,
                 CanSubmit = currentRound?.Status == RoundStatus.InProgress && 
-                          !currentRound.PlayerResults.Any(pr => pr.PlayerId == playerId && pr.HasSubmitted)
+                          playerResult != null && 
+                          !playerResult.HasSubmitted
             };
         }
     }

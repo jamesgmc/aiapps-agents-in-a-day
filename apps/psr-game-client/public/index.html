@@ -313,17 +313,17 @@
                 let totalScore = 0;
                 
                 results.forEach(result => {
-                    totalScore += result.Score;
-                    const moveText = result.Move !== null ? MoveNames[result.Move] : 'N/A';
-                    const answerCorrect = result.AnswerCorrect ? '✅' : '❌';
+                    totalScore += result.score;
+                    const moveText = result.move !== null ? MoveNames[result.move] : 'N/A';
+                    const answerCorrect = result.answerCorrect ? '✅' : '❌';
                     
                     html += `
                         <div class="round-result">
-                            <strong>Round ${result.RoundNumber}</strong><br>
-                            Answer: "${result.Answer || 'N/A'}" ${answerCorrect}<br>
+                            <strong>Round ${result.roundNumber}</strong><br>
+                            Answer: "${result.answer || 'N/A'}" ${answerCorrect}<br>
                             Move: ${moveText}<br>
-                            Score: ${result.Score} points<br>
-                            ${result.SubmittedAt ? `Submitted: ${new Date(result.SubmittedAt).toLocaleTimeString()}` : 'Not submitted'}
+                            Score: ${result.score} points<br>
+                            ${result.submittedAt ? `Submitted: ${new Date(result.submittedAt).toLocaleTimeString()}` : 'Not submitted'}
                         </div>
                     `;
                 });
