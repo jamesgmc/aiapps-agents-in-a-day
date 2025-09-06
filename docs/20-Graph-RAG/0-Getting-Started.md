@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-slug: /lab2-setup
+slug: /20-Graph-RAG-Setup
 ---
 
 

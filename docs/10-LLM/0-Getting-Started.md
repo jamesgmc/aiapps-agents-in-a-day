@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-slug: /lab1-setup
+slug: /10-LLM-Setup
 ---
 
 :::info LAB PRE-REQUISITES

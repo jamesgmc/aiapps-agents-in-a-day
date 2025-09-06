@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-slug: /lab1-setup
+slug: /50-AI-Agents-Setup
 ---
 
 :::info LAB PRE-REQUISITES

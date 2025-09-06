@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-slug: /lab1-setup
+slug: /40-AI-Apps-Setup
 ---
 
 :::info LAB PRE-REQUISITES

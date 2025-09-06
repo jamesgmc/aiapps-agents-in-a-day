@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-slug: /lab3-setup
+slug: /30-Chatbot-Setup
 ---
 
 :::info LAB PRE-REQUISITES
