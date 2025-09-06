@@ -1,6 +1,6 @@
 {
-  "position": 4,
-  "label": "LAB 1 - Interact with OpenAI Models",
+  "position": 10,
+  "label": "Lab 1: LLM",
   "collapsible": true,
   "collapsed": true,
   "className": "red"
