@@ -73,6 +73,31 @@ public class TournamentService : ITournamentService
         }
     }
 
+    public bool UnregisterPlayer(int playerId)
+    {
+        lock (_lock)
+        {
+            var player = _tournament.Players.FirstOrDefault(p => p.Id == playerId);
+            if (player == null)
+                return false;
+
+            // Remove player from tournament
+            _tournament.Players.Remove(player);
+
+            // Remove player from all round results
+            foreach (var round in _tournament.Rounds)
+            {
+                var playerResult = round.PlayerResults.FirstOrDefault(pr => pr.PlayerId == playerId);
+                if (playerResult != null)
+                {
+                    round.PlayerResults.Remove(playerResult);
+                }
+            }
+
+            return true;
+        }
+    }
+
     public bool StartTournament()
     {
         lock (_lock)
@@ -191,6 +216,47 @@ public class TournamentService : ITournamentService
             if (roundNumber < Tournament.MaxRounds)
             {
                 _tournament.CurrentRound = roundNumber + 1;
+            }
+
+            return true;
+        }
+    }
+
+    public bool ResetCurrentRound()
+    {
+        lock (_lock)
+        {
+            var currentRound = GetCurrentRound();
+            if (currentRound == null)
+                return false;
+
+            // Reset round status
+            currentRound.Status = RoundStatus.Pending;
+            currentRound.StartedAt = null;
+            currentRound.EndedAt = null;
+            currentRound.Question = string.Empty;
+            currentRound.CorrectAnswer = string.Empty;
+            currentRound.ServerMove = Move.Rock; // Default value
+
+            // Reset all player results for this round
+            foreach (var playerResult in currentRound.PlayerResults)
+            {
+                playerResult.Answer = null;
+                playerResult.Move = null;
+                playerResult.AnswerCorrect = false;
+                playerResult.Score = 0;
+                playerResult.SubmittedAt = null;
+            }
+
+            // Reset player total scores only for this round's contribution
+            foreach (var player in _tournament.Players)
+            {
+                var playerResult = currentRound.PlayerResults.FirstOrDefault(pr => pr.PlayerId == player.Id);
+                if (playerResult != null)
+                {
+                    // Subtract this round's score from total (recalculated scores will be 0)
+                    player.TotalScore -= playerResult.Score;
+                }
             }
 
             return true;

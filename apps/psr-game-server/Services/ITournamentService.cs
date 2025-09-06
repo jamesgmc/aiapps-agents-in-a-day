@@ -6,6 +6,7 @@ public interface ITournamentService
 {
     // Player registration
     RegisterPlayerResponse RegisterPlayer(string playerName);
+    bool UnregisterPlayer(int playerId);
     
     // Tournament management
     Tournament GetTournament();
@@ -16,6 +17,7 @@ public interface ITournamentService
     // Round management
     bool StartRound(int roundNumber, string? question = null, string? correctAnswer = null);
     bool EndRound(int roundNumber);
+    bool ResetCurrentRound();
     Round? GetCurrentRound();
     
     // Player actions
