@@ -49,6 +49,44 @@ def start_game():
         game_agent = None
         return redirect(url_for('index'))
 
+@app.route('/reconnect', methods=['POST'])
+def reconnect_game():
+    """Reconnect with existing player ID"""
+    global game_agent
+    
+    player_id = request.form.get('player_id', '').strip()
+    
+    if not player_id:
+        return redirect(url_for('index'))
+    
+    try:
+        player_id = int(player_id)
+    except ValueError:
+        return redirect(url_for('index'))
+    
+    # Create game agent with existing player ID
+    game_agent = GameAgent(f"Player {player_id}")
+    game_agent.player_id = player_id
+    
+    # Verify the player exists by getting status
+    from api_client import PSRGameClient
+    client = PSRGameClient()
+    status_response = client.get_player_status(player_id)
+    
+    if "error" in status_response:
+        game_agent.log_status(f"Failed to reconnect: {status_response['error']}")
+        game_agent = None
+        return redirect(url_for('index'))
+    
+    game_agent.log_status(f"Successfully reconnected as Player ID: {player_id}")
+    
+    # Get current results
+    game_agent.get_current_results()
+    
+    # Start autonomous play
+    game_agent.start_autonomous_play()
+    return redirect(url_for('index'))
+
 @app.route('/reset')
 def reset_game():
     """Reset the game to start over"""
