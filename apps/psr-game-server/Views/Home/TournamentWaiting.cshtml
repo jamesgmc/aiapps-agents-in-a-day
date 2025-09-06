@@ -1,0 +1,129 @@
+@model PsrGameServer.Models.Tournament
+@{
+    ViewData["Title"] = "Tournament Lobby";
+}
+
+<link rel="stylesheet" href="~/css/tournament.css" />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="tournament-waiting-header">
+                <h1 class="display-3 text-primary">🎮 Tournament Lobby</h1>
+                <p class="lead">Welcome to the Paper-Scissors-Rock Tournament!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3><i class="fas fa-users"></i> Players Joining</h3>
+                    <div class="player-counter">
+                        <span class="display-4" id="playerCount">@Model.Players.Count</span>
+                        <small class="d-block">Players Registered</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="playersGrid">
+                        @for (int i = 0; i < Model.Players.Count; i++)
+                        {
+                            var player = Model.Players[i];
+                            <div class="col-md-6 col-lg-4 mb-3 player-card" style="animation-delay: @(i * 0.1)s">
+                                <div class="card border-success h-100">
+                                    <div class="card-body text-center">
+                                        <div class="player-avatar mb-2">
+                                            <i class="fas fa-user-circle fa-3x text-success"></i>
+                                        </div>
+                                        <h5 class="card-title">@player.Name</h5>
+                                        <small class="text-muted">Player #@player.Id</small>
+                                        <div class="mt-2">
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check"></i> Ready
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        
+                        @* Show empty slots for more players *@
+                        @for (int i = Model.Players.Count; i < 12; i++)
+                        {
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card border-secondary h-100 waiting-slot">
+                                    <div class="card-body text-center">
+                                        <div class="player-avatar mb-2">
+                                            <i class="fas fa-user-plus fa-3x text-secondary"></i>
+                                        </div>
+                                        <h5 class="card-title text-muted">Waiting for player...</h5>
+                                        <div class="loading-dots">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <div class="referee-controls">
+                @if (Model.Players.Count > 0)
+                {
+                    <form method="post" asp-action="StartTournament" class="d-inline">
+                        <button type="submit" class="btn btn-success btn-lg pulse-animation">
+                            <i class="fas fa-play"></i> Start Tournament
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <button class="btn btn-secondary btn-lg" disabled>
+                        <i class="fas fa-users"></i> Waiting for Players
+                    </button>
+                }
+                
+                <a href="/Home/Register" class="btn btn-outline-primary btn-lg ms-3">
+                    <i class="fas fa-user-plus"></i> Register New Player
+                </a>
+                
+                <form method="post" asp-action="ResetTournament" class="d-inline ms-3">
+                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to reset the tournament? This will clear all scores but keep registered players.')">
+                        <i class="fas fa-redo"></i> Reset Tournament
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-refresh every 3 seconds to show new players joining
+setTimeout(function() {
+    location.reload();
+}, 3000);
+
+// Animate counter when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const counter = document.getElementById('playerCount');
+    const target = parseInt(counter.textContent);
+    let current = 0;
+    const increment = target / 20;
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
+        counter.textContent = Math.floor(current);
+    }, 50);
+});
+</script>

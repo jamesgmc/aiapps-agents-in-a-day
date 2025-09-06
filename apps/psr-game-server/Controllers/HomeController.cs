@@ -30,6 +30,13 @@ public class HomeController : Controller
     public IActionResult EndTournament()
     {
         _tournamentService.EndTournament();
+        return RedirectToAction("GrandFinish");
+    }
+
+    [HttpPost]
+    public IActionResult ResetTournament()
+    {
+        _tournamentService.ResetTournament();
         return RedirectToAction("Index");
     }
 
@@ -52,9 +59,35 @@ public class HomeController : Controller
         if (!success)
         {
             TempData["Error"] = "Failed to end round";
+            return RedirectToAction("Index");
         }
         
-        return RedirectToAction("Index");
+        return RedirectToAction("RoundComplete", new { roundNumber });
+    }
+
+    public IActionResult RoundComplete(int roundNumber)
+    {
+        var tournament = _tournamentService.GetTournament();
+        var viewModel = new RoundCompleteViewModel
+        {
+            Tournament = tournament,
+            CompletedRoundNumber = roundNumber,
+            RoundResults = _tournamentService.GetRoundResults(roundNumber),
+            IsLastRound = roundNumber >= Tournament.MaxRounds
+        };
+        return View(viewModel);
+    }
+
+    public IActionResult TournamentWaiting()
+    {
+        var tournament = _tournamentService.GetTournament();
+        return View(tournament);
+    }
+
+    public IActionResult GrandFinish()
+    {
+        var tournament = _tournamentService.GetTournament();
+        return View(tournament);
     }
 
     public IActionResult Results()
@@ -170,4 +203,12 @@ public class GridViewModel
 {
     public List<Player> Players { get; set; } = new();
     public List<Round> Rounds { get; set; } = new();
+}
+
+public class RoundCompleteViewModel
+{
+    public Tournament Tournament { get; set; } = new();
+    public int CompletedRoundNumber { get; set; }
+    public List<RoundResultEntry> RoundResults { get; set; } = new();
+    public bool IsLastRound { get; set; }
 }
