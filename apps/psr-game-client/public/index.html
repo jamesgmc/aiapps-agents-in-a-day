@@ -360,19 +360,19 @@
             }
 
             try {
-                // Try to get status with this player ID to verify it exists
+                // Call the reconnect endpoint which will set up the session
                 const response = await fetch(`/reconnect`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ playerId, sessionId: gameState.sessionId })
+                    body: JSON.stringify({ playerId: parseInt(playerId), sessionId: gameState.sessionId })
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
-                    completePlayerSetup(playerId, result.playerName, 'Reconnected successfully!', messageDiv);
+                    completePlayerSetup(result.playerId, result.playerName, result.message, messageDiv);
                 } else {
                     showMessage(messageDiv, result.error || 'Reconnection failed', 'error');
                 }
