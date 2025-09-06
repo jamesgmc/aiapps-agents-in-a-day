@@ -51,22 +51,24 @@ class GameAgent:
         # Math questions
         if "+" in question:
             try:
-                # Simple addition
-                parts = question.replace("?", "").split("+")
-                if len(parts) == 2:
-                    num1 = int(parts[0].strip())
-                    num2 = int(parts[1].strip())
+                # Simple addition - look for pattern "X + Y"
+                import re
+                match = re.search(r'(\d+)\s*\+\s*(\d+)', question)
+                if match:
+                    num1 = int(match.group(1))
+                    num2 = int(match.group(2))
                     return str(num1 + num2)
             except:
                 pass
         
-        if "-" in question and "subtract" in question_lower:
+        if "-" in question:
             try:
-                # Simple subtraction
-                parts = question.replace("?", "").split("-")
-                if len(parts) == 2:
-                    num1 = int(parts[0].strip())
-                    num2 = int(parts[1].strip())
+                # Simple subtraction - look for pattern "X - Y"
+                import re
+                match = re.search(r'(\d+)\s*-\s*(\d+)', question)
+                if match:
+                    num1 = int(match.group(1))
+                    num2 = int(match.group(2))
                     return str(num1 - num2)
             except:
                 pass
@@ -176,6 +178,9 @@ class GameAgent:
                     elif submit_response.get("success"):
                         self.log_status(f"Successfully submitted answer and move for Round {current_round}")
                         rounds_completed = current_round
+                        # Fetch updated results after submission
+                        time.sleep(1)  # Brief pause to let server process
+                        self.get_current_results()
                     else:
                         self.log_status(f"Submit failed: {submit_response.get('message', 'Unknown error')}")
                 
@@ -188,6 +193,29 @@ class GameAgent:
         
         self.is_running = False
         self.log_status("Game monitoring stopped.")
+    
+    def get_current_results(self):
+        """Get current results and update results list"""
+        if not self.player_id:
+            return
+        
+        results_response = self.client.get_player_results(self.player_id)
+        
+        if "error" in results_response:
+            self.log_status(f"Error getting current results: {results_response['error']}")
+            return
+        
+        self.results = results_response if isinstance(results_response, list) else []
+        
+        if self.results:
+            latest_result = self.results[-1]  # Get most recent result
+            round_num = latest_result.get("roundNumber", "?")
+            score = latest_result.get("score", 0)
+            answer_correct = latest_result.get("answerCorrect", False)
+            move = latest_result.get("move")
+            move_name = self.get_move_name(move) if move is not None else "None"
+            
+            self.log_status(f"Round {round_num} result: {score} points, Answer: {'✓' if answer_correct else '✗'}, Move: {move_name}")
     
     def get_final_results(self):
         """Get and display final results"""
