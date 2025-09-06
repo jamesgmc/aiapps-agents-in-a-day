@@ -18,7 +18,7 @@ Elevate product design creativity by harnessing the power of DALL-e model to gen
 
 Use Dall-e model to create cretivity product design based on user's description.
 
-There is a `Design` page (`apps\chatbot\pages\design\Design.tsx`) on chatbot. The page has an input textbox for description, and a button to call AI Service and get back a generated image.
+There is a `Design` page (`apps-chat\chatbot\pages\design\Design.tsx`) on chatbot. The page has an input textbox for description, and a button to call AI Service and get back a generated image.
 
 Complete the `dalleApi` function to send a prompt and receive a generated image.
 

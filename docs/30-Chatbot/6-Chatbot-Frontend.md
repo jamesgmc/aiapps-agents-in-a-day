@@ -27,9 +27,9 @@ In the previous lab, we configured and hosted the backend API code locally. The 
    ```
    
 3. Take your time and have a look at these files:
-   - `apps\chatbot\scr\api.index.ts` points to backend api
-   - `apps\chatbot\scr\pages\chat\Chat.tsx` manages chat conversations
-   - `apps\chatbot\scr\components\Answer\Answer.tsx` manages chat response
+   - `apps-chat\chatbot\scr\api.index.ts` points to backend api
+   - `apps-chat\chatbot\scr\pages\chat\Chat.tsx` manages chat conversations
+   - `apps-chat\chatbot\scr\components\Answer\Answer.tsx` manages chat response
 
 4. Navigating to local URL in the browser accesses the front-end application. Through this front-end application User Interface, questions can be submitted to the Azure OpenAI model about the Bike Store company data, then it will generate responses accordingly.
 

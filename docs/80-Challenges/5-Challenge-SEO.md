@@ -18,7 +18,7 @@ Automate the retrieval and creation of SEO-optimized content, incorporating rele
 
 Develop a feature to download a specific web page, convert html to text and summarise it.
 
-There is a `SEO` page (`apps\chatbot\pages\seo\Seo.tsx`) on chatbot. The page has an input textbox for a url, and a button to invoke AI Service and get back a generated SEO content. use `http://localhost:4000/product.html` for testing.
+There is a `SEO` page (`apps-chat\chatbot\pages\seo\Seo.tsx`) on chatbot. The page has an input textbox for a url, and a button to invoke AI Service and get back a generated SEO content. use `http://localhost:4000/product.html` for testing.
 
 Complete the `seoApi` function to send a website url and receive a structured json containing various SEO fields.
 

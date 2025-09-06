@@ -18,7 +18,7 @@ Leveraging GPT-4o's vision capabilities for accurate analysis and verification o
 
 Design a feature to utilise vision model to understand and extract information from image or photo.
 
-There is a `Vision` page (`apps\chatbot\pages\vision\Vision.tsx`) on chatbot. The page has an image upload button to select a local image file, and a button to invoke AI Service and retrieve vision response.
+There is a `Vision` page (`apps-chat\chatbot\pages\vision\Vision.tsx`) on chatbot. The page has an image upload button to select a local image file, and a button to invoke AI Service and retrieve vision response.
 
 Complete the `visionApi` function to send a user prompt together with a uploaded image, then receive the response that anlyzes certain features on the photo. The vision model will describe the content of the image.
 
