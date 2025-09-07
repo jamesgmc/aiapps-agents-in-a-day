@@ -372,7 +372,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    completePlayerSetup(result.playerId, result.playerName, result.message, messageDiv);
+                    completePlayerSetup(result.playerId, result.playerName, result.message, messageDiv, true);
                 } else {
                     showMessage(messageDiv, result.error || 'Reconnection failed', 'error');
                 }
@@ -381,7 +381,7 @@
             }
         }
 
-        function completePlayerSetup(playerId, playerName, message, messageDiv) {
+        function completePlayerSetup(playerId, playerName, message, messageDiv, isReconnection = false) {
             gameState.isRegistered = true;
             gameState.playerId = playerId;
             gameState.playerName = playerName;
@@ -397,15 +397,15 @@
             document.getElementById('player-info').innerHTML = 
                 `<strong>Player:</strong> ${playerName} | <strong>ID:</strong> <span class="player-id">${playerId}</span>`;
             
-            // Start status updates
-            startStatusUpdates();
+            // Start status updates with reconnection flag
+            startStatusUpdates(isReconnection);
         }
 
         function showMessage(element, message, type) {
             element.innerHTML = `<div class="${type}">${message}</div>`;
         }
 
-        async function startStatusUpdates() {
+        async function startStatusUpdates(isReconnection = false) {
             if (updateInterval) {
                 clearInterval(updateInterval);
             }
@@ -420,14 +420,19 @@
                 }
             }, 2000);
 
+            // For reconnection, add a small delay to allow session to be fully established
+            const initialDelay = isReconnection ? 100 : 0;
+            
             // Initial update
-            try {
-                const response = await fetch(`/status?sessionId=${gameState.sessionId}`);
-                const status = await response.json();
-                updateGameDisplay(status);
-            } catch (error) {
-                console.error('Initial status error:', error);
-            }
+            setTimeout(async () => {
+                try {
+                    const response = await fetch(`/status?sessionId=${gameState.sessionId}`);
+                    const status = await response.json();
+                    updateGameDisplay(status);
+                } catch (error) {
+                    console.error('Initial status error:', error);
+                }
+            }, initialDelay);
         }
 
         function updateGameDisplay(status) {
@@ -688,9 +693,22 @@
         }
 
         // Auto-refresh results every 10 seconds if registered
+        // Add a small delay for the first refresh to allow session establishment
+        let autoRefreshStarted = false;
         setInterval(() => {
             if (gameState.isRegistered) {
-                loadResults();
+                if (!autoRefreshStarted) {
+                    // For the first auto-refresh after registration/reconnection,
+                    // wait a bit longer to ensure session is established
+                    setTimeout(() => {
+                        loadResults();
+                    }, 3000);
+                    autoRefreshStarted = true;
+                } else {
+                    loadResults();
+                }
+            } else {
+                autoRefreshStarted = false;
             }
         }, 10000);
 

@@ -154,6 +154,9 @@ app.post('/register', async (req, res) => {
 
         const result = await GameClient.registerPlayer(playerName);
         
+        // Ensure sessionId is always treated as a string
+        const sessionIdStr = String(sessionId);
+        
         // Create session state
         const sessionState = {
             playerId: result.playerId,
@@ -167,9 +170,9 @@ app.post('/register', async (req, res) => {
             results: []
         };
         
-        sessions.set(sessionId, sessionState);
+        sessions.set(sessionIdStr, sessionState);
         
-        console.log(`Player ${playerName} registered with ID: ${result.playerId} (Session: ${sessionId})`);
+        console.log(`Player ${playerName} registered with ID: ${result.playerId} (Session: ${sessionIdStr})`);
         
         res.json({ 
             success: true, 
@@ -178,7 +181,7 @@ app.post('/register', async (req, res) => {
         });
 
         // Start monitoring game state for this session
-        startGameMonitoring(sessionId);
+        startGameMonitoring(sessionIdStr);
         
     } catch (error) {
         res.status(500).json({ 
@@ -199,6 +202,9 @@ app.post('/reconnect', async (req, res) => {
         if (!sessionId) {
             return res.status(400).json({ error: 'Session ID is required' });
         }
+
+        // Ensure sessionId is always treated as a string
+        const sessionIdStr = String(sessionId);
 
         // Try to get player status to verify the player exists
         const status = await GameClient.getStatus(playerId);
@@ -228,19 +234,22 @@ app.post('/reconnect', async (req, res) => {
             results: []
         };
         
-        sessions.set(sessionId, sessionState);
+        // Ensure session is saved before starting monitoring and returning success
+        sessions.set(sessionIdStr, sessionState);
         
-        console.log(`Player ${playerName} reconnected with ID: ${playerId} (Session: ${sessionId})`);
+        // Start monitoring game state for this session BEFORE returning success
+        // This ensures the monitoring is active when the client starts status polling
+        startGameMonitoring(sessionIdStr);
         
+        console.log(`Player ${playerName} reconnected with ID: ${playerId} (Session: ${sessionIdStr})`);
+        
+        // Return success only after session is fully established
         res.json({ 
             success: true, 
             playerId: playerId,
             playerName: playerName,
             message: 'Reconnected successfully!' 
         });
-
-        // Start monitoring game state for this session
-        startGameMonitoring(sessionId);
         
     } catch (error) {
         res.status(500).json({ 
@@ -252,10 +261,15 @@ app.post('/reconnect', async (req, res) => {
 
 app.get('/status', (req, res) => {
     const sessionId = req.query.sessionId || req.headers['session-id'];
-    if (sessionId && sessions.has(sessionId)) {
-        const sessionState = sessions.get(sessionId);
+    // Ensure sessionId is always treated as a string for consistent lookup
+    const sessionIdStr = String(sessionId);
+    console.log(`Status check for sessionId: ${sessionIdStr}, sessions.has: ${sessions.has(sessionIdStr)}`);
+    if (sessionIdStr && sessions.has(sessionIdStr)) {
+        const sessionState = sessions.get(sessionIdStr);
+        console.log(`Found session state for ${sessionIdStr}:`, sessionState ? 'exists' : 'null');
         res.json(sessionState);
     } else {
+        console.log(`No session found for ${sessionIdStr}, available sessions:`, Array.from(sessions.keys()));
         // Return default state if no session found
         res.json({
             isRegistered: false,
@@ -273,7 +287,8 @@ app.get('/status', (req, res) => {
 app.get('/results', async (req, res) => {
     try {
         const sessionId = req.query.sessionId || req.headers['session-id'];
-        const sessionState = sessions.get(sessionId);
+        const sessionIdStr = String(sessionId);
+        const sessionState = sessions.get(sessionIdStr);
         
         if (!sessionState || !sessionState.playerId) {
             return res.status(400).json({ error: 'Player not registered' });
@@ -317,7 +332,8 @@ app.post('/submit-answer', async (req, res) => {
 app.get('/final-results', async (req, res) => {
     try {
         const sessionId = req.query.sessionId || req.headers['session-id'];
-        const sessionState = sessions.get(sessionId);
+        const sessionIdStr = String(sessionId);
+        const sessionState = sessions.get(sessionIdStr);
         
         if (!sessionState || !sessionState.playerId) {
             return res.status(400).json({ error: 'Player not registered' });
@@ -359,16 +375,19 @@ let monitoringIntervals = new Map(); // sessionId -> interval
 let hasSubmittedForRound = {};
 
 function startGameMonitoring(sessionId) {
+    // Ensure sessionId is always treated as a string
+    const sessionIdStr = String(sessionId);
+    
     // Clear existing interval for this session
-    if (monitoringIntervals.has(sessionId)) {
-        clearInterval(monitoringIntervals.get(sessionId));
+    if (monitoringIntervals.has(sessionIdStr)) {
+        clearInterval(monitoringIntervals.get(sessionIdStr));
     }
 
-    console.log(`Starting game monitoring for session ${sessionId}...`);
+    console.log(`Starting game monitoring for session ${sessionIdStr}...`);
     
     const interval = setInterval(async () => {
         try {
-            const sessionState = sessions.get(sessionId);
+            const sessionState = sessions.get(sessionIdStr);
             if (!sessionState || !sessionState.playerId) return;
 
             const status = await GameClient.getStatus(sessionState.playerId);
@@ -380,24 +399,24 @@ function startGameMonitoring(sessionId) {
             sessionState.currentQuestion = status.currentQuestion;
             sessionState.gameActive = status.tournamentStatus === 1; // InProgress
 
-            console.log(`Session ${sessionId}: Tournament=${status.tournamentStatus}, Round=${status.currentRound}, RoundStatus=${status.currentRoundStatus}`);
+            console.log(`Session ${sessionIdStr}: Tournament=${status.tournamentStatus}, Round=${status.currentRound}, RoundStatus=${status.currentRoundStatus}`);
 
             // Note: We removed the auto-submission logic here
             // The client will now manually submit through the confirmation popup
 
             // Stop monitoring if tournament is completed
             if (status.tournamentStatus === 2) { // Completed
-                console.log(`Tournament completed for session ${sessionId}, stopping monitoring`);
+                console.log(`Tournament completed for session ${sessionIdStr}, stopping monitoring`);
                 clearInterval(interval);
-                monitoringIntervals.delete(sessionId);
+                monitoringIntervals.delete(sessionIdStr);
             }
 
         } catch (error) {
-            console.error(`Monitoring error for session ${sessionId}:`, error.message);
+            console.error(`Monitoring error for session ${sessionIdStr}:`, error.message);
         }
     }, 2000); // Check every 2 seconds
     
-    monitoringIntervals.set(sessionId, interval);
+    monitoringIntervals.set(sessionIdStr, interval);
 }
 
 // Start server
