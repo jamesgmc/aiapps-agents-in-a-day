@@ -2,6 +2,6 @@
   "position": 40,
   "label": "Lab 4: AI Apps",
   "collapsible": true,
-  "collapsed": true,
+  "collapsed": false,
   "className": "red"
 }

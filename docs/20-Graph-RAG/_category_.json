@@ -2,6 +2,6 @@
     "position": 20,
     "label": "Lab 2: Graph RAG",
     "collapsible": true,
-    "collapsed": true,
+    "collapsed": false,
     "className": "red"
 }

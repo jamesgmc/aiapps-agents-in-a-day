@@ -2,6 +2,6 @@
   "position": 50,
   "label": "Lab 5: AI Agents",
   "collapsible": true,
-  "collapsed": true,
+  "collapsed": false,
   "className": "red"
 }
