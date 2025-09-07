@@ -30,7 +30,7 @@ async function main() {
         // const databases = await adminDb.listDatabases();
         // console.log('Databases:');
         // databases.databases.forEach(db => console.log(` await client.db('${db.name}').dropDatabase(); `));
-        // await client.db('aiapp1day_daniel').dropDatabase();
+        // await client.db('aiaaa_daniel').dropDatabase();
 
     } catch (err) {
         console.error(err);

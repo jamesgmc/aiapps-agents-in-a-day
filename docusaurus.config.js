@@ -12,14 +12,14 @@ const config = {
   tagline:
     "Accelerate Your AI Journey: Build AI Apps and Agents",
   url: "https://github-insight-anz-lab.github.io",
-  baseUrl: "/aiapp1day/",
+  baseUrl: "/aiapps-agents/",
 
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "ignore",
   trailingSlash: true,
 
   organizationName: "GitHub-Insight-ANZ-Lab",
-  projectName: "aiapp1day",
+  projectName: "aiapps-agents",
   deploymentBranch: "main",
   favicon: "img/favicon.ico",
 

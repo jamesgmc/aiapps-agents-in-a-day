@@ -27,7 +27,7 @@ Please see the [lab outline section](#lab-outline) below for more details.
 
 ### Chatbot Demo
 
-https://arg-syd-aiapp1day-chat.azurewebsites.net/
+https://arg-syd-aiaaa-chat.azurewebsites.net/
 
 ![alt text](images/chatbot-image.png)
 

@@ -432,7 +432,7 @@ resource logicApp 'Microsoft.Logic/workflows@2019-05-01' = {
 // Static Web App
 resource staticWebApp 'Microsoft.Web/staticSites@2022-09-01' = {
   name: staticWebAppName
-  location: location
+  location: 'EastUS2'
   sku: {
     name: 'Free'
     tier: 'Free'

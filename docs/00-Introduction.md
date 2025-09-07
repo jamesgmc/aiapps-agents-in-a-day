@@ -25,4 +25,4 @@ The lab is organized into two parts. The first part focuses on understanding the
 
 ## Learner Feedback
 
-We would love to hear your feedback on this lab. Please visit the [GitHub repository for this lab](https://github.com/GitHub-Insight-ANZ-Lab/aiapp1day/), and use the Issues tab for bugs or suggestions or create a pull-request with your suggestions.
+We would love to hear your feedback on this lab. Please visit the [GitHub repository for this lab](https://github.com/GitHub-Insight-ANZ-Lab/aiapps-agents/), and use the Issues tab for bugs or suggestions or create a pull-request with your suggestions.

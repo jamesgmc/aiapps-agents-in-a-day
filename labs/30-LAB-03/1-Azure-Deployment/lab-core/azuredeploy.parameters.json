@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": { 
-            "value": "arg-syd-aiapp1day"
+            "value": "arg-syd-aiaaa"
         },
         "location": { 
             "value": "eastus"
@@ -12,11 +12,11 @@
             "value": "S0"
         },        
         "mongoDbUserName": {
-            "value": "aiapp1dayadmin"
+            "value": "aiaaaadmin"
         },
         
         "mongoDbPassword": {
-            "value": "Aiapp1daypassword123"
+            "value": "aiaaapassword123"
         }        
     }
 }

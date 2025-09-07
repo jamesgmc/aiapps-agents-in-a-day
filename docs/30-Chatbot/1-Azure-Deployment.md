@@ -32,7 +32,7 @@ Open a terminal and navigate to `labs/30-LAB-03/1-Azure-Deployment/lab-user` fol
    az account set --subscription <subscription-id>
    ```
 
-3. Create a resource group, replace \{your-rg-name\} with the resource group name of your choosing. For example, aiapp1day-daniel-rg. You may have restricted permissions to create a resource group. In the case of restrcited resource group creation access, please skip this step. You will have to find out the name of the resource group and note it down for the next steps.
+3. Create a resource group, replace \{your-rg-name\} with the resource group name of your choosing. For example, aiaaa-daniel-rg. You may have restricted permissions to create a resource group. In the case of restrcited resource group creation access, please skip this step. You will have to find out the name of the resource group and note it down for the next steps.
 
    ```Powershell
    az group create --name {your-rg-name} --location eastus
@@ -89,7 +89,7 @@ Open a terminal window and log in to Azure using the following command:
    az account set --subscription <subscription-id>
    ```
 
-3. Create resource group, replace \{your-rg-name\} with the resource group name you like, could be aiapp1day-daniel-rg.
+3. Create resource group, replace \{your-rg-name\} with the resource group name you like, could be aiaaa-daniel-rg.
 
    ```Powershell
    az group create --name {your-rg-name} --location eastus

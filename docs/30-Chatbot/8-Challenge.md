@@ -18,7 +18,7 @@ We can call Dall-e to generate an image, just like how we did in Playground in l
         const size = '1024x1024';
         const n = 1;
         const client = new OpenAIClient(
-            `https://arg-syd-aiapp1day-openai.openai.azure.com`,
+            `https://arg-syd-aiaaa-openai.openai.azure.com`,
             new AzureKeyCredential("<add key>"),
             options
         );
@@ -51,7 +51,7 @@ async function CompletionApi(prompt) {
         api_version: "2023-12-01-preview"
     };
     const client = new OpenAIClient(
-        `https://arg-syd-aiapp1day-openai.openai.azure.com`,
+        `https://arg-syd-aiaaa-openai.openai.azure.com`,
         new AzureKeyCredential("<add key>"),
         options
     );

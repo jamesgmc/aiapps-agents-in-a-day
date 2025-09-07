@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 ## Lab Code Repository
 
 The source code for the labs is hosted on GitHub. You can access the repository using the following link:
-https://github.com/GitHub-Insight-ANZ-Lab/aiapp1day
+https://github.com/GitHub-Insight-ANZ-Lab/aiapps-agents
 
 The repository contains the following folders:
 
@@ -25,7 +25,7 @@ Follow the steps below to set up the lab environment using GitHub Codespaces:
 
 1. **Create a GitHub Account**: If you don't have a GitHub account, you can create one [here](https://github.com/join).
 
-2. **Open in Codespaces**: Navigate to the [aiapp1day](https://github.com/GitHub-Insight-ANZ-Lab/aiapp1day) repository. Click on the "Code" button and select "Open with Codespaces". If you don't see this option, ensure you have GitHub Codespaces enabled for your account.
+2. **Open in Codespaces**: Navigate to the [aiapps-agents](https://github.com/GitHub-Insight-ANZ-Lab/aiapps-agents) repository. Click on the "Code" button and select "Open with Codespaces". If you don't see this option, ensure you have GitHub Codespaces enabled for your account.
 
 3. **Create a New Codespace**: Click on "New codespace" to create a new development environment. This will set up a Codespace with all the necessary tools and dependencies pre-installed.
 
@@ -57,16 +57,16 @@ Follow the steps below to set up the lab environment using GitHub Codespaces:
    :::
 
 
-2. Visit our [aiapp1day](https://github.com/GitHub-Insight-ANZ-Lab/aiapp1day) repository in GitHub. This repository contains the source code and guides for completing the labs.
+2. Visit our [aiapps-agents](https://github.com/GitHub-Insight-ANZ-Lab/aiapps-agents) repository in GitHub. This repository contains the source code and guides for completing the labs.
 
     ```bash
-    git clone https://github.com/GitHub-Insight-ANZ-Lab/aiapp1day.git
+    git clone https://github.com/GitHub-Insight-ANZ-Lab/aiapps-agents.git
     ```
 
 3. Navigate to the repository folder and open it in Visual Studio Code:
 
     ```bash
-    cd aiapp1day
+    cd aiapps-agents
     code .
     ```
 
@@ -89,14 +89,14 @@ Once restarted, search `Windows Sandbox` in `Start` button.
 
 Let us test the connection to Cosmos DB instance and OpenAI service.
 
-1.  Open VS Code and navigate to the `aiapp1day` repository folder. If you are using Codespaces, you should already be in the repository folder.
+1.  Open VS Code and navigate to the `aiapps-agents` repository folder. If you are using Codespaces, you should already be in the repository folder.
 
 2.  Navigate to the setup folder `~/labs/00-Setup/` within the repository. Go to `Terminal` window in VS Code.
     ```bash
     cd labs/00-Setup/
     ```
 
-3.  Open `setup.sh`, let's update `<MONGODB_Name>` setting with your own database name. Replace `add_value` with `aiapp1day_xxxxx_xx` (for example: aiapp1day_daniel_66).
+3.  Open `setup.sh`, let's update `<MONGODB_Name>` setting with your own database name. Replace `add_value` with `aiaaa_xxxxx_xx` (for example: aiaaa_daniel_66).
 
     :::info
     if you are deploying your own Azure resources (optional), please update keys and connection string with your own.
@@ -105,13 +105,13 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     ![edit setting](images/edit-settings.png)
 
 
-4.  Update `<MONGODB_CONNECTION_STRING>` with `mongodb+srv://aiapp1dayadmin:Aiapp1daypassword123@arg-syd-aiapp1day-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000`
+4.  Update `<MONGODB_CONNECTION_STRING>` with `mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000`
 
-5.  Update `<AZURE_OPENAI_API_INSTANCE_NAME>` with `arg-syd-aiapp1day-openai`
+5.  Update `<AZURE_OPENAI_API_INSTANCE_NAME>` with `arg-syd-aiaaa-openai`
 
 6.  Update `<AZURE_OPENAI_API_KEY>` with `a30df7e6e63f424884fde2f86b2624b5`
 
-7.  Update `<GRAPH_RAG_API>` with `https://arg-syd-aiapp1day-ca.ashycoast-2c2322dd.eastus.azurecontainerapps.io`
+7.  Update `<GRAPH_RAG_API>` with `https://arg-syd-aiaaa-ca.ashycoast-2c2322dd.eastus.azurecontainerapps.io`
 
 8.  Go to terminal windows, save the `setup.sh` file and run below bash command to replace all variables in the repo. If you need to run `setup.sh` again to fix typos, you need to revert previous changes in `Source Control` tab or ask us for help.
 
@@ -123,7 +123,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     :::info
     If you have issue running above script, you can also carry out variable replacement manually. 
     - Switch to VS Code `Search` tab, replace `<MONGODB_Name>` placeholder with your own database name. 
-    - Search for `<MONGODB_Name>` and replace with `aiapp1day_xxxxx_xx` (for example: aiapp1day_daniel_66). 
+    - Search for `<MONGODB_Name>` and replace with `aiaaa_xxxxx_xx` (for example: aiaaa_daniel_66). 
     - Then click `Replace All` icon, there will be multiple items to be replaced. The placeholder string will be replaced in the whole repo so that you have a dedicated database on the shared Cosmos DB instance.
 
     ![alt text](images/setup.png)
@@ -163,33 +163,33 @@ You can also create a free Azure account with $200 credit to use on Azure servic
 
 | Description          | Value                                                  |
 | -------------------- | ------------------------------------------------------ |
-| AI Proxy Playground  | https://arg-syd-aiapp1day-playground.azurewebsites.net |
+| AI Proxy Playground  | https://arg-syd-aiaaa-playground.azurewebsites.net |
 | Azure OpenAI API Key | a30df7e6e63f424884fde2f86b2624b5                       |
 
 ### Azure OpenAI Resource Configuration
 
 | Variable Name                               | Value                                             |
 | ------------------------------------------- | ------------------------------------------------- |
-| AZURE_OPENAI_API_INSTANCE_NAME              | arg-syd-aiapp1day-openai                          |
-| AZURE_OPENAI_API_ENDPOINT                   | https://arg-syd-aiapp1day-openai.openai.azure.com/ |
+| AZURE_OPENAI_API_INSTANCE_NAME              | arg-syd-aiaaa-openai                          |
+| AZURE_OPENAI_API_ENDPOINT                   | https://arg-syd-aiaaa-openai.openai.azure.com/ |
 | AZURE_OPENAI_API_KEY                        | a30df7e6e63f424884fde2f86b2624b5                  |
 | AZURE_OPENAI_API_DEPLOYMENT_NAME            | completions                                       |
 | AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME | embeddings                                        |
 | AZURE_OPENAI_API_VERSION                    | 2023-09-01-preview                                |
-| GRAPH_RAG_API                               | https://arg-syd-aiapp1day-ca.ashycoast-2c2322dd.eastus.azurecontainerapps.io |
+| GRAPH_RAG_API                               | https://arg-syd-aiaaa-ca.ashycoast-2c2322dd.eastus.azurecontainerapps.io |
 
 ### Azure Cosmos DB for MongoDB
 
 Cosmos DB is used as the database for the chatbot. During the lab exercises, you will populate the database with sample data. You are required to **create a new database with a unique name** in the shared Cosmos DB instance.
 
-The database name could be in the format `aiapp1day_{your_name}_{your_lucky_number}` so that you have your own copy of data.
+The database name could be in the format `aiaaa_{your_name}_{your_lucky_number}` so that you have your own copy of data.
 You should remove the curly brackets `{}` and replace the placeholders with your name and a lucky number.
 
 | Variable Name              | Value                                                                                                                                                                                                 |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| MONGODB_CONNECTION_STRING  | mongodb+srv://aiapp1dayadmin:Aiapp1daypassword123@arg-syd-aiapp1day-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000 |
-| MONGODB_Name               | aiapp1day_\{your_name\}_\{your_lucky_number\}                                                                                                                                                         |
-| MONGODB_Name (for example) | aiapp1day_daniel_55                                                                                                                                                                                   |
+| MONGODB_CONNECTION_STRING  | mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000 |
+| MONGODB_Name               | aiaaa_\{your_name\}_\{your_lucky_number\}                                                                                                                                                         |
+| MONGODB_Name (for example) | aiaaa_daniel_55                                                                                                                                                                                   |
 
 :::info
 API keys and connection details will be reset after the lab session.
@@ -199,9 +199,9 @@ API keys and connection details will be reset after the lab session.
 
 | Resource Name              | Endpoint | Key |
 | ------------- | ------------- | ------------- |
-| GPT-4o | https://arg-syd-aiapp1day-openai.openai.azure.com/openai/deployments/gpt4o/chat/completions?api-version=2024-08-01-preview | a30df7e6e63f424884fde2f86b2624b5 (deploymentName: gpt4o) |
-| Dall-e 3 | https://arg-syd-aiapp1day-openai.openai.azure.com/openai/deployments/dalle3/images/generations?api-version=2024-02-01 | a30df7e6e63f424884fde2f86b2624b5 (deploymentName: dalle3) |
-| Computer Vision | https://arg-syd-aiapp1day-cv.cognitiveservices.azure.com/ | 786639364fd04642b86ae805c72c43f6 |
+| GPT-4o | https://arg-syd-aiaaa-openai.openai.azure.com/openai/deployments/gpt4o/chat/completions?api-version=2024-08-01-preview | a30df7e6e63f424884fde2f86b2624b5 (deploymentName: gpt4o) |
+| Dall-e 3 | https://arg-syd-aiaaa-openai.openai.azure.com/openai/deployments/dalle3/images/generations?api-version=2024-02-01 | a30df7e6e63f424884fde2f86b2624b5 (deploymentName: dalle3) |
+| Computer Vision | https://arg-syd-aiaaa-cv.cognitiveservices.azure.com/ | 786639364fd04642b86ae805c72c43f6 |
 | Translator Service | https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=xx&from=xx | 8a2c06f38dc2447da606bfe49bd78db1 |
 | Speech Service | https://eastus.api.cognitive.microsoft.com/ | 274f545088c54f689ef7c04496488864 (region: eastus) |
 

@@ -187,7 +187,7 @@ resource containerStoreContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatab
 
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
-  name: 'aiapp1dayst${uniqueString(resourceGroup().id)}'
+  name: 'aiaaast${uniqueString(resourceGroup().id)}'
   location: resourceGroup().location
   sku: {
     name: 'Standard_LRS'
@@ -227,7 +227,7 @@ resource aiSearch 'Microsoft.Search/searchServices@2024-03-01-preview' = {
 
 
 resource registry 'Microsoft.ContainerRegistry/registries@2023-11-01-preview' = {
-  name: 'aiapp1dayacr'
+  name: 'aiaaaacr'
   location: location
   sku: {
     name: 'Standard'
@@ -278,8 +278,8 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
       activeRevisionsMode: 'Single'
       registries: [
         {
-          server: 'aiapp1dayacr.azurecr.io'
-          username: 'aiapp1dayacr'
+          server: 'aiaaaacr.azurecr.io'
+          username: 'aiaaaacr'
           passwordSecretRef: 'acr-password'
         }
       ]
@@ -299,7 +299,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
       containers: [
         {
           name: 'graph-rag-backend'
-          image: 'aiapp1dayacr.azurecr.io/graph-rag-backend-image:v6'
+          image: 'aiaaaacr.azurecr.io/graph-rag-backend-image:v6'
           resources: {
             cpu: 1
             memory: '2Gi'
@@ -315,7 +315,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
             }
             {
               name: 'AI_SEARCH_URL'
-              value: 'https://arg-syd-aiapp1day-ais.search.windows.net'
+              value: 'https://arg-syd-aiaaa-ais.search.windows.net'
             }
             {
               name: 'AI_SEARCH_KEY'
@@ -327,7 +327,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
             }
             {
               name: 'COSMOS_URI_ENDPOINT'
-              value: 'https://arg-syd-aiapp1day-rag.documents.azure.com:443/'
+              value: 'https://arg-syd-aiaaa-rag.documents.azure.com:443/'
             }
             {
               name: 'COSMOS_KEY'
@@ -335,7 +335,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
             }
             {
               name: 'GRAPHRAG_API_BASE'
-              value: 'https://arg-syd-aiapp1day-openai.openai.azure.com'
+              value: 'https://arg-syd-aiaaa-openai.openai.azure.com'
             }
             {
               name: 'GRAPHRAG_API_VERSION'
@@ -371,7 +371,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
             }
             {
               name: 'STORAGE_ACCOUNT_BLOB_URL'
-              value: 'https://aiapp1daystcr5qsjmhmj2kc.blob.core.windows.net'
+              value: 'https://aiaaastcr5qsjmhmj2kc.blob.core.windows.net'
             }
             {
               name: 'STORAGE_ACCOUNT_KEY'
