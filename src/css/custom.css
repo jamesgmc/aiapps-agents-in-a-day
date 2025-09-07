@@ -4,25 +4,58 @@
  * work well for content-centric websites.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* AI-themed color palette inspired by agentic design principles */
+:root {
+  /* Primary AI blue gradient colors */
+  --ifm-color-primary: #2563eb;
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1e40af;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+  
+  /* AI accent colors */
+  --ai-magenta: #e935c7;
+  --ai-cyan: #06b6d4;
+  --ai-purple: #8b5cf6;
+  --ai-gradient-primary: linear-gradient(135deg, #2563eb 0%, #e935c7 100%);
+  --ai-gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+  
+  /* Enhanced typography */
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', 'Fira Code', monospace;
+  --ifm-h1-font-size: 3rem;
+  --ifm-h2-font-size: 2.25rem;
+  --ifm-h3-font-size: 1.75rem;
+  
+  /* Workshop theme enhancements */
+  --ifm-hero-background-color: var(--ai-gradient-primary);
+  --ifm-navbar-background-color: rgba(255, 255, 255, 0.95);
+  --ifm-navbar-shadow: 0 2px 20px rgba(37, 99, 235, 0.1);
+}
 
 [data-theme='dark'] {
-  --ifm-color-primary: #4ddbff;
-  --ifm-color-primary-dark: #2cd4ff;
-  --ifm-color-primary-darker: #1bd1ff;
-  --ifm-color-primary-darkest: #00b9e8;
-  --ifm-color-primary-light: #6ee2ff;
-  --ifm-color-primary-lighter: #7fe5ff;
-  --ifm-color-primary-lightest: #b1efff;
-}
-:root {
-  --ifm-color-primary: #1c4273;
-  --ifm-color-primary-dark: #193b67;
-  --ifm-color-primary-darker: #183862;
-  --ifm-color-primary-darkest: #142e51;
-  --ifm-color-primary-light: #1f497e;
-  --ifm-color-primary-lighter: #204c84;
-  --ifm-color-primary-lightest: #245695;
+  /* Dark theme AI colors */
+  --ifm-color-primary: #60a5fa;
+  --ifm-color-primary-dark: #3b82f6;
+  --ifm-color-primary-darker: #2563eb;
+  --ifm-color-primary-darkest: #1d4ed8;
+  --ifm-color-primary-light: #93c5fd;
+  --ifm-color-primary-lighter: #bfdbfe;
+  --ifm-color-primary-lightest: #dbeafe;
+  
+  /* Dark theme AI accents */
+  --ai-magenta: #f472b6;
+  --ai-cyan: #22d3ee;
+  --ai-purple: #a78bfa;
+  --ai-gradient-primary: linear-gradient(135deg, #1e40af 0%, #e935c7 100%);
+  --ai-gradient-secondary: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+  
+  --ifm-hero-background-color: var(--ai-gradient-primary);
+  --ifm-navbar-background-color: rgba(15, 23, 42, 0.95);
 }
 
 /* :root {
@@ -60,8 +93,145 @@
   --ifm-color-primary-lightest: #abe3ca;
 } */
 
-body.ko {
-  font-family: 'Noto Sans KR', sans-serif;
+/* AI Workshop Hero Section */
+.hero--primary {
+  background: var(--ai-gradient-primary) !important;
+  color: white !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero--primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  pointer-events: none;
+}
+
+.hero__title {
+  font-size: 3.5rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 1.5rem !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.hero__subtitle {
+  font-size: 1.5rem !important;
+  font-weight: 400 !important;
+  margin-bottom: 2rem !important;
+  opacity: 0.95;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Enhanced buttons */
+.button--lg {
+  font-size: 1.2rem !important;
+  padding: 1rem 2rem !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+}
+
+.button--lg:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-decoration: none !important;
+}
+
+/* AI-themed feature cards */
+.ai-feature-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--ai-gradient-secondary);
+}
+
+.ai-feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+  border-color: rgba(233, 53, 199, 0.3);
+}
+
+/* AI Icons and animations */
+.ai-icon {
+  width: 80px !important;
+  height: 80px !important;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--ai-gradient-secondary);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 1.5rem auto;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Enhanced navbar */
+.navbar {
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+}
+
+.navbar__brand {
+  font-weight: 700;
+  background: var(--ai-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Sidebar enhancements */
+.menu__link {
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.menu__link:hover {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(233, 53, 199, 0.1) 100%);
+}
+
+.menu__link--active {
+  background: var(--ai-gradient-primary) !important;
+  color: white !important;
 }
 
 .header-github-link:hover {
