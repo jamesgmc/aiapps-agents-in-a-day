@@ -2,9 +2,6 @@
 @description('Location for all resources')
 param location string = resourceGroup().location
 
-@description('Environment name (lab)')
-param environment string = 'lab'
-
 @description('Application name prefix')
 param appName string = 'aiapps-agents'
 
@@ -12,7 +9,7 @@ param appName string = 'aiapps-agents'
 param uniqueSuffix string = uniqueString(resourceGroup().id)
 
 // Variables
-var resourcePrefix = '${appName}-${environment}'
+var resourcePrefix = '${appName}'
 var storageAccountName = replace('${resourcePrefix}st${uniqueSuffix}', '-', '')
 var keyVaultName = '${resourcePrefix}-kv-${uniqueSuffix}'
 var cosmosDbAccountName = '${resourcePrefix}-cosmos-${uniqueSuffix}'
@@ -109,7 +106,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
     enableRbacAuthorization: true
-    vaultUri: 'https://${keyVaultName}.${az.environment().suffixes.keyvaultDns}'
     provisioningState: 'Succeeded'
     publicNetworkAccess: 'Enabled'
   }
@@ -476,6 +472,19 @@ resource aiFoundryWorkspace 'Microsoft.MachineLearningServices/workspaces@2023-0
     v1LegacyMode: false
   }
   kind: 'Hub'
+}
+
+// AI Foundry Project (Azure Machine Learning Project)
+var aiFoundryProjectName = '${resourcePrefix}-ai-project-${uniqueSuffix}'
+resource aiFoundryProject 'Microsoft.MachineLearningServices/projects@2023-08-01-preview' = {
+  name: aiFoundryProjectName
+  location: location
+  properties: {
+    workspaceId: aiFoundryWorkspace.id
+    description: 'AI Foundry project for AI Apps and Agents'
+    friendlyName: aiFoundryProjectName
+    publicNetworkAccess: 'Enabled'
+  }
 }
 
 // Outputs
