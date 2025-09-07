@@ -1,0 +1,25 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"hostRequirements": {
+	  "cpus": 4
+	},
+	"waitFor": "onCreateCommand",
+	// "updateContentCommand": "python3 -m pip install -r requirements.txt",
+	"postCreateCommand": "curl -sL https://aka.ms/InstallAzureCLIDeb",
+	"customizations": {
+	  "codespaces": {
+		"openFiles": []
+	  },
+	  "vscode": {
+		"extensions": [
+		  "mongodb.mongodb-vscode",
+		  "ms-azuretools.vscode-azureappservice",
+		  "ms-azuretools.vscode-bicep",
+		  "github.copilot-chat",
+		  "github.copilot",
+          "ms-python.python",
+          "ms-toolsai.jupyter"
+		]
+	  }
+	}
+  }
