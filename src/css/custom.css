@@ -234,6 +234,13 @@
   color: white !important;
 }
 
+/* Parent menu item styling only when the parent itself is active */
+.menu__list-item-collapsible .menu__link--active {
+  background: var(--ai-gradient-primary) !important;
+  color: white !important;
+  font-weight: 600;
+}
+
 .header-github-link:hover {
   opacity: 0.6;
 }
