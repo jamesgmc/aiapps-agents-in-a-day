@@ -16,9 +16,34 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
+            to="/docs">
+            🚀 Start Learning AI Agents
           </Link>
+        </div>
+        <div style={{
+          marginTop: '2rem',
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '2rem',
+          flexWrap: 'wrap',
+          opacity: '0.9'
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🤖</div>
+            <div>AI Agents</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚡</div>
+            <div>Azure OpenAI</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎯</div>
+            <div>Hands-on Labs</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🚀</div>
+            <div>Real Projects</div>
+          </div>
         </div>
       </div>
     </header>
