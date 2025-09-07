@@ -228,19 +228,22 @@ app.post('/reconnect', async (req, res) => {
             results: []
         };
         
+        // Ensure session is saved before starting monitoring and returning success
         sessions.set(sessionId, sessionState);
+        
+        // Start monitoring game state for this session BEFORE returning success
+        // This ensures the monitoring is active when the client starts status polling
+        startGameMonitoring(sessionId);
         
         console.log(`Player ${playerName} reconnected with ID: ${playerId} (Session: ${sessionId})`);
         
+        // Return success only after session is fully established
         res.json({ 
             success: true, 
             playerId: playerId,
             playerName: playerName,
             message: 'Reconnected successfully!' 
         });
-
-        // Start monitoring game state for this session
-        startGameMonitoring(sessionId);
         
     } catch (error) {
         res.status(500).json({ 
@@ -252,10 +255,13 @@ app.post('/reconnect', async (req, res) => {
 
 app.get('/status', (req, res) => {
     const sessionId = req.query.sessionId || req.headers['session-id'];
+    console.log(`Status check for sessionId: ${sessionId}, sessions.has: ${sessions.has(sessionId)}`);
     if (sessionId && sessions.has(sessionId)) {
         const sessionState = sessions.get(sessionId);
+        console.log(`Found session state for ${sessionId}:`, sessionState ? 'exists' : 'null');
         res.json(sessionState);
     } else {
+        console.log(`No session found for ${sessionId}, available sessions:`, Array.from(sessions.keys()));
         // Return default state if no session found
         res.json({
             isRegistered: false,
