@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "location": {
-      "value": "East US"
+      "value": "Australia East"
     },
     "environment": {
-      "value": "dev"
+      "value": "lab"
     },
     "appName": {
       "value": "agentic-ai-app"
