@@ -2,11 +2,11 @@
 @description('Location for all resources')
 param location string = resourceGroup().location
 
-@description('Environment name (dev, staging, prod)')
-param environment string = 'dev'
+@description('Environment name (lab)')
+param environment string = 'lab'
 
 @description('Application name prefix')
-param appName string = 'agentic-ai-app'
+param appName string = 'aiapps-agents'
 
 @description('Unique suffix for resource names')
 param uniqueSuffix string = uniqueString(resourceGroup().id)
