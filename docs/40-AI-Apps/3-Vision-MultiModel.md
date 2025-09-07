@@ -1,5 +1,5 @@
 ---
-title: "Tutorial 3: Computer Vision Analysis"
+title: "Computer Vision Analysis"
 slug: /40-AI-Apps-Vision
 ---
 

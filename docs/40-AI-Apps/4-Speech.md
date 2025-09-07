@@ -1,5 +1,5 @@
 ---
-title: "Tutorial 4: Speech Processing and Accessibility"
+title: "Speech Processing"
 slug: /40-AI-Apps-Speech
 ---
 

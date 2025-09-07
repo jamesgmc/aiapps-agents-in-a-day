@@ -1,5 +1,5 @@
 ---
-title: "Tutorial 6: Store Automation with Function Calling"
+title: "Automation"
 slug: /40-AI-Apps-Automation
 ---
 

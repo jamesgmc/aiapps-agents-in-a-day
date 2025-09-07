@@ -1,5 +1,5 @@
 ---
-title: "Tutorial 1: Product Design with DALL-E"
+title: "Design with DALL-E"
 slug: /40-AI-Apps-Design
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "Tutorial 2: Multilingual Translation Services"
+title: "Multilingual Translation Services"
 slug: /40-AI-Apps-Translation
 ---
 

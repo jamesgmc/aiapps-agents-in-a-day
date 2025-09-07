@@ -1,5 +1,5 @@
 ---
-title: "Tutorial 5: SEO Content Generation"
+title: "Content Generation"
 slug: /40-AI-Apps-SEO
 ---
 
