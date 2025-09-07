@@ -1,3 +1,4 @@
+#!/usr/bin/env pwsh
 
 $ResourceGroupName = "rg-aiapps-agents"
 $Location = "Australia East"
