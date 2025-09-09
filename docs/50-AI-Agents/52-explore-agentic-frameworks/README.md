@@ -77,24 +77,52 @@ from semantic_kernel.kernel import Kernel
 
 # Define a ChatHistory object to hold the conversation's context
 chat_history = ChatHistory()
-chat_history.add_user_message("I'd like to go to New York on January 1, 2025")
+chat_history.add_user_message("I need to answer this question: What is the capital of France? My move should be Rock.")
 
 
-# Define a sample plugin that contains the function to book travel
-class BookTravelPlugin:
-    """A Sample Book Travel Plugin"""
+# Define a sample plugin that contains the functions for PSR game agent
+class PSRGamePlugin:
+    """A PSR Game Agent Plugin for intelligent question answering and move selection"""
 
-    @kernel_function(name="book_flight", description="Book travel given location and date")
-    async def book_flight(
-        self, date: Annotated[str, "The date of travel"], location: Annotated[str, "The location to travel to"]
+    @kernel_function(name="answer_question", description="Answer a tournament question using AI knowledge")
+    async def answer_question(
+        self, question: Annotated[str, "The tournament question to answer"]
     ) -> str:
-        return f"Travel was booked to {location} on {date}"
+        # Simple question answering logic - could be enhanced with RAG
+        question_lower = question.lower()
+        if "capital of france" in question_lower:
+            return "Paris"
+        elif "largest ocean" in question_lower:
+            return "Pacific Ocean"
+        elif "2 + 2" in question_lower or "two plus two" in question_lower:
+            return "4"
+        else:
+            return f"I need to research the answer to: {question}"
+
+    @kernel_function(name="select_move", description="Select optimal Rock, Paper, or Scissors move")
+    async def select_move(
+        self, strategy: Annotated[str, "Strategy hint like 'random', 'rock', 'counter_rock', etc."]
+    ) -> str:
+        import random
+        if strategy == "random":
+            moves = ["Rock", "Paper", "Scissors"]
+            return random.choice(moves)
+        elif strategy == "rock":
+            return "Rock"
+        elif strategy == "paper":
+            return "Paper" 
+        elif strategy == "scissors":
+            return "Scissors"
+        elif strategy == "counter_rock":
+            return "Paper"  # Paper beats Rock
+        else:
+            return "Rock"  # Default to Rock
 
 # Create the Kernel
 kernel = Kernel()
 
 # Add the sample plugin to the Kernel object
-kernel.add_plugin(BookTravelPlugin(), plugin_name="book_travel")
+kernel.add_plugin(PSRGamePlugin(), plugin_name="psr_game")
 
 # Define the Azure OpenAI AI Connector
 chat_service = AzureChatCompletion(
@@ -117,7 +145,7 @@ async def main():
 
     """
     Note: In the auto function calling process, the model determines it can invoke the 
-    `BookTravelPlugin` using the `book_flight` function, supplying the necessary arguments. 
+    `PSRGamePlugin` using the `answer_question` and `select_move` functions, supplying the necessary arguments. 
     
     For example:
 
@@ -126,23 +154,31 @@ async def main():
             "id": "call_abc123",
             "type": "function",
             "function": {
-                "name": "BookTravelPlugin-book_flight",
-                "arguments": "{'location': 'New York', 'date': '2025-01-01'}"
+                "name": "PSRGamePlugin-answer_question",
+                "arguments": "{'question': 'What is the capital of France?'}"
+            }
+        },
+        {
+            "id": "call_def456", 
+            "type": "function",
+            "function": {
+                "name": "PSRGamePlugin-select_move",
+                "arguments": "{'strategy': 'rock'}"
             }
         }
     ]
 
-    Since the location and date arguments are required (as defined by the kernel function), if the 
+    Since the question and strategy arguments are required (as defined by the kernel function), if the 
     model lacks either, it will prompt the user to provide them. For instance:
 
-    User: Book me a flight to New York.
-    Model: Sure, I'd love to help you book a flight. Could you please specify the date?
-    User: I want to travel on January 1, 2025.
-    Model: Your flight to New York on January 1, 2025, has been successfully booked. Safe travels!
+    User: I need to play in the PSR tournament.
+    Model: I'd love to help you with the tournament! Could you please provide the question you need to answer and your preferred strategy?
+    User: The question is "What is the capital of France?" and I want to play Rock.
+    Model: The answer to "What is the capital of France?" is Paris. Your move is Rock. Good luck in the tournament!
     """
 
     print(f"`{response}`")
-    # Example AI Model Response: `Your flight to New York on January 1, 2025, has been successfully booked. Safe travels! ✈️🗽`
+    # Example AI Model Response: `The answer is Paris and your selected move is Rock. You're ready for the PSR tournament round! 🎮🪨`
 
     # Add the model's response to our chat history context
     chat_history.add_assistant_message(response.content)
@@ -160,7 +196,7 @@ using System.ComponentModel;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 
 ChatHistory chatHistory = [];
-chatHistory.AddUserMessage("I'd like to go to New York on January 1, 2025");
+chatHistory.AddUserMessage("I need to answer this question: What is the capital of France? My move should be Rock.");
 
 var kernelBuilder = Kernel.CreateBuilder();
 kernelBuilder.AddAzureOpenAIChatCompletion(
@@ -168,7 +204,7 @@ kernelBuilder.AddAzureOpenAIChatCompletion(
     apiKey: "YOUR_API_KEY",
     endpoint: "YOUR_AZURE_ENDPOINT"
 );
-kernelBuilder.Plugins.AddFromType<BookTravelPlugin>("BookTravel"); 
+kernelBuilder.Plugins.AddFromType<PSRGamePlugin>("PSRGame"); 
 var kernel = kernelBuilder.Build();
 
 var settings = new AzureOpenAIPromptExecutionSettings()
@@ -181,7 +217,7 @@ var chatCompletion = kernel.GetRequiredService<IChatCompletionService>();
 var response = await chatCompletion.GetChatMessageContentAsync(chatHistory, settings, kernel);
 
 /*
-Behind the scenes, the model recognizes the tool to call, what arguments it already has (location) and (date)
+Behind the scenes, the model recognizes the tool to call, what arguments it already has (question) and (strategy)
 {
 
 "tool_calls": [
@@ -189,8 +225,16 @@ Behind the scenes, the model recognizes the tool to call, what arguments it alre
         "id": "call_abc123",
         "type": "function",
         "function": {
-            "name": "BookTravelPlugin-book_flight",
-            "arguments": "{'location': 'New York', 'date': '2025-01-01'}"
+            "name": "PSRGamePlugin-answer_question",
+            "arguments": "{'question': 'What is the capital of France?'}"
+        }
+    },
+    {
+        "id": "call_def456",
+        "type": "function", 
+        "function": {
+            "name": "PSRGamePlugin-select_move",
+            "arguments": "{'strategy': 'rock'}"
         }
     }
 ]
@@ -199,21 +243,48 @@ Behind the scenes, the model recognizes the tool to call, what arguments it alre
 Console.WriteLine(response.Content);
 chatHistory.AddMessage(response!.Role, response!.Content!);
 
-// Example AI Model Response: Your flight to New York on January 1, 2025, has been successfully booked. Safe travels! ✈️🗽
+// Example AI Model Response: The answer is Paris and your selected move is Rock. You're ready for the PSR tournament round! 🎮🪨
 
-// Define a plugin that contains the function to book travel
-public class BookTravelPlugin
+// Define a plugin that contains the functions for PSR game agent
+public class PSRGamePlugin
 {
-    [KernelFunction("book_flight")]
-    [Description("Book travel given location and date")]
-    public async Task<string> BookFlight(DateTime date, string location)
+    [KernelFunction("answer_question")]
+    [Description("Answer a tournament question using AI knowledge")]
+    public async Task<string> AnswerQuestion(string question)
     {
-        return await Task.FromResult( $"Travel was booked to {location} on {date}");
+        // Simple question answering logic - could be enhanced with RAG
+        var questionLower = question.ToLower();
+        if (questionLower.Contains("capital of france"))
+            return await Task.FromResult("Paris");
+        else if (questionLower.Contains("largest ocean"))
+            return await Task.FromResult("Pacific Ocean");
+        else if (questionLower.Contains("2 + 2") || questionLower.Contains("two plus two"))
+            return await Task.FromResult("4");
+        else
+            return await Task.FromResult($"I need to research the answer to: {question}");
+    }
+
+    [KernelFunction("select_move")]
+    [Description("Select optimal Rock, Paper, or Scissors move")]
+    public async Task<string> SelectMove(string strategy)
+    {
+        var random = new Random();
+        var moves = new[] { "Rock", "Paper", "Scissors" };
+        
+        return strategy.ToLower() switch
+        {
+            "random" => await Task.FromResult(moves[random.Next(moves.Length)]),
+            "rock" => await Task.FromResult("Rock"),
+            "paper" => await Task.FromResult("Paper"),
+            "scissors" => await Task.FromResult("Scissors"),
+            "counter_rock" => await Task.FromResult("Paper"), // Paper beats Rock
+            _ => await Task.FromResult("Rock") // Default to Rock
+        };
     }
 }
 ```
 
-What you can see from this example is how you can leverage a pre-built parser to extract key information from user input, such as the origin, destination, and date of a flight booking request. This modular approach allows you to focus on the high-level logic.
+What you can see from this example is how you can leverage a pre-built parser to extract key information from user input, such as tournament questions and game strategy preferences. This modular approach allows you to focus on the high-level logic for building intelligent PSR game agents.
 
 ### Leverage Collaborative Tools
 
@@ -221,29 +292,29 @@ Frameworks like CrewAI, Microsoft AutoGen, and Semantic Kernel facilitate the cr
 
 **How teams can use these**: Teams can design agents with specific roles and tasks, enabling them to test and refine collaborative workflows and improve overall system efficiency.
 
-**How it works in practice**: You can create a team of agents where each agent has a specialized function, such as data retrieval, analysis, or decision-making. These agents can communicate and share information to achieve a common goal, such as answering a user query or completing a task.
+**How it works in practice**: You can create a team of agents where each agent has a specialized function, such as question answering, move selection, or tournament strategy analysis. These agents can communicate and share information to achieve a common goal, such as winning PSR tournament rounds or optimizing game performance.
 
 **Example code (AutoGen)**:
 
 ```python
 # creating agents, then create a round robin schedule where they can work together, in this case in order
 
-# Data Retrieval Agent
-# Data Analysis Agent
-# Decision Making Agent
+# Question Answering Agent - specializes in answering tournament questions
+# Move Selection Agent - analyzes optimal Rock/Paper/Scissors moves  
+# Strategy Coordinator Agent - coordinates overall tournament strategy
 
-agent_retrieve = AssistantAgent(
-    name="dataretrieval",
+agent_question = AssistantAgent(
+    name="questionanswerer",
     model_client=model_client,
-    tools=[retrieve_tool],
-    system_message="Use tools to solve tasks."
+    tools=[answer_tool],
+    system_message="Answer tournament questions accurately using available knowledge and tools."
 )
 
-agent_analyze = AssistantAgent(
-    name="dataanalysis",
+agent_move = AssistantAgent(
+    name="moveselection",
     model_client=model_client,
-    tools=[analyze_tool],
-    system_message="Use tools to solve tasks."
+    tools=[move_tool],
+    system_message="Select optimal Rock, Paper, or Scissors moves based on strategy analysis."
 )
 
 # conversation ends when user says "APPROVE"
@@ -251,14 +322,14 @@ termination = TextMentionTermination("APPROVE")
 
 user_proxy = UserProxyAgent("user_proxy", input_func=input)
 
-team = RoundRobinGroupChat([agent_retrieve, agent_analyze, user_proxy], termination_condition=termination)
+team = RoundRobinGroupChat([agent_question, agent_move, user_proxy], termination_condition=termination)
 
-stream = team.run_stream(task="Analyze data", max_turns=10)
+stream = team.run_stream(task="Play PSR tournament round", max_turns=10)
 # Use asyncio.run(...) when running in a script.
 await Console(stream)
 ```
 
-What you see in the previous code is how you can create a task that involves multiple agents working together to analyze data. Each agent performs a specific function, and the task is executed by coordinating the agents to achieve the desired outcome. By creating dedicated agents with specialized roles, you can improve task efficiency and performance.
+What you see in the previous code is how you can create a task that involves multiple agents working together to play in a PSR tournament. Each agent performs a specific function, and the task is executed by coordinating the agents to achieve the desired outcome. By creating dedicated agents with specialized roles, you can improve tournament performance and win rate.
 
 ### Learn in Real-Time
 

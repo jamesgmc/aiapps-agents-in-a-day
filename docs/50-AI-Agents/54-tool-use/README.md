@@ -84,22 +84,54 @@ Let's use the example of getting the current time in a city to illustrate:
     We will then take this schema and pass it to the client created previously, along with the users request to find the time in San Francisco. What's important to note is that a **tool call** is what is returned, **not** the final answer to the question. As mentioned earlier, the LLM returns the name of the function it selected for the task, and the arguments that will be passed to it.
 
     ```python
-    # Function description for the model to read
+    # Function description for the model to read - PSR Tournament Tools
     tools = [
         {
             "type": "function",
             "function": {
-                "name": "get_current_time",
-                "description": "Get the current time in a given location",
+                "name": "answer_tournament_question",
+                "description": "Answer a PSR tournament question using knowledge base",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "location": {
+                        "question": {
                             "type": "string",
-                            "description": "The city name, e.g. San Francisco",
+                            "description": "The tournament question to answer, e.g. 'What is the capital of France?'",
                         },
+                        "difficulty": {
+                            "type": "string", 
+                            "description": "Question difficulty level: easy, medium, hard",
+                            "enum": ["easy", "medium", "hard"]
+                        }
                     },
-                    "required": ["location"],
+                    "required": ["question"],
+                },
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "select_optimal_move",
+                "description": "Select the optimal Rock, Paper, or Scissors move based on strategy analysis",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "opponent_history": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "Previous moves by opponents if available",
+                        },
+                        "round_number": {
+                            "type": "integer",
+                            "description": "Current round number in tournament"
+                        },
+                        "strategy": {
+                            "type": "string",
+                            "description": "Strategy to use: random, aggressive, defensive, counter",
+                            "enum": ["random", "aggressive", "defensive", "counter"]
+                        }
+                    },
+                    "required": ["round_number", "strategy"],
                 },
             }
         }
@@ -108,8 +140,8 @@ Let's use the example of getting the current time in a city to illustrate:
    
     ```python
   
-    # Initial user message
-    messages = [{"role": "user", "content": "What's the current time in San Francisco"}] 
+    # Initial user message - PSR tournament scenario
+    messages = [{"role": "user", "content": "I need to answer this question for the PSR tournament: 'What is the capital of Japan?' and select my next move for round 3"}] 
   
     # First API call: Ask the model to use the function
       response = client.chat.completions.create(
@@ -131,50 +163,119 @@ Let's use the example of getting the current time in a city to illustrate:
 
     ```bash
     Model's response:
-    ChatCompletionMessage(content=None, role='assistant', function_call=None, tool_calls=[ChatCompletionMessageToolCall(id='call_pOsKdUlqvdyttYB67MOj434b', function=Function(arguments='{"location":"San Francisco"}', name='get_current_time'), type='function')])
+    ChatCompletionMessage(content=None, role='assistant', function_call=None, tool_calls=[ChatCompletionMessageToolCall(id='call_pOsKdUlqvdyttYB67MOj434b', function=Function(arguments='{"question":"What is the capital of Japan?","difficulty":"easy"}', name='answer_tournament_question'), type='function'), ChatCompletionMessageToolCall(id='call_xYz123AbC789dEf456', function=Function(arguments='{"round_number":3,"strategy":"defensive"}', name='select_optimal_move'), type='function')])
     ```
   
 1. **The function code required to carry out the task:**
 
-    Now that the LLM has chosen which function needs to be run the code that carries out the task needs to be implemented and executed.
-    We can implement the code to get the current time in Python. We will also need to write the code to extract the name and arguments from the response_message to get the final result.
+    Now that the LLM has chosen which functions need to be run, the code that carries out the PSR tournament tasks needs to be implemented and executed.
+    We can implement the code to answer tournament questions and select optimal moves. We will also need to write the code to extract the name and arguments from the response_message to get the final result.
 
     ```python
-      def get_current_time(location):
-        """Get the current time for a given location"""
-        print(f"get_current_time called with location: {location}")  
-        location_lower = location.lower()
+      def answer_tournament_question(question, difficulty="medium"):
+        """Answer a PSR tournament question using knowledge base"""
+        print(f"answer_tournament_question called with question: {question}, difficulty: {difficulty}")
         
-        for key, timezone in TIMEZONE_DATA.items():
-            if key in location_lower:
-                print(f"Timezone found for {key}")  
-                current_time = datetime.now(ZoneInfo(timezone)).strftime("%I:%M %p")
-                return json.dumps({
-                    "location": location,
-                    "current_time": current_time
-                })
-      
-        print(f"No timezone data found for {location_lower}")  
-        return json.dumps({"location": location, "current_time": "unknown"})
+        question_lower = question.lower()
+        
+        # Geography questions
+        if "capital" in question_lower:
+            if "japan" in question_lower:
+                return json.dumps({"question": question, "answer": "Tokyo", "confidence": "high"})
+            elif "france" in question_lower:
+                return json.dumps({"question": question, "answer": "Paris", "confidence": "high"})
+            elif "australia" in question_lower:
+                return json.dumps({"question": question, "answer": "Canberra", "confidence": "high"})
+        
+        # Science questions  
+        elif "largest ocean" in question_lower:
+            return json.dumps({"question": question, "answer": "Pacific Ocean", "confidence": "high"})
+        elif "fastest land animal" in question_lower:
+            return json.dumps({"question": question, "answer": "Cheetah", "confidence": "high"})
+        
+        # Math questions
+        elif any(op in question for op in ["+", "plus", "add"]):
+            # Simple math parsing
+            import re
+            numbers = re.findall(r'\d+', question)
+            if len(numbers) >= 2:
+                result = sum(int(n) for n in numbers[:2])
+                return json.dumps({"question": question, "answer": str(result), "confidence": "high"})
+        
+        # Default response
+        return json.dumps({"question": question, "answer": "I need to research this question", "confidence": "low"})
+
+      def select_optimal_move(round_number, strategy, opponent_history=None):
+        """Select optimal Rock, Paper, or Scissors move based on strategy"""
+        print(f"select_optimal_move called with round: {round_number}, strategy: {strategy}")
+        
+        moves = ["Rock", "Paper", "Scissors"]
+        
+        if strategy == "random":
+            import random
+            selected_move = random.choice(moves)
+        elif strategy == "aggressive":
+            # Aggressive strategy favors Rock (appears strong)
+            selected_move = "Rock"
+        elif strategy == "defensive":
+            # Defensive strategy uses Paper (beats the common Rock)
+            selected_move = "Paper"
+        elif strategy == "counter":
+            # Counter strategy based on opponent history
+            if opponent_history and len(opponent_history) > 0:
+                last_opponent_move = opponent_history[-1]
+                if last_opponent_move == "Rock":
+                    selected_move = "Paper"
+                elif last_opponent_move == "Paper":
+                    selected_move = "Scissors"
+                elif last_opponent_move == "Scissors":
+                    selected_move = "Rock"
+                else:
+                    selected_move = "Rock"  # Default
+            else:
+                selected_move = "Rock"  # Default when no history
+        else:
+            selected_move = "Rock"  # Safe default
+            
+        return json.dumps({
+            "round_number": round_number,
+            "selected_move": selected_move,
+            "strategy_used": strategy,
+            "reasoning": f"Selected {selected_move} using {strategy} strategy for round {round_number}"
+        })
     ```
 
      ```python
-     # Handle function calls
+     # Handle PSR tournament function calls
       if response_message.tool_calls:
           for tool_call in response_message.tool_calls:
-              if tool_call.function.name == "get_current_time":
-     
-                  function_args = json.loads(tool_call.function.arguments)
-     
-                  time_response = get_current_time(
-                      location=function_args.get("location")
+              function_args = json.loads(tool_call.function.arguments)
+              
+              if tool_call.function.name == "answer_tournament_question":
+                  question_response = answer_tournament_question(
+                      question=function_args.get("question"),
+                      difficulty=function_args.get("difficulty", "medium")
                   )
-     
+                  
                   messages.append({
                       "tool_call_id": tool_call.id,
                       "role": "tool",
-                      "name": "get_current_time",
-                      "content": time_response,
+                      "name": "answer_tournament_question",
+                      "content": question_response,
+                  })
+                  
+              elif tool_call.function.name == "select_optimal_move":
+                  move_response = select_optimal_move(
+                      round_number=function_args.get("round_number"),
+                      strategy=function_args.get("strategy"),
+                      opponent_history=function_args.get("opponent_history", [])
+                  )
+                  
+                  messages.append({
+                      "tool_call_id": tool_call.id,
+                      "role": "tool", 
+                      "name": "select_optimal_move",
+                      "content": move_response,
                   })
       else:
           print("No tool calls were made by the model.")  
@@ -189,9 +290,9 @@ Let's use the example of getting the current time in a city to illustrate:
      ```
 
      ```bash
-      get_current_time called with location: San Francisco
-      Timezone found for san francisco
-      The current time in San Francisco is 09:24 AM.
+      answer_tournament_question called with question: What is the capital of Japan?, difficulty: easy
+      select_optimal_move called with round: 3, strategy: defensive
+      The capital of Japan is Tokyo. For round 3, I recommend using Paper as your move with a defensive strategy, which is effective against the commonly chosen Rock.
      ```
 
 Function Calling is at the heart of most, if not all agent tool use design, however implementing it from scratch can sometimes be challenging.
@@ -209,20 +310,53 @@ The following diagram illustrates the process of function calling with Semantic 
 
 ![function calling](./images/functioncalling-diagram.png)
 
-In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the `get_current_time` function we saw earlier into a plugin by turning it into a class with the function in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the GetCurrentTimePlugin, the kernel will automatically serialize the function and its parameters, creating the schema to send to the LLM in the process.
+In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the PSR tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the PSRTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
 
 ```python
 from semantic_kernel.functions import kernel_function
 
-class GetCurrentTimePlugin:
-    async def __init__(self, location):
-        self.location = location
+class PSRTournamentPlugin:
+    """Plugin for PSR Tournament functionality"""
 
     @kernel_function(
-        description="Get the current time for a given location"
+        description="Answer a PSR tournament question using knowledge base"
     )
-    def get_current_time(location: str = ""):
-        ...
+    def answer_tournament_question(self, question: str, difficulty: str = "medium") -> str:
+        """Answer tournament questions with varying difficulty levels"""
+        # Implementation here - same as the function we defined earlier
+        question_lower = question.lower()
+        
+        if "capital" in question_lower and "japan" in question_lower:
+            return "Tokyo"
+        elif "largest ocean" in question_lower:
+            return "Pacific Ocean"
+        # ... other question handling logic
+        
+        return "I need to research this question"
+
+    @kernel_function(
+        description="Select optimal Rock, Paper, or Scissors move based on strategy analysis"
+    )
+    def select_optimal_move(self, round_number: int, strategy: str, opponent_history: list = None) -> str:
+        """Select the best move for the current round"""
+        moves = ["Rock", "Paper", "Scissors"]
+        
+        if strategy == "defensive":
+            return "Paper"  # Beats the common Rock
+        elif strategy == "aggressive":
+            return "Rock"   # Appears strong
+        elif strategy == "counter" and opponent_history:
+            # Counter the last opponent move
+            last_move = opponent_history[-1] if opponent_history else "Rock"
+            if last_move == "Rock":
+                return "Paper"
+            elif last_move == "Paper":
+                return "Scissors"
+            else:
+                return "Rock"
+        else:
+            import random
+            return random.choice(moves)
 
 ```
 
@@ -233,10 +367,11 @@ from semantic_kernel import Kernel
 kernel = Kernel()
 
 # Create the plugin
-get_current_time_plugin = GetCurrentTimePlugin(location)
+psr_tournament_plugin = PSRTournamentPlugin()
 
 # Add the plugin to the kernel
-kernel.add_plugin(get_current_time_plugin)
+kernel.add_plugin(psr_tournament_plugin, plugin_name="psr_tournament")
+```
 ```
   
 ### Azure AI Agent Service
