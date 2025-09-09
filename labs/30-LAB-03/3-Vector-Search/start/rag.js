@@ -22,8 +22,9 @@ async function main() {
     console.log("Connected to MongoDB");
     const db = dbClient.db(dbname);
 
+    // TODO: Add RAG with vector search test code here
+    // This will be added during the lab exercise
 
-    
   } catch (err) {
     console.error(err);
   } finally {
@@ -70,5 +71,7 @@ async function vectorSearch(db, collectionName, query, numResults = 3) {
   const results = await collection.aggregate(pipeline).toArray();
   return results;
 }
+
+// TODO: ragWithVectorsearch function will be added here
 
 main().catch(console.error);

@@ -14,7 +14,12 @@ async function main() {
         console.log('Connected to MongoDB');
         const db = client.db(dbname);
 
+        // TODO: Add product data loading code here
+        // This section will be filled during the lab exercise
         
+        // TODO: Add customer and sales data loading code here
+        // This section will be filled during the lab exercise
+
     } catch (err) {
         console.error(err);
     } finally {

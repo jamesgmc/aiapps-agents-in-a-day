@@ -44,88 +44,27 @@ The `product` data set is located in the `data\product.csv` file. It has the fol
 
    ![alt text](images/rag_load_data_image.png)
 
-2. The first step is to convert the CSV file to JSON format. Open the `convert.js` file and paste the following code. This will parse the CSV file and generate `product.json` file with the data.
+2. The `convert.js` file already contains the complete code to convert the CSV file to JSON format and fix data type issues. The file includes proper handling for:
+   - Parsing the CSV file format
+   - Converting the tags field from JSON strings
+   - Converting the price field to a proper float value
 
-   ```javascript
-   const fs = require("fs");
-   const path = require("path");
-   const rootDir = "data";
-
-   // Read CSV file
-   const csvFilePath = path.join(rootDir, "product.csv");
-   const csvData = fs.readFileSync(csvFilePath, "utf8");
-
-   // Convert CSV to JSON
-   function csvToJson(csv) {
-     const lines = csv.trim().split("\n");
-     const headers = lines[0]
-       .split(",")
-       .map((header) => header.replace(/"/g, ""));
-     const jsonData = lines.slice(1).map((line) => {
-       const values = line
-         .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
-         .map((value) => value.replace(/"/g, ""));
-       const obj = {};
-       headers.forEach((header, index) => {
-         if (header === "tags") {
-           // Decode the JSON string
-           obj[header] = JSON.parse(values[index].replace(/'/g, '"'));
-         } else {
-           obj[header] = values[index];
-         }
-       });
-       return obj;
-     });
-     return JSON.stringify(jsonData, null, 2);
-   }
-
-   const json = csvToJson(csvData);
-
-   // Write JSON to file
-   const jsonFilePath = path.join(rootDir, "product.json");
-   fs.writeFileSync(jsonFilePath, json, "utf8");
-
-   console.log("CSV file has been converted to JSON file successfully.");
-   ```
-
-3. Save the `convert.js` file. Run the following command in the terminal window to execute the script:
+3. Run the conversion script to generate the `product.json` file:
 
    ```bash
    node convert.js
    ```
 
-4. Open the generated `product.json` file and see if any format issues stands out?
+4. Open the generated `product.json` file to verify the data has been correctly formatted:
    ![alt text](images/rag_load_data_image-1.png)
 
-5. It seems `price` field is a string rather than float. The datatype is important, Lets correct it.
-
-6. To convert the price tag to a float in the JSON file, head back to the _convert.js_ file and modify the code as below in line 21-27:
-
-   ```javascript
-   if (header === "tags") {
-     // Decode the JSON string
-     obj[header] = JSON.parse(values[index].replace(/'/g, '"'));
-   } else if (header === "price") {
-     // Convert price to integer
-     obj[header] = parseFloat(values[index], 10);
-   } else {
-     obj[header] = values[index];
-   }
-   ```
-
-7. Execute the code again and compare the two JSON files once more.
-
-   :::note
-   (Optional) Can you suggest a modification to the code that would preserve the quotation marks in the description field?
-   :::
+   Notice that the `price` field is now a proper number (not a string) and the tags field has been correctly parsed as a JSON array.
 
 ## Bulk load product data
 
 There are multiple options available for performing bulk operations in Cosmos DB. In this section, we will focus on using the `bulkWrite` method. The `bulkWrite` method allows you to execute multiple write operations in a single batch, including insert, update, and delete operations.
 
-1. Open the `import.js` file, and add the following code after the code block `const db = client.db(dbname);`. The code below is to be within the try-catch block.
-
-   This will read the `product.json` file and load the data into the `productRawData` variable. product.json file is used as it contains the fixes we made for _price_ field. The database collection for `product` is also initialized. Note that MongoDB will create the collections if they do not already exist.
+1. Open the `import.js` file. You'll see it already has the basic MongoDB connection setup. Now add the following code block where indicated by the `TODO: Add product data loading code here` comment:
 
    ```javascript
    // Load product data
@@ -144,11 +83,7 @@ There are multiple options available for performing bulk operations in Cosmos DB
    const productData = JSON.parse(productRawData).map((prod) =>
      cleanData(prod)
    );
-   ```
 
-2. You may run the upload script multiple times, which will result in duplicate data. To avoid having duplicate data, the code below deletes any existing products before loading the new data.
-
-   ```javascript
    // Delete any existing products
    console.log("Deleting existing products");
    await productCollection.deleteMany({});
@@ -163,27 +98,7 @@ There are multiple options available for performing bulk operations in Cosmos DB
    console.log(`${result.insertedCount} products inserted`);
    ```
 
-3. Save the `import.js` file.
-
-4. Run the application by executing the following command in the terminal window:
-
-   ```bash
-   node import.js
-   ```
-
-   ![A console window displays indicating products have been inserted into the products collection](images/rag_load_data_products_loaded.png "Products loaded")
-
-   :::tip
-   We reduced the total products in the data set from 295 to only 49 in the end. Do you know why?
-   :::
-
-## Bulk load of customer and sales data
-
-The `Customer` and `Sales` data is in the `custSalesData.json` file. We will be splitting the data into two collections, `customers` and `sales`, and loading them into Cosmos DB.
-
-1. Open the `import.js` file, and add the following code next to the previous code block. This will read the `custSalesData.json` file and load the data into the `custSaledData` variable.
-
-   The database collections for `customers` and `sales` are also initialized.
+2. Now add the following code for loading customer and sales data where indicated by the `TODO: Add customer and sales data loading code here` comment:
 
    ```javascript
    // Load customer and sales data
@@ -198,11 +113,7 @@ The `Customer` and `Sales` data is in the `custSalesData.json` file. We will be 
    const custSalesData = JSON.parse(custSalesRawData).map((custSales) =>
      cleanData(custSales)
    );
-   ```
 
-2. The following code firstly splits the `custSalesData` into `customer` and `sales` data, then loads the customer data into the collection using the `insertMany` method. Finally load the sales data into the collection using the `insertMany` method.
-
-   ```javascript
    console.log("Split customer and sales data");
    const customerData = custSalesData.filter(
      (cust) => cust["type"] === "customer"
@@ -229,6 +140,12 @@ The `Customer` and `Sales` data is in the `custSalesData.json` file. We will be 
    ```bash
    node import.js
    ```
+
+   ![A console window displays indicating products have been inserted into the products collection](images/rag_load_data_products_loaded.png "Products loaded")
+
+   :::tip
+   We reduced the total products in the data set from 295 to only 49 in the end. Do you know why?
+   :::
 
    ![A console window displays indicating customers and sales have been inserted into the customers and sales collections](images/rag_load_data_customers_sales_loaded.png "Customers and sales loaded")
 

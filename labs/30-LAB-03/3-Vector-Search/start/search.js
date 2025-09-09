@@ -21,8 +21,9 @@ async function main() {
     console.log("Connected to MongoDB");
     const db = dbClient.db(dbname);
 
+    // TODO: Add vector search test code here
+    // This will be added during the lab exercise
 
-    
   } catch (err) {
     console.error(err);
   } finally {
@@ -40,5 +41,7 @@ async function generateEmbeddings(text) {
   await new Promise((resolve) => setTimeout(resolve, 500));
   return embeddings.data[0].embedding;
 }
+
+// TODO: vectorSearch and printProductSearchResult functions will be added here
 
 main().catch(console.error);

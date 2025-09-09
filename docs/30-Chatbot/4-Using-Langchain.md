@@ -50,9 +50,9 @@ When establishing the connection to the vector store, recall that in the previou
 
 The return value of a vector search in LangChain is a list of `Document` objects. The LangChain `Document` class contains two properties: `pageContent`, that represents the textual content that is typically used to augment the prompt, and `metadata` that contains all other attributes of the document. In the cell below, we'll use the `_id` field as the `pageContent`, and the rest of the fields are returned as metadata.
 
-1. Open the `vector-search.js` file in the Visual Studio Code editor.
+1. Open the `vector-search.js` file in the Visual Studio Code editor. Notice it has the basic MongoDB connection setup.
 
-2. Directly beneath the line `const { MongoClient } = require('mongodb');`, add the following code to import the necessary LangChain packages. This code imports the AzureCosmosDBVectorStore that represents the vector index in a collection, the `AzureCosmosDBSimilarityType` that will allow us to perform a vector search using cosine similarity, and the `OpenAIEmbeddings` class that will be used to generate the embeddings for the user's input for the vector search.
+2. Add the following complete code block where the `TODO: Set up Azure Cosmos DB vector store and perform vector search` comment appears:
 
    ```javascript
    const {
@@ -60,11 +60,7 @@ The return value of a vector search in LangChain is a list of `Document` objects
      AzureCosmosDBSimilarityType,
    } = require("@langchain/community/vectorstores/azure_cosmosdb");
    const { OpenAIEmbeddings } = require("@langchain/openai");
-   ```
 
-3. Directly beneath the line of code that sets up the MongoDB connection `const dbClient = new MongoClient(process.env.MONGODB_CONNECTION_STRING); var dbname = process.env.MONGODB_Name;`, add the following code to initialize the connection to the vector store that points to the `products` collection and associated index. The `OpenAIEmbeddings` uses the default values obtained from the environment variables to initialize.
-
-   ```javascript
    // set up the Azure Cosmos DB vector store using the initialized MongoDB client
    const azureCosmosDBConfig = {
      client: dbClient,
@@ -78,11 +74,7 @@ The return value of a vector search in LangChain is a list of `Document` objects
      new OpenAIEmbeddings(),
      azureCosmosDBConfig
    );
-   ```
 
-4. In the `main` function, directly beneath the line of code `console.log("Connected to MongoDB");`, append the following code that will perform a vector search using the `vectorStore` object and output the results.
-
-   ```javascript
    // perform a vector search using the vector store
    const results = await vectorStore.similaritySearch(
      "What yellow products do you have?",
@@ -92,9 +84,9 @@ The return value of a vector search in LangChain is a list of `Document` objects
    console.log(results);
    ```
 
-5. Save the `vector-search.js` file.
+3. Save the `vector-search.js` file.
 
-6. Run the application by executing the following command in the terminal window:
+4. Run the application by executing the following command in the terminal window:
 
    ```bash
    node vector-search.js
@@ -120,7 +112,53 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
 
 1. Open the `langchain-rag.js` file in the Visual Studio Code editor.
 
-2. Directly preceding the final line of code in this file (where the main function is called), add the `formatDocuments` function that will be used to format the `Document` objects into a JSON string that will be used in the prompt for the LLM. The code is documented inline.
+## RAG with LangChain
+
+In this section, we'll implement the RAG pattern using LangChain. In LangChain, a **retriever** is used to augment the prompt with contextual data. In this case, the already established vector store will be used as the retriever. By default, the prompt is augmented with the `pageContent` field of the retrieved document that customarily contains the text content of the embedded vector. In our case, the document itself serves as the textual content, so we'll have to do some pre-processing to format the text of the product list that is expected in our system prompt (JSON string) - see the `formatDocuments` function below for this implementation.
+
+We'll also define a reusable RAG chain to control the flow and behavior of the call into the LLM. This chain is defined using the LCEL syntax (LangChain Expression Language).
+
+1. Open the `langchain-rag.js` file. Notice it has the basic MongoDB connection setup.
+
+2. Add the following complete code block where the `TODO: Set up Azure Cosmos DB vector store for LangChain RAG` comment appears:
+
+   ```javascript
+   const {
+     AzureCosmosDBVectorStore,
+     AzureCosmosDBSimilarityType,
+   } = require("@langchain/community/vectorstores/azure_cosmosdb");
+   const { OpenAIEmbeddings, ChatOpenAI } = require("@langchain/openai");
+
+   // To support the LangChain LCEL RAG chain
+   const { PromptTemplate } = require("@langchain/core/prompts");
+   const {
+     RunnableSequence,
+     RunnablePassthrough,
+   } = require("@langchain/core/runnables");
+   const { StringOutputParser } = require("@langchain/core/output_parsers");
+
+   // set up the Azure Cosmos DB vector store using the initialized MongoDB client
+   const azureCosmosDBConfig = {
+     client: dbClient,
+     databaseName: dbname,
+     collectionName: "products",
+     indexName: "VectorSearchIndex",
+     embeddingKey: "contentVector",
+     textKey: "_id",
+   };
+   const vectorStore = new AzureCosmosDBVectorStore(
+     new OpenAIEmbeddings(),
+     azureCosmosDBConfig
+   );
+
+   // set up the OpenAI chat model
+   const chatModel = new ChatOpenAI();
+
+   // Test the RAG chain
+   console.log(await ragLCELChain("What yellow products do you have?"));
+   ```
+
+3. Add the following helper functions before the main function call at the end of the file:
 
    ```javascript
    function formatDocuments(docs) {
@@ -151,32 +189,7 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
      strDocs += "\n\n";
      return strDocs;
    }
-   ```
 
-3. Below `require("@langchain/community/vectorstores/azure_cosmosdb")` import statement, add below class that will be used to interact with the LLM.
-
-   ```javascript
-   const { OpenAIEmbeddings, ChatOpenAI } = require("@langchain/openai");
-   ```
-
-4. Directly beneath the line of code that was just modified in the previous step, add the following code to import and initialize an Azure OpenAI chat model. 
-
-   ```javascript
-   // To support the LangChain LCEL RAG chain
-   const { PromptTemplate } = require("@langchain/core/prompts");
-   const {
-     RunnableSequence,
-     RunnablePassthrough,
-   } = require("@langchain/core/runnables");
-   const { StringOutputParser } = require("@langchain/core/output_parsers");
-   
-   // set up the OpenAI chat model
-   const chatModel = new ChatOpenAI();
-   ```
-
-5. Before the last line of code in the file (that calls the main function), add the following function that creates a reusable LangChain RAG chain. The code is documented inline.
-
-   ```javascript
    async function ragLCELChain(question) {
      // A system prompt describes the responsibilities, instructions, and persona of the AI.
      // Note the addition of the templated variable/placeholder for the list of products and the incoming question.
@@ -226,15 +239,9 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
    }
    ```
 
-6. In the `main` function, directly beneath the line of code `console.log('Connected to MongoDB');`, add the following code that will call the `ragLCELChain` function to perform a vector search using the `vectorStore` object and output the results.
+4. Save the `langchain-rag.js` file.
 
-   ```javascript
-   console.log(await ragLCELChain("What yellow products do you have?"));
-   ```
-
-7. Save the `langchain-rag.js` file.
-
-8. Run the application by executing the following command in the terminal window:
+5. Run the application by executing the following command in the terminal window:
 
    ```bash
    node langchain-rag.js
@@ -242,19 +249,19 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
 
    ![The console output shows the response from the LLM based on the augmented prompt and returns the LLM response.](images/rag_chain_output.png "RAG chain output")
 
-9. Lets now try a different question.
+6. You can also try a different question by modifying the test call:
 
-```javascript
-console.log(
-  await ragLCELChain(
-    "What is the name of the product that has the SKU TI-R982?"
-  )
-);
-```
+   ```javascript
+   console.log(
+     await ragLCELChain(
+       "What is the name of the product that has the SKU TI-R982?"
+     )
+   );
+   ```
 
-:::info
-Why do we get a response like this? how can we improve it?
-:::
+   :::info
+   Why do we get a response like this? how can we improve it?
+   :::
 
 ## LangChain agent
 
