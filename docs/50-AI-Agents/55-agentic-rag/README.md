@@ -43,13 +43,14 @@ This iterative “maker-checker” style of operation is designed to improve cor
 
 The distinguishing quality that makes a system “agentic” is its ability to own its reasoning process. Traditional RAG implementations often depend on humans pre-defining a path for the model: a chain-of-thought that outlines what to retrieve and when.
 But when a system is truly agentic, it internally decides how to approach the problem. It’s not just executing a script; it’s autonomously determining the sequence of steps based on the quality of the information it finds.
-For example, if it’s asked to create a product launch strategy, it doesn’t rely solely on a prompt that spells out the entire research and decision-making workflow. Instead, the agentic model independently decides to:
+For example, if it’s asked to answer a complex PSR tournament question and select an optimal move, it doesn’t rely solely on a prompt that spells out the entire research and decision-making workflow. Instead, the agentic model independently decides to:
 
-1. Retrieve current market trend reports using Bing Web Grounding
-2. Identify relevant competitor data using Azure AI Search.
-3.	Correlate historical internal sales metrics using Azure SQL Database.
-4. Synthesize the findings into a cohesive strategy orchestrated via Azure OpenAI Service.
-5.	Evaluate the strategy for gaps or inconsistencies, prompting another round of retrieval if necessary.
+1. Search its knowledge base for the specific question topic using vector search
+2. Retrieve related contextual information using Azure AI Search to enhance accuracy 
+3. Cross-reference multiple sources to validate the answer's correctness
+4. Analyze opponent move patterns from tournament history using Azure SQL Database
+5. Synthesize all findings to provide both an accurate answer and strategic move recommendation
+6. Evaluate the confidence level and iterate if needed for tournament-critical decisions
 All of these steps—refining queries, choosing sources, iterating until “happy” with the answer—are decided by the model, not pre-scripted by a human.
 
 ## Iterative Loops, Tool Integration, and Memory
@@ -91,9 +92,9 @@ Key differences from more advanced AI forms include:
 
 Agentic RAG shines in scenarios requiring iterative refinement and precision:
 
-1. **Correctness-First Environments:** In compliance checks, regulatory analysis, or legal research, the agentic model can repeatedly verify facts, consult multiple sources, and rewrite queries until it produces a thoroughly vetted answer.
-2. **Complex Database Interactions:** When dealing with structured data where queries might often fail or need adjustment, the system can autonomously refine its queries using Azure SQL or Microsoft Fabric OneLake, ensuring the final retrieval aligns with the user’s intent.
-3. **Extended Workflows:** Longer-running sessions might evolve as new information surfaces. Agentic RAG can continuously incorporate new data, shifting strategies as it learns more about the problem space.
+1. **Tournament Question Accuracy:** In PSR tournament settings where answer correctness is critical, the agentic model can repeatedly verify facts across multiple knowledge sources, cross-reference information, and rewrite queries until it produces a thoroughly vetted answer with high confidence.
+2. **Strategic Move Optimization:** When dealing with structured data where queries might often fail or need adjustment, the system can autonomously refine its queries using Azure SQL or Microsoft Fabric OneLake, ensuring the final retrieval aligns with the user’s intent.
+3. **Adaptive Tournament Performance:** Longer-running sessions might evolve as new information surfaces. Agentic RAG can continuously incorporate new data, shifting strategies as it learns more about the problem space.
 
 ## Governance, Transparency, and Trust
 
@@ -108,6 +109,49 @@ Having tools that provide a clear record of actions is essential. Without them, 
 ![AgentRunExample](./images/AgentRunExample.png)
 
 ![AgentRunExample2](./images/AgentRunExample2.png)
+
+## PSR Tournament Agentic RAG Example
+
+Here's how an Agentic RAG system might work for a PSR tournament agent:
+
+**Initial Query:** "Answer this tournament question: 'What is the chemical symbol for gold?' and recommend my next move for round 4."
+
+**Agentic RAG Process:**
+```
+1. Initial Assessment
+   - Question type: Chemistry/Science
+   - Round: 4 (mid-tournament)
+   - Confidence needed: High (tournament critical)
+
+2. Knowledge Retrieval Loop
+   - Search vector database for "chemical symbols" + "gold"
+   - Retrieve: Multiple sources confirm "Au" 
+   - Cross-validate: Check periodic table references
+   - Confidence: High (95%+)
+
+3. Strategic Analysis Loop  
+   - Query tournament database for opponent patterns
+   - Retrieve: Historical move data for rounds 1-3
+   - Analyze: Opponent favors Rock in even rounds
+   - Strategy: Select Paper to counter expected Rock
+
+4. Validation Loop
+   - Verify answer accuracy against chemistry knowledge base
+   - Confirm move selection against game theory principles
+   - Check confidence thresholds met
+   - Final decision: Proceed with submission
+
+5. Response Synthesis
+   - Answer: "Au" (confidence: 96%)
+   - Move: "Paper" (strategic reasoning: counters opponent pattern)
+   - Ready for tournament submission
+```
+
+This demonstrates the key Agentic RAG principles:
+- **Autonomous reasoning:** The system decided what sources to query and how to validate
+- **Iterative refinement:** Multiple loops to ensure accuracy and strategy
+- **Tool orchestration:** Combined knowledge retrieval, data analysis, and validation
+- **Self-correction:** Would retry with different sources if confidence was low
 
 ## Conclusion
 
