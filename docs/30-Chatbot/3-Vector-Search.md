@@ -33,54 +33,22 @@ You will also learn how to use the vector index to retrieve the relevant documen
    npm install
    ```
 
-## Create the Azure OpenAI client
-
-1. Install the `@azure/openai` package by running the following command in the terminal window.
+5. Install the `@azure/openai` package by running the following command in the terminal window.
 
    ```bash
    npm install @azure/openai@1.0.0-beta.11 --save
    ```
 
-2. This will install the package and save it as a dependency in your project's `package.json` file.
-   ![alt text](images/rag_with_vector_search_image-4.png)
+## Test the embedding functionality
 
-3. Open the `embedding.js` file in the Visual Studio Code editor.
+The Azure OpenAI client and embedding functions have been pre-configured in all the lab files. Let's start by testing the text embedding functionality.
 
-4. Add the following code to import the Azure OpenAI client and Azure Key Credential classes at the top of the file below `const { MongoClient } = require('mongodb');` line. The code block alse creates an instance of the Azure OpenAI client afer the imports.
+1. Open the `embedding.js` file in the Visual Studio Code editor. Notice that it already contains:
+   - The Azure OpenAI client setup
+   - The `generateEmbeddings` function
+   - MongoDB connection boilerplate
 
-   ```javascript
-   const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
-
-   // set up the Azure OpenAI client
-   const embeddingsDeploymentName = "embeddings";
-   const completionsDeploymentName = "completions";
-   const aoaiClient = new OpenAIClient(
-     "https://" +
-       process.env.AZURE_OPENAI_API_INSTANCE_NAME +
-       ".openai.azure.com/",
-     new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY)
-   );
-   ```
-
-## Create a function to generate text embeddings
-
-Vectorizing or embedding text is the process of converting text into a numerical representation. The embedding model to generate text embeddings is already deployed in Azure OpenAI. In this step you will create a function that will generate embeddings for the provided text.
-
-1. In `embedding.js`, add the following code after the `main` function:
-
-   ```javascript
-   async function generateEmbeddings(text) {
-     const embeddings = await aoaiClient.getEmbeddings(
-       embeddingsDeploymentName,
-       text
-     );
-     // Rest period to avoid rate limiting on Azure OpenAI
-     await new Promise((resolve) => setTimeout(resolve, 500));
-     return embeddings.data[0].embedding;
-   }
-   ```
-
-2. Now call the `generateEmbeddings` function with a sample text string to test the function. Add the following code in the `main` function after the `const db = dbClient.db(dbname);` line:
+2. Add the following test code where indicated by the `TODO: Test the generateEmbeddings function` comment:
 
    ```javascript
    console.log(await generateEmbeddings("Hello, world!"));
@@ -108,11 +76,9 @@ Now that the `generateEmbeddings` function is working, the next step is to use i
 
 In this section, a function is added that will loop through each document in a collection, generate the vector embedding, and store the vector embedding in the document itself. The function takes advantage of `bulkWrite` operations to perform upserts on the existing documents in an efficient way. Lastly, the function will create a vector index (VectorSearchIndex) on the collection to enable vector search queries if it does not already exist.
 
-<!-- :::danger
-We have a lot of people doing the lab at the same time. Get in quick before rate limit is hit!
-::: -->
+1. Open the `vectorize.js` file. Notice it already has the Azure OpenAI client setup and the `generateEmbeddings` function.
 
-1. In `vectorize.js`, add the following code above the last line of the file `main().catch(console.error);` (that calls the `main` function) - the code is documented inline to explain the steps taken:
+2. Add the following code where the `TODO: addCollectionContentVectorField function will be added here during the lab` comment appears:
 
    ```javascript
    async function addCollectionContentVectorField(db, collectionName) {
@@ -192,7 +158,7 @@ We have a lot of people doing the lab at the same time. Get in quick before rate
    }
    ```
 
-2. In the `main` function, beneath the `const db = dbClient.db(dbname);` line of code, add the following code to call the new `addCollectionContentVectorField` function on the `products` collection. We do the same for creating the vector embeddings for the `customers` and `sales` collections.
+3. Now add the function calls in the main function where the `TODO: Call addCollectionContentVectorField for products, customers, and sales` comment appears:
 
    ```javascript
    await addCollectionContentVectorField(db, "products");
@@ -200,9 +166,9 @@ We have a lot of people doing the lab at the same time. Get in quick before rate
    await addCollectionContentVectorField(db, "sales");
    ```
 
-3. Save the `vectorize.js` file.
+4. Save the `vectorize.js` file.
 
-4. Run the application and observe the progress in the console.
+5. Run the application and observe the progress in the console.
 
    ```bash
    node vectorize.js
@@ -210,21 +176,22 @@ We have a lot of people doing the lab at the same time. Get in quick before rate
 
    ![Console output displays the progress of vectorizing and storing the embeddings in each document.](images/vectorize_and_store_embeddings.png "Vectorizing and storing the embeddings in each document")
 
-5. Let us check the `products` collection in the Azure Cosmos DB Data Explorer. The `contentVector` field should be populated with the vector embeddings for each document.
+6. Let us check the `products` collection in the Azure Cosmos DB Data Explorer. The `contentVector` field should be populated with the vector embeddings for each document.
 
    ![alt text](images/rag_with_vector_search_image-6.png)
 
-6. You also notice that the `VectorSearchIndex` index has been created on the `contentVector` field.
+7. You also notice that the `VectorSearchIndex` index has been created on the `contentVector` field.
 
    ![alt text](images/rag_with_vector_search_image-5.png)
-
 
 ## Use vector search
 
 We have generated vector embeddings for each document and created vector indexes.
 In this section, we will add the steps to retrieve the most relevant documents from Cosmos DB based based on the cosine similarity of the query vector and the content vectors of the documents in the collection.
 
-1. In `search.js`, add the following code directly above the last line of the file `main().catch(console.error);` (that calls the `main` function) - the code is documented inline to explain the steps taken. This code introduces two functions, one to perform a vector search and another to format and print the search results:
+1. Open the `search.js` file. Notice it already includes the Azure OpenAI setup and `generateEmbeddings` function.
+
+2. Add the following code where the `TODO: vectorSearch and printProductSearchResult functions will be added here` comment appears:
 
    ```javascript
    async function vectorSearch(db, collectionName, query, numResults = 3) {
@@ -266,7 +233,7 @@ In this section, we will add the steps to retrieve the most relevant documents f
    }
    ```
 
-2. In the `main` function, beneath the `const db = dbClient.db(dbname);` line of code, add the following code to test the new `vectorSearch` function:
+3. Add the test code in the main function where the `TODO: Add vector search test code here` comment appears:
 
    ```javascript
    //vector search for the top 3 most relevant products
@@ -278,9 +245,9 @@ In this section, we will add the steps to retrieve the most relevant documents f
    searchResults.forEach(printProductSearchResult);
    ```
 
-3. Save the `search.js` file.
+4. Save the `search.js` file.
 
-4. Run the application and observe the search results in the console.
+5. Run the application and observe the search results in the console.
 
    ```bash
    node search.js
@@ -292,7 +259,9 @@ In this section, we will add the steps to retrieve the most relevant documents f
 
 In this section, a function is added that will use the vector search results to augment a prompt to a large language model (LLM). This is considered a RAG (Retrieval Augmented Generation) pattern. The function will use the search results in the prompt to the LLM.
 
-1. In `rag.js`, add the following code directly above the last line of the file `main().catch(console.error);` (that calls the `main` function) - the code is documented inline to explain the steps taken:
+1. Open the `rag.js` file. Notice it already includes the Azure OpenAI setup, `generateEmbeddings` function, and `vectorSearch` function.
+
+2. Add the following code where the `TODO: ragWithVectorsearch function will be added here` comment appears:
 
    ```javascript
    async function ragWithVectorsearch(
@@ -349,7 +318,7 @@ In this section, a function is added that will use the vector search results to 
    }
    ```
 
-2. In the `main` function, beneath the `const db = dbClient.db(dbname);` line of code, add the following code to test the new `ragWithVectorsearch` function:
+3. Add the test code in the main function where the `TODO: Add RAG with vector search test code here` comment appears:
 
    ```javascript
    //RAG with vector search for the top 3 most relevant products
@@ -363,9 +332,9 @@ In this section, a function is added that will use the vector search results to 
    );
    ```
 
-3. Save the `rag.js` file.
+4. Save the `rag.js` file.
 
-4. Run the application and observe the response in the console.
+5. Run the application and observe the response in the console.
 
    ```bash
    node rag.js

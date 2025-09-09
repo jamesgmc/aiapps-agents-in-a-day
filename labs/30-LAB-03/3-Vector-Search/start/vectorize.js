@@ -21,7 +21,8 @@ async function main() {
     console.log("Connected to MongoDB");
     const db = dbClient.db(dbname);
 
-
+    // TODO: Call addCollectionContentVectorField for products, customers, and sales
+    // This will be added during the lab exercise
     
   } catch (err) {
     console.error(err);
@@ -40,5 +41,7 @@ async function generateEmbeddings(text) {
   await new Promise((resolve) => setTimeout(resolve, 500));
   return embeddings.data[0].embedding;
 }
+
+// TODO: addCollectionContentVectorField function will be added here during the lab
 
 main().catch(console.error);
