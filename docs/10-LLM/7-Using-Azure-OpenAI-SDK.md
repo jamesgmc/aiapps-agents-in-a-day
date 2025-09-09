@@ -20,6 +20,10 @@ cd labs/10-LAB-01/7-Using-Azure-OpenAI-SDK
 npm install
 ```
 
+:::warning Package Version
+The `@azure/openai` package used in this lab is a beta version. For production applications, consider using the stable OpenAI SDK with Azure OpenAI support. This lab uses the beta version for educational purposes.
+:::
+
 3. **Configure your Azure OpenAI credentials:**
    - Copy `config-template.js` to `config.js` and update with your credentials, OR
    - Edit the endpoint and API key directly in each JavaScript file

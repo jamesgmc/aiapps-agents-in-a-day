@@ -2,6 +2,10 @@
 
 This directory contains practical examples for using the Azure OpenAI SDK with Node.js.
 
+:::warning Package Notice
+This lab uses `@azure/openai@1.0.0-beta.11` which is deprecated. For production applications, migrate to the stable OpenAI SDK. This lab serves educational purposes and demonstrates the concepts which apply to the newer SDK as well.
+:::
+
 ## Setup Instructions
 
 1. **Install dependencies:**
