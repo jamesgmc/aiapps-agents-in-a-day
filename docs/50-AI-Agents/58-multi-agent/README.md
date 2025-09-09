@@ -111,44 +111,44 @@ Let's take an example where a user wants a recommendation on the best stock to b
 
 ![Recommendation](./images/multi-agent-filtering.png)
 
-## Scenario: Refund process
+## Scenario: PSR Tournament Coordination
 
-Consider a scenario where a customer is trying to get a refund for a product, there can be quite a few agents involved in this process but let's divide it up between agents specific for this process and general agents that can be used in other processes.
+Consider a scenario where a PSR tournament is being organized and managed, there can be quite a few agents involved in this process but let's divide it up between agents specific for this tournament process and general agents that can be used in other gaming processes.
 
-**Agents specific for the refund process**:
+**Agents specific for the PSR tournament process**:
 
-Following are some agents that could be involved in the refund process:
+Following are some agents that could be involved in the tournament process:
 
-- **Customer agent**: This agent represents the customer and is responsible for initiating the refund process.
-- **Seller agent**: This agent represents the seller and is responsible for processing the refund.
-- **Payment agent**: This agent represents the payment process and is responsible for refunding the customer's payment.
-- **Resolution agent**: This agent represents the resolution process and is responsible for resolving any issues that arise during the refund process.
-- **Compliance agent**: This agent represents the compliance process and is responsible for ensuring that the refund process complies with regulations and policies.
+- **Player agent**: This agent represents individual players and is responsible for participating in tournament rounds, answering questions, and selecting moves.
+- **Referee agent**: This agent represents the tournament referee and is responsible for starting/ending rounds, validating submissions, and determining winners.
+- **Question agent**: This agent represents the question management process and is responsible for generating tournament questions and validating answers.
+- **Scoring agent**: This agent represents the scoring process and is responsible for calculating points, maintaining leaderboards, and determining final rankings.
+- **Tournament coordinator agent**: This agent represents the tournament management process and is responsible for coordinating between all other agents and managing tournament flow.
 
 **General agents**:
 
-These agents can be used by other parts of your business.
+These agents can be used by other parts of your gaming system.
 
-- **Shipping agent**: This agent represents the shipping process and is responsible for shipping the product back to the seller. This agent can be used both for the refund process and for general shipping of a product via a purchase for example.
-- **Feedback agent**: This agent represents the feedback process and is responsible for collecting feedback from the customer. Feedback could be had at any time and not just during the refund process.
-- **Escalation agent**: This agent represents the escalation process and is responsible for escalating issues to a higher level of support. You can use this type of agent for any process where you need to escalate an issue.
-- **Notification agent**: This agent represents the notification process and is responsible for sending notifications to the customer at various stages of the refund process.
-- **Analytics agent**: This agent represents the analytics process and is responsible for analyzing data related to the refund process.
-- **Audit agent**: This agent represents the audit process and is responsible for auditing the refund process to ensure that it is being carried out correctly.
-- **Reporting agent**: This agent represents the reporting process and is responsible for generating reports on the refund process.
-- **Knowledge agent**: This agent represents the knowledge process and is responsible for maintaining a knowledge base of information related to the refund process. This agent could be knowledgeable both on refunds and other parts of your business.
-- **Security agent**: This agent represents the security process and is responsible for ensuring the security of the refund process.
-- **Quality agent**: This agent represents the quality process and is responsible for ensuring the quality of the refund process.
+- **Authentication agent**: This agent represents the player authentication process and is responsible for verifying player identities and managing access credentials. This agent can be used both for tournament participation and for general platform access.
+- **Notification agent**: This agent represents the notification process and is responsible for sending real-time updates to players about tournament status, round starts, and results.
+- **Analytics agent**: This agent represents the analytics process and is responsible for analyzing tournament data, player performance patterns, and game statistics.
+- **Anti-cheat agent**: This agent represents the security process and is responsible for detecting cheating attempts, validating answer authenticity, and maintaining fair play.
+- **Performance agent**: This agent represents the performance monitoring process and is responsible for tracking system performance and optimizing tournament operations.
+- **Audit agent**: This agent represents the audit process and is responsible for logging all tournament activities and maintaining compliance records.
+- **Reporting agent**: This agent represents the reporting process and is responsible for generating tournament reports, performance summaries, and statistical analyses.
+- **Knowledge agent**: This agent represents the knowledge management process and is responsible for maintaining question databases and answer validation systems. This agent could be knowledgeable both on tournament topics and other gaming content.
+- **Communication agent**: This agent represents the inter-agent communication process and is responsible for coordinating messages between different agents in the system.
+- **Backup agent**: This agent represents the backup and recovery process and is responsible for ensuring tournament data integrity and system reliability.
 
-There's quite a few agents listed previously both for the specific refund process but also for the general agents that can be used in other parts of your business. Hopefully this gives you an idea on how you can decide on which agents to use in your multi-agent system.
+There's quite a few agents listed previously both for the specific tournament process but also for the general agents that can be used in other parts of your gaming system. Hopefully this gives you an idea on how you can decide on which agents to use in your multi-agent tournament system.
 
 ## Assignment
 
-Design a multi-agent system for a customer support process. Identify the agents involved in the process, their roles and responsibilities, and how they interact with each other. Consider both agents specific to the customer support process and general agents that can be used in other parts of your business.
+Design a multi-agent system for a PSR tournament coordination process. Identify the agents involved in the tournament, their roles and responsibilities, and how they interact with each other. Consider both agents specific to the tournament process and general agents that can be used in other parts of your gaming system.
 
 > Have a think before you read the following solution, you may need more agents than you think.
 
-> TIP: Think about the different stages of the customer support process and also consider agents needed for any system.
+> TIP: Think about the different stages of the PSR tournament process and also consider agents needed for any gaming system.
 
 ## Solution
 
