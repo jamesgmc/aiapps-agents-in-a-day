@@ -19,10 +19,41 @@ In this tutorial, you'll learn how to leverage AI for product design by integrat
 
 By the end of this tutorial, you will be able to:
 
-1. Integrate DALL-E model for image generation
-2. Implement secure API key management
-3. Handle content safety exceptions
-4. Create responsive UI for AI-generated content
+1. **Understand DALL-E 3 Capabilities**: Learn about the latest features and improvements in OpenAI's image generation model
+2. **Implement Azure OpenAI Integration**: Set up and configure Azure OpenAI for image generation with proper authentication and error handling
+3. **Design Effective Prompts**: Create prompts that generate high-quality, relevant images for business use cases
+4. **Handle Content Safety**: Implement content filtering and safety measures for generated images
+5. **Build Production UI**: Create user-friendly interfaces for image generation with loading states and error handling
+6. **Optimize for Business Use**: Apply image generation to real marketing and design workflows
+
+## DALL-E 3 Deep Dive
+
+### What Makes DALL-E 3 Special
+
+DALL-E 3 represents a significant advancement in AI image generation:
+
+**Enhanced Understanding**: 
+- Improved comprehension of complex prompts with multiple objects and relationships
+- Better handling of spatial relationships and positioning
+- More accurate interpretation of artistic styles and techniques
+
+**Higher Quality Output**:
+- 1024x1024 pixel resolution for crisp, professional images
+- Better consistency in generating human faces and hands
+- Improved coherence in complex scenes with multiple elements
+
+**Safety and Compliance**:
+- Built-in content policy enforcement
+- Automatic filtering of potentially harmful content
+- Respect for artist styles and copyrighted material
+
+**Business Applications**:
+- Marketing material creation (social media posts, advertisements)
+- Product mockups and prototyping
+- Educational content and illustrations
+- Creative brainstorming and ideation
+
+![DALL-E 3 Capabilities Overview](images/dalle3-capabilities.png)
 
 ## Scenario
 
@@ -36,54 +67,226 @@ Elevate product design creativity by harnessing the power of DALL-E model to gen
 
 ## Step-by-Step Implementation
 
-### Step 1: Set Up Your Environment
+### Step 1: Understanding Azure OpenAI DALL-E Integration
 
-First, ensure you have access to:
-- Azure OpenAI service with DALL-E deployment
-- The chatbot application (`apps-chat\chatbot`)
-- Your API keys properly configured
+Before implementing, understand the key components:
 
-### Step 2: Examine the Existing Code
+**Azure OpenAI Service Setup**:
+- DALL-E 3 model deployment in your Azure OpenAI resource
+- Proper endpoint configuration (e.g., `https://your-resource.openai.azure.com/`)
+- API keys with appropriate permissions
+- Region considerations for best performance
 
-Navigate to the Design page located at `apps-chat\chatbot\pages\design\Design.tsx`. You'll find:
-- An input textbox for design descriptions
-- A button to trigger AI image generation
-- A placeholder for displaying generated images
-
-### Step 3: Implement the DALL-E API Function
-
-Your task is to complete the `dalleApi` function to:
-- Send a text prompt to the DALL-E endpoint
-- Receive and process the generated image response
-- Handle any errors or content safety issues
-
-#### Key Requirements:
-- Use the OpenAI Client to invoke the DALL-E endpoint
-- Configure proper API endpoints and model deployment names
-- Parse the response to extract the generated image URL
-- Implement error handling for content safety violations
-
-### Step 4: Code Implementation
-
-Here's the structure you need to implement:
-
+**API Structure**:
 ```typescript
-async function dalleApi(prompt: string): Promise<string> {
-    // TODO: Implement DALL-E API call
-    // 1. Set up OpenAI client with your endpoint and credentials
-    // 2. Configure image generation parameters (size, count)
-    // 3. Call the getImages method with deployment name and prompt
-    // 4. Extract and return the image URL from response
-    // 5. Handle errors appropriately
+// Azure OpenAI DALL-E endpoint pattern
+const endpoint = "https://<resource-name>.openai.azure.com/";
+const deploymentName = "dalle3"; // Your DALL-E deployment name
+const apiVersion = "2024-02-01"; // Latest API version for DALL-E
+```
+
+![Azure OpenAI DALL-E Setup](images/azure-openai-dalle-setup.png)
+
+### Step 2: Set Up Your Development Environment
+
+**Prerequisites Check**:
+```bash
+# Verify Node.js and npm versions
+node --version  # Should be 16+
+npm --version
+
+# Navigate to the chatbot application
+cd apps-chat/chatbot
+
+# Install dependencies if not already done
+npm install
+
+# Start development server
+npm run dev
+```
+
+**Required Dependencies**:
+```json
+{
+  "@azure/openai": "^1.0.0-beta.12",
+  "react": "^18.0.0",
+  "react-promise-tracker": "^2.1.0"
 }
 ```
 
-### Step 5: Testing Your Implementation
+### Step 3: Examine the Existing Code Structure
 
-1. Enter a creative description in the input field
-2. Click the Generate button
-3. Verify the image loads correctly
-4. Test with various prompts to ensure robustness
+Navigate to `apps-chat\chatbot\pages\design\Design.tsx` and review:
+
+**Current Components**:
+- Input field for prompt text
+- Generate button to trigger DALL-E
+- Image display area for results
+- Loading state management
+
+**Key Functions to Implement**:
+- `dalleApi()`: Main function for DALL-E integration
+- Error handling for content safety
+- Image URL processing and display
+
+### Step 4: Implement Professional DALL-E Integration
+
+Here's the comprehensive implementation structure:
+
+```typescript
+import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
+
+async function dalleApi(prompt: string): Promise<string> {
+    try {
+        // Step 1: Configure Azure OpenAI client
+        const endpoint = process.env.AZURE_OPENAI_ENDPOINT || "https://your-resource.openai.azure.com/";
+        const apiKey = process.env.AZURE_OPENAI_API_KEY || "your-api-key";
+        
+        const client = new OpenAIClient(
+            endpoint,
+            new AzureKeyCredential(apiKey)
+        );
+
+        // Step 2: Prepare image generation parameters
+        const imageGenerationOptions = {
+            prompt: prompt,
+            size: "1024x1024" as const,
+            n: 1,
+            quality: "standard" as const,
+            style: "vivid" as const
+        };
+
+        // Step 3: Call DALL-E API
+        const deploymentName = "dalle3"; // Your deployment name
+        const response = await client.getImages(
+            deploymentName, 
+            prompt, 
+            imageGenerationOptions
+        );
+
+        // Step 4: Extract image URL
+        if (response.data && response.data.length > 0) {
+            const imageUrl = response.data[0].url;
+            if (imageUrl) {
+                return imageUrl;
+            }
+        }
+
+        throw new Error("No image URL returned from DALL-E");
+
+    } catch (error) {
+        // Step 5: Handle specific error types
+        if (error.status === 400) {
+            throw new Error("Content policy violation: Please modify your prompt and try again");
+        } else if (error.status === 429) {
+            throw new Error("Rate limit exceeded: Please wait a moment before trying again");
+        } else if (error.status === 500) {
+            throw new Error("Service temporarily unavailable: Please try again later");
+        } else {
+            throw new Error(`Image generation failed: ${error.message}`);
+        }
+    }
+}
+```
+
+### Step 5: Enhanced Prompt Engineering
+
+**Effective Prompt Patterns**:
+
+```typescript
+// Product design prompts
+const productPrompts = {
+    logo: "Create a modern, minimalist logo for [company/product] with [color scheme], vector style, clean lines",
+    packaging: "Design product packaging for [product] in [style], showing [features], professional photography style",
+    marketing: "Create a marketing banner for [product/service] with [mood/tone], [target audience] focus, high quality",
+    mockup: "Product mockup of [item] in [environment/setting], realistic lighting, commercial photography style"
+};
+
+// Style modifiers for different use cases
+const styleModifiers = {
+    professional: "clean, corporate, professional photography, high quality, studio lighting",
+    creative: "artistic, creative, vibrant colors, dynamic composition, innovative design",
+    minimalist: "minimalist, clean lines, simple, white background, modern design",
+    vintage: "vintage style, retro colors, classic design elements, nostalgic feel"
+};
+
+// Example of building comprehensive prompts
+function buildDesignPrompt(basePrompt: string, style: string, additionalDetails?: string): string {
+    return `${basePrompt}, ${styleModifiers[style]}${additionalDetails ? `, ${additionalDetails}` : ''}, 4K resolution, professional quality`;
+}
+```
+
+### Step 6: Advanced Error Handling and User Experience
+
+```typescript
+interface ImageGenerationState {
+    isLoading: boolean;
+    imageUrl: string | null;
+    error: string | null;
+    progress: number;
+}
+
+class ImageGenerationManager {
+    private state: ImageGenerationState = {
+        isLoading: false,
+        imageUrl: null,
+        error: null,
+        progress: 0
+    };
+
+    async generateImage(prompt: string, onStateChange: (state: ImageGenerationState) => void): Promise<void> {
+        // Update loading state
+        this.updateState({ isLoading: true, error: null, progress: 25 }, onStateChange);
+
+        try {
+            // Validate prompt
+            if (!this.validatePrompt(prompt)) {
+                throw new Error("Please provide a more descriptive prompt (minimum 10 characters)");
+            }
+
+            this.updateState({ progress: 50 }, onStateChange);
+
+            // Generate image
+            const imageUrl = await dalleApi(prompt);
+            
+            this.updateState({ progress: 75 }, onStateChange);
+
+            // Verify image accessibility
+            await this.verifyImageUrl(imageUrl);
+            
+            this.updateState({ 
+                isLoading: false, 
+                imageUrl, 
+                progress: 100 
+            }, onStateChange);
+
+        } catch (error) {
+            this.updateState({ 
+                isLoading: false, 
+                error: error.message,
+                progress: 0 
+            }, onStateChange);
+        }
+    }
+
+    private validatePrompt(prompt: string): boolean {
+        return prompt.trim().length >= 10 && prompt.trim().length <= 1000;
+    }
+
+    private async verifyImageUrl(url: string): Promise<void> {
+        // Test if image URL is accessible
+        const response = await fetch(url, { method: 'HEAD' });
+        if (!response.ok) {
+            throw new Error("Generated image is not accessible");
+        }
+    }
+
+    private updateState(updates: Partial<ImageGenerationState>, onStateChange: (state: ImageGenerationState) => void): void {
+        this.state = { ...this.state, ...updates };
+        onStateChange(this.state);
+    }
+}
+```
 
 ## Advanced Considerations
 
@@ -109,6 +312,258 @@ Once you have the basic functionality working, consider these enhancements:
 - Integrate with the main chatbot conversation flow
 - Save generated images to storage
 - Share functionality
+
+## Real-World Business Applications
+
+### Marketing Campaign Creation
+Build a comprehensive marketing asset generator:
+
+```typescript
+interface MarketingAssetGenerator {
+    // Generate social media posts
+    async generateSocialPost(product: string, platform: 'instagram' | 'facebook' | 'twitter'): Promise<string> {
+        const platformSpecs = {
+            instagram: "square 1024x1024, vibrant colors, lifestyle photography style",
+            facebook: "landscape 1200x630, professional, engaging composition",
+            twitter: "landscape 1024x512, clear messaging, eye-catching design"
+        };
+        
+        const prompt = `Create a ${platformSpecs[platform]} social media post featuring ${product}, modern design, high quality, marketing photography`;
+        return await dalleApi(prompt);
+    }
+
+    // Generate product mockups
+    async generateProductMockup(product: string, context: string): Promise<string> {
+        const prompt = `Product mockup of ${product} in ${context}, professional photography, realistic lighting, commercial quality, clean background`;
+        return await dalleApi(prompt);
+    }
+
+    // Generate brand-consistent artwork
+    async generateBrandArtwork(brandGuidelines: BrandGuidelines, concept: string): Promise<string> {
+        const prompt = `${concept} in brand style: ${brandGuidelines.colorScheme}, ${brandGuidelines.style}, logo placement area, brand consistent, professional quality`;
+        return await dalleApi(prompt);
+    }
+}
+
+interface BrandGuidelines {
+    colorScheme: string;
+    style: string;
+    logoPlacement: string;
+    restrictions: string[];
+}
+```
+
+### E-commerce Integration
+Create product images for online stores:
+
+```typescript
+class EcommerceImageGenerator {
+    async generateProductVariations(baseProduct: string, variations: string[]): Promise<string[]> {
+        const images: string[] = [];
+        
+        for (const variation of variations) {
+            const prompt = `${baseProduct} in ${variation}, product photography, white background, professional lighting, e-commerce style, high resolution`;
+            try {
+                const imageUrl = await dalleApi(prompt);
+                images.push(imageUrl);
+            } catch (error) {
+                console.error(`Failed to generate ${variation}:`, error);
+            }
+        }
+        
+        return images;
+    }
+
+    async generateLifestyleShots(product: string, lifestyleContext: string): Promise<string> {
+        const prompt = `${product} being used in ${lifestyleContext}, lifestyle photography, natural lighting, authentic setting, people interacting with product`;
+        return await dalleApi(prompt);
+    }
+}
+```
+
+### Content Creation Workflow
+Automated content pipeline for different media:
+
+```typescript
+class ContentCreationPipeline {
+    async createContentSeries(theme: string, formats: ContentFormat[]): Promise<ContentAsset[]> {
+        const assets: ContentAsset[] = [];
+        
+        for (const format of formats) {
+            try {
+                const prompt = this.buildFormatSpecificPrompt(theme, format);
+                const imageUrl = await dalleApi(prompt);
+                
+                assets.push({
+                    format,
+                    imageUrl,
+                    prompt,
+                    generatedAt: new Date(),
+                    status: 'ready'
+                });
+            } catch (error) {
+                assets.push({
+                    format,
+                    imageUrl: null,
+                    prompt: '',
+                    generatedAt: new Date(),
+                    status: 'failed',
+                    error: error.message
+                });
+            }
+        }
+        
+        return assets;
+    }
+
+    private buildFormatSpecificPrompt(theme: string, format: ContentFormat): string {
+        const formatSpecs = {
+            'blog-header': '1200x400 banner style, text overlay area, professional',
+            'social-square': '1024x1024 square format, engaging, social media optimized',
+            'email-banner': '600x200 email header, clear messaging area, professional',
+            'presentation-slide': '1920x1080 presentation background, clean, minimal text area'
+        };
+        
+        return `${theme}, ${formatSpecs[format.type]}, high quality, professional design`;
+    }
+}
+
+interface ContentFormat {
+    type: 'blog-header' | 'social-square' | 'email-banner' | 'presentation-slide';
+    dimensions: string;
+    requirements: string[];
+}
+
+interface ContentAsset {
+    format: ContentFormat;
+    imageUrl: string | null;
+    prompt: string;
+    generatedAt: Date;
+    status: 'ready' | 'failed' | 'processing';
+    error?: string;
+}
+```
+
+## Performance Optimization and Scaling
+
+### Caching Strategy
+Implement intelligent caching to reduce costs and improve performance:
+
+```typescript
+class ImageGenerationCache {
+    private cache = new Map<string, CacheEntry>();
+    private readonly CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
+    async getOrGenerate(prompt: string): Promise<string> {
+        // Check cache first
+        const cached = this.getCached(prompt);
+        if (cached) {
+            return cached.imageUrl;
+        }
+
+        // Generate new image
+        const imageUrl = await dalleApi(prompt);
+        
+        // Cache the result
+        this.setCached(prompt, imageUrl);
+        
+        return imageUrl;
+    }
+
+    private getCached(prompt: string): CacheEntry | null {
+        const entry = this.cache.get(this.hashPrompt(prompt));
+        if (entry && (Date.now() - entry.timestamp) < this.CACHE_DURATION) {
+            return entry;
+        }
+        return null;
+    }
+
+    private setCached(prompt: string, imageUrl: string): void {
+        this.cache.set(this.hashPrompt(prompt), {
+            imageUrl,
+            timestamp: Date.now(),
+            prompt
+        });
+    }
+
+    private hashPrompt(prompt: string): string {
+        // Simple hash function for demonstration
+        return btoa(prompt).replace(/[^a-zA-Z0-9]/g, '').substring(0, 32);
+    }
+}
+
+interface CacheEntry {
+    imageUrl: string;
+    timestamp: number;
+    prompt: string;
+}
+```
+
+### Batch Processing
+Handle multiple image generation requests efficiently:
+
+```typescript
+class BatchImageGenerator {
+    private queue: ImageRequest[] = [];
+    private processing = false;
+    private readonly BATCH_SIZE = 3;
+    private readonly DELAY_BETWEEN_BATCHES = 2000; // 2 seconds
+
+    async queueGeneration(request: ImageRequest): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.queue.push({
+                ...request,
+                resolve,
+                reject
+            });
+            
+            this.processBatch();
+        });
+    }
+
+    private async processBatch(): Promise<void> {
+        if (this.processing || this.queue.length === 0) return;
+        
+        this.processing = true;
+        
+        try {
+            const batch = this.queue.splice(0, this.BATCH_SIZE);
+            
+            // Process batch concurrently with individual error handling
+            const promises = batch.map(async (request) => {
+                try {
+                    const result = await dalleApi(request.prompt);
+                    request.resolve(result);
+                } catch (error) {
+                    request.reject(error);
+                }
+            });
+            
+            await Promise.allSettled(promises);
+            
+            // Delay before processing next batch
+            if (this.queue.length > 0) {
+                setTimeout(() => {
+                    this.processing = false;
+                    this.processBatch();
+                }, this.DELAY_BETWEEN_BATCHES);
+            } else {
+                this.processing = false;
+            }
+            
+        } catch (error) {
+            this.processing = false;
+            console.error('Batch processing error:', error);
+        }
+    }
+}
+
+interface ImageRequest {
+    prompt: string;
+    resolve?: (result: string) => void;
+    reject?: (error: Error) => void;
+}
+```
 
 ## Solution Reference
 
