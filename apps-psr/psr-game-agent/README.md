@@ -23,6 +23,21 @@ A Python web application that acts as an autonomous player for the Paper-Scissor
 - Python 3.8 or higher
 - PSR Game Server running on localhost:5289
 - pip (Python package manager)
+- Azure AI Foundry endpoint and API key (optional, for enhanced question answering)
+
+## Configuration
+
+### Environment Variables
+
+The agent supports Azure AI integration for intelligent question answering. Create a `.env` file with the following variables:
+
+```bash
+# Azure AI Foundry Configuration (optional)
+AZURE_AI_ENDPOINT=https://your-azure-ai-endpoint.cognitiveservices.azure.com
+AZURE_AI_KEY=your-azure-ai-api-key-here
+```
+
+**Note**: If Azure AI credentials are not provided, the agent will fall back to local pattern-based question answering.
 
 ## Installation
 
@@ -31,7 +46,17 @@ A Python web application that acts as an autonomous player for the Paper-Scissor
    cd apps-psr/psr-game-agent
    ```
 
-2. Install dependencies:
+2. Set up environment variables:
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+   
+   # Edit .env file and add your Azure AI credentials
+   # AZURE_AI_ENDPOINT=https://your-azure-ai-endpoint.cognitiveservices.azure.com
+   # AZURE_AI_KEY=your-azure-ai-api-key-here
+   ```
+
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```

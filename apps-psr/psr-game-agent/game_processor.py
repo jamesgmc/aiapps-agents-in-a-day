@@ -3,7 +3,8 @@ import time
 import threading
 from typing import Optional, List, Dict, Any
 from api_client import PSRGameClient
-from agent import GameAgent
+# from agent import GameAgent
+from agent_v1 import GameAgent
 
 class GameProcessor:
     """Autonomous game agent for PSR Tournament"""
