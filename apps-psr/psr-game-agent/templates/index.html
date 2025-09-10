@@ -885,21 +885,10 @@
         
         <div class="auto-refresh">
             <script>
-                // Auto-scroll log container to bottom
-                function scrollLogToBottom() {
-                    const logContainer = document.querySelector('.log-container');
-                    if (logContainer) {
-                        logContainer.scrollTop = logContainer.scrollHeight;
-                    }
-                }
-                
                 // Auto-refresh every 3 seconds to show live updates
                 setTimeout(function() {
                     window.location.reload();
                 }, 3000);
-                
-                // Scroll log to bottom on page load
-                document.addEventListener('DOMContentLoaded', scrollLogToBottom);
             </script>
             🔄 I'm keeping everything fresh - auto-updating every 3 seconds to show you the latest!
         </div>
@@ -954,25 +943,6 @@
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             highlightActiveRound();
-            
-            // Auto-scroll log container to bottom
-            const logContainer = document.querySelector('.log-container');
-            if (logContainer) {
-                logContainer.scrollTop = logContainer.scrollHeight;
-                
-                // Add smooth scrolling observer for new log entries
-                const observer = new MutationObserver(function() {
-                    logContainer.scrollTo({
-                        top: logContainer.scrollHeight,
-                        behavior: 'smooth'
-                    });
-                });
-                
-                observer.observe(logContainer, {
-                    childList: true,
-                    subtree: true
-                });
-            }
         });
     </script>
 </body>
