@@ -12,7 +12,7 @@ const config = {
   tagline:
     "Accelerate Your AI Journey: Build AI Apps and Agents",
   url: "https://github-insight-anz-lab.github.io",
-  baseUrl: "/aiapps-agents/",
+  baseUrl: "/aiapps-agents-in-a-day/",
 
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "ignore",
