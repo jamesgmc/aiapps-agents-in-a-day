@@ -1,5 +1,7 @@
 # AI Agents in Production: Observability & Evaluation
 
+//todo: for game agent, add tracing in vs code locally and evulation
+
 As AI agents move from experimental prototypes to real-world applications, the ability to understand their behavior, monitor their performance, and systematically evaluate their outputs becomes important.
 
 ## Learning Goals

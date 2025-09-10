@@ -1,6 +1,7 @@
 
-
 # Introduction to AI Agents
+
+//todo: for game agent, create agent VS Code AI Toolkit
 
 ## Defining AI Agents and Types of AI Agents
 

@@ -1,25 +1,9 @@
 # Using Agentic Protocols (MCP, A2A and NLWeb)
 
+//todo: for game agent, add mcp capability
+//todo: for game agent, add A2A
 
 As the use of AI agents grows, so does the need for protocols that ensure standardization, security, and support open innovation. In this lesson, we will cover 3 protocols looking to meet this need - Model Context Protocol (MCP), Agent to Agent (A2A) and Natural Language Web (NLWeb).
-
-## Introduction
-
-In this lesson, we will cover:
-
-• How **MCP** allows AI Agents to access external tools and data to complete user tasks.
-
-• How **A2A** enables communication and collaboration between different AI agents.
-
-• How **NLWeb** brings natural language interfaces to any website enabling AI Agents to discover and interact with the content.
-
-## Learning Goals
-
-• **Identify** the core purpose and benefits of MCP, A2A, and NLWeb in the context of AI agents.
-
-• **Explain** how each protocol facilitates communication and interaction between LLMs, tools, and other agents.
-
-• **Recognize** the distinct roles each protocol plays in building complex agentic systems.
 
 ## Model Context Protocol
 

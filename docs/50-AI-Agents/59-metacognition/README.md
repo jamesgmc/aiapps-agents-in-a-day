@@ -1,5 +1,7 @@
 # Metacognition in AI Agents
 
+//todo: for game agent, add history and loss game
+
 ## Introduction to Metacognition
 
 Metacognition refers to the higher-order cognitive processes that involve thinking about one’s own thinking. For AI agents, this means being able to evaluate and adjust their actions based on self-awareness and past experiences. Metacognition, or "thinking about thinking," is an important concept in the development of agentic AI systems. It involves AI systems being aware of their own internal processes and being able to monitor, regulate, and adapt their behavior accordingly. Much like we do when we read the room or look at a problem. This self-awareness can help AI systems make better decisions, identify errors, and improve their performance over time- again linking back to the Turing test and the debate over whether AI is going to take over.

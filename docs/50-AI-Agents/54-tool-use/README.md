@@ -1,6 +1,8 @@
 
 # Tool Use Design Pattern
 
+//todo: for game agent, add tool use
+
 Tools are interesting because they allow AI agents to have a broader range of capabilities. Instead of the agent having a limited set of actions it can perform, by adding a tool, the agent can now perform a wide range of actions. In this chapter, we will look at the Tool Use Design Pattern, which describes how AI agents can use specific tools to achieve their goals.
 
 ## What is the Tool Use Design Pattern?
@@ -353,7 +355,6 @@ psr_tournament_plugin = PSRTournamentPlugin()
 
 # Add the plugin to the kernel
 kernel.add_plugin(psr_tournament_plugin, plugin_name="psr_tournament")
-```
 ```
   
 ### Azure AI Agent Service

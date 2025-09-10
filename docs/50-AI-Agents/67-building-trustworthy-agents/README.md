@@ -1,6 +1,8 @@
 
 # Building Trustworthy AI Agents
 
+//todo: for game agent, add a human in the loop action
+
 ## Safety
 
 Let's first look at building safe agentic applications. Safety means that the AI agent performs as designed. As builders of agentic applications, we have methods and tools to maximize safety:

@@ -1,6 +1,8 @@
 
 # Planning Design
 
+//todo: for game agent, add planning step
+
 ## Defining the Overall Goal and Breaking Down a Task
 
 ![Defining Goals and Tasks](./images/defining-goals-tasks.png)
