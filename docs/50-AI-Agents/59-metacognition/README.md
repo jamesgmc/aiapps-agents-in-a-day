@@ -1,17 +1,5 @@
 # Metacognition in AI Agents
 
-## Introduction
-
-Welcome to the lesson on metacognition in AI agents! This chapter is designed for beginners who are curious about how AI agents can think about their own thinking processes. By the end of this lesson, you'll understand key concepts and be equipped with practical examples to apply metacognition in AI agent design.
-
-## Learning Goals
-
-After completing this lesson, you'll be able to:
-
-1. Understand the implications of reasoning loops in agent definitions.
-2. Use planning and evaluation techniques to help self-correcting agents.
-3. Create your own agents capable of manipulating code to accomplish tasks.
-
 ## Introduction to Metacognition
 
 Metacognition refers to the higher-order cognitive processes that involve thinking about one’s own thinking. For AI agents, this means being able to evaluate and adjust their actions based on self-awareness and past experiences. Metacognition, or "thinking about thinking," is an important concept in the development of agentic AI systems. It involves AI systems being aware of their own internal processes and being able to monitor, regulate, and adapt their behavior accordingly. Much like we do when we read the room or look at a problem. This self-awareness can help AI systems make better decisions, identify errors, and improve their performance over time- again linking back to the Turing test and the debate over whether AI is going to take over.
@@ -1418,14 +1406,3 @@ This is a simple form of metacognition where the system is capable of adjusting 
 
 Metacognition is a powerful tool that can significantly enhance the capabilities of AI agents. By incorporating metacognitive processes, you can design agents that are more intelligent, adaptable, and efficient. Use the additional resources to further explore the fascinating world of metacognition in AI agents.
 
-### Got More Questions about the Metacognition Design Pattern?
-
-Join the [Azure AI Foundry Discord](https://aka.ms/ai-agents/discord) to meet with other learners, attend office hours and get your AI Agents questions answered.
-
-## Previous Lesson
-
-[Multi-Agent Design Pattern](../08-multi-agent/README.md)
-
-## Next Lesson
-
-[AI Agents in Production](../10-ai-agents-production/README.md)

@@ -11,20 +11,6 @@ In general, agents should:
 - Facilitate and support collaboration in the ways we as individuals prefer to work with others
 - Make us better versions of ourselves (e.g., life coach/task master, helping us learn emotional regulation and mindfulness skills, building resilience, etc.)
 
-## This Lesson Will Cover
-
-- What are the Agentic Design Principles
-- What are some guidelines to follow while implementing these design principles
-- What are some examples of using the design principles
-
-## Learning Goals
-
-After completing this lesson, you will be able to:
-
-1. Explain what the Agentic Design Principles are
-2. Explain the guidelines for using the Agentic Design Principles
-3. Understand how to build an agent using the Agentic Design Principles
-
 ## The Agentic Design Principles
 
 ![Agentic Design Principles](./images/agentic-design-principles.png)
@@ -83,20 +69,3 @@ Imagine you are designing a Travel Agent, here is how you could think about usin
 2. **Control** – Make sure it’s clear how the user can modify the Agent after it’s been created with things like the System Prompt. Enable the user to choose how verbose the Agent is, its writing style, and any caveats on what the Agent should not talk about. Allow the user to view and delete any associated files or data, prompts, and past conversations.
 3. **Consistency** – Make sure the icons for Share Prompt, add a file or photo and tag someone or something are standard and recognizable. Use the paperclip icon to indicate file upload/sharing with the Agent, and an image icon to indicate graphics upload.
 
-### Got More Questions about AI Agentic Design Patterns?
-
-Join the [Azure AI Foundry Discord](https://aka.ms/ai-agents/discord) to meet with other learners, attend office hours and get your AI Agents questions answered.
-
-## Additional Resources
-
-- <a href="https://openai.com" target="_blank">Practices for Governing Agentic AI Systems | OpenAI</a>
-- <a href="https://microsoft.com" target="_blank">The HAX Toolkit Project - Microsoft Research</a>
-- <a href="https://responsibleaitoolbox.ai" target="_blank">Responsible AI Toolbox</a>
-
-## Previous Lesson
-
-[Exploring Agentic Frameworks](../02-explore-agentic-frameworks/README.md)
-
-## Next Lesson
-
-[Tool Use Design Pattern](../04-tool-use/README.md)

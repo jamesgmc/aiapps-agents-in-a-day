@@ -3,29 +3,6 @@
 
 As soon as you start working on a project that involves multiple agents, you will need to consider the multi-agent design pattern. However, it might not be immediately clear when to switch to multi-agents and what the advantages are.
 
-## Introduction
-
-In this lesson, we're looking to answer the following questions:
-
-- What are the scenarios where multi-agents are applicable to?
-- What are the advantages of using multi-agents over just one singular agent doing multiple tasks?
-- What are the building blocks of implementing the multi-agent design pattern?
-- How do we have visibility to how the multiple agents are interacting with each other?
-
-## Learning Goals
-
-After this lesson, you should be able to:
-
-- Identify scenarios where multi-agents are applicable
-- Recognize the advantages of using multi-agents over a singular agent.
-- Comprehend the building blocks of implementing the multi-agent design pattern.
-
-What's the bigger picture?
-
-*Multi agents are a design pattern that allows multiple agents to work together to achieve a common goal*.
-
-This pattern is widely used in various fields, including robotics, autonomous systems, and distributed computing.
-
 ## Scenarios Where Multi-Agents Are Applicable
 
 So what scenarios are a good use case for using multi-agents? The answer is that there are many scenarios where employing multiple agents is beneficial especially in the following cases:
@@ -153,35 +130,3 @@ Design a multi-agent system for a PSR tournament coordination process. Identify 
 ## Solution
 
 [Solution](./solution/solution.md)
-
-## Knowledge checks
-
-Question: When should you consider using multi-agents?
-
-- [ ] A1: When you have a small workload and a simple task.
-- [ ] A2: When you have a large workload
-- [ ] A3: When you have a simple task.
-
-[Solution quiz](./solution/solution-quiz.md)
-
-## Summary
-
-In this lesson, we've looked at the multi-agent design pattern, including the scenarios where multi-agents are applicable, the advantages of using multi-agents over a singular agent, the building blocks of implementing the multi-agent design pattern, and how to have visibility into how the multiple agents are interacting with each other.
-
-### Got More Questions about the Multi-Agent Design Pattern?
-
-Join the [Azure AI Foundry Discord](https://aka.ms/ai-agents/discord) to meet with other learners, attend office hours and get your AI Agents questions answered.
-
-## Additional resources
-
-- <a href="https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html" target="_blank">AutoGen design patterns</a>
-- <a href="https://www.analyticsvidhya.com/blog/2024/10/agentic-design-patterns/" target="_blank">Agentic design patterns</a>
-
-
-## Previous Lesson
-
-[Planning Design](../07-planning-design/README.md)
-
-## Next Lesson
-
-[Metacognition in AI Agents](../09-metacognition/README.md)

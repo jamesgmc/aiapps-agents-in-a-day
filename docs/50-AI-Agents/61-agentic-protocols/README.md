@@ -9,7 +9,7 @@ In this lesson, we will cover:
 
 • How **MCP** allows AI Agents to access external tools and data to complete user tasks.
 
-•  How **A2A** enables communication and collaboration between different AI agents.
+• How **A2A** enables communication and collaboration between different AI agents.
 
 • How **NLWeb** brings natural language interfaces to any website enabling AI Agents to discover and interact with the content.
 
@@ -160,13 +160,3 @@ Consider our travel booking website again, but this time, it's powered by NLWeb.
 
 5. **AI Agent Interaction**: Because NLWeb serves as an MCP server, an external AI travel agent could also connect to this website's NLWeb instance. The AI agent could then use the `ask` MCP method to query the website directly: `ask("Are there any vegan-friendly restaurants in the Honolulu area recommended by the hotel?")`. The NLWeb instance would process this, leveraging its database of restaurant information (if loaded), and return a structured JSON response.
 
-### Got More Questions about MCP/A2A/NLWeb?
-
-Join the [Azure AI Foundry Discord](https://aka.ms/ai-agents/discord) to meet with other learners, attend office hours and get your AI Agents questions answered.
-
-## Resources
-
-- [MCP for Beginners](https://aka.ms/mcp-for-beginners)  
-- [MCP Documentation](https://github.com/microsoft/semantic-kernel/tree/main/python/semantic-kernel/semantic_kernel/connectors/mcp)
-- [NLWeb Repo](https://github.com/nlweb-ai/NLWeb)
-- [Semantic Kernel Guides](https://learn.microsoft.com/semantic-kernel/)

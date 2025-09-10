@@ -1,23 +1,6 @@
 
 # Planning Design
 
-## Introduction
-
-This lesson will cover
-
-* Defining a clear overall goal and breaking a complex task into manageable tasks.
-* Leveraging structured output for more reliable and machine-readable responses.
-* Applying an event-driven approach to handle dynamic tasks and unexpected inputs.
-
-## Learning Goals
-
-After completing this lesson, you will have an understanding about:
-
-* Identify and set an overall goal for an AI agent, ensuring it clearly knows what needs to be achieved.
-* Decompose a complex task into manageable subtasks and organize them into a logical sequence.
-* Equip agents with the right tools (e.g., search tools or data analytics tools), decide when and how they are used, and handle unexpected situations that arise.
-* Evaluate subtask outcomes, measure performance, and iterate on actions to improve the final output.
-
 ## Defining the Overall Goal and Breaking Down a Task
 
 ![Defining Goals and Tasks](./images/defining-goals-tasks.png)
@@ -285,19 +268,3 @@ For more comprehensive planning do checkout Magnetic One <a href="https://www.mi
 ## Summary
 
 In this article we have looked at an example of how we can create a planner that can dynamically select the available agents defined. The output of the Planner decomposes the tasks and assigns the agents so they can be executed. It is assumed the agents have access to the functions/tools that are required to perform the task. In addition to the agents you can include other patterns like reflection, summarizer, and round robin chat to further customize.
-
-## Additional Resources
-
-* AutoGen Magentic One - A Generalist multi-agent system for solving complex tasks and has achieved impressive results on multiple challenging agentic benchmarks. Reference: <a href="https://github.com/microsoft/autogen/tree/main/python/packages/autogen-magentic-one" target="_blank">autogen-magentic-one</a>. In this implementation the orchestrator create task specific plan and delegates these tasks to the available agents. In addition to planning the orchestrator also employs a tracking mechanism to monitor the progress of the task and re-plans as required.
-
-### Got More Questions about the Planning Design Pattern?
-
-Join the [Azure AI Foundry Discord](https://aka.ms/ai-agents/discord) to meet with other learners, attend office hours and get your AI Agents questions answered.
-
-## Previous Lesson
-
-[Building Trustworthy AI Agents](../06-building-trustworthy-agents/README.md)
-
-## Next Lesson
-
-[Multi-Agent Design Pattern](../08-multi-agent/README.md)
