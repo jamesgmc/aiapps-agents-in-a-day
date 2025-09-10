@@ -1,7 +1,7 @@
 
 # Building Trustworthy AI Agents
 
-//todo: for game agent, add a human in the loop action
+//todo: for game agent, add a human in the loop action, call it agent_v67.py in apps-psr/psr-game-agent. follow agent_v1.py
 
 ## Safety
 

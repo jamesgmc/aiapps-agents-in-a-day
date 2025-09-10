@@ -1,7 +1,7 @@
 
 # Planning Design
 
-//todo: for game agent, add planning step
+//todo: for game agent, add planning step, call it agent_v57.py in apps-psr/psr-game-agent. follow agent_v1.py
 
 ## Defining the Overall Goal and Breaking Down a Task
 

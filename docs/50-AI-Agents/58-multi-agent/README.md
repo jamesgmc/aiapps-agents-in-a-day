@@ -1,7 +1,7 @@
 
 # Multi-agent design patterns
 
-//todo: for game agent, add second agent locally
+//todo: for game agent, add second agent locally, call it agent_v58.py in apps-psr/psr-game-agent. follow agent_v1.py
 
 As soon as you start working on a project that involves multiple agents, you will need to consider the multi-agent design pattern. However, it might not be immediately clear when to switch to multi-agents and what the advantages are.
 

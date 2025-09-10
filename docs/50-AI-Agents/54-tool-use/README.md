@@ -1,7 +1,7 @@
 
 # Tool Use Design Pattern
 
-//todo: for game agent, add tool use
+//todo: for game agent, add tool use, call it agent_v54.py in apps-psr/psr-game-agent. follow agent_v1.py
 
 Tools are interesting because they allow AI agents to have a broader range of capabilities. Instead of the agent having a limited set of actions it can perform, by adding a tool, the agent can now perform a wide range of actions. In this chapter, we will look at the Tool Use Design Pattern, which describes how AI agents can use specific tools to achieve their goals.
 

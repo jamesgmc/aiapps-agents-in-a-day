@@ -1,6 +1,6 @@
 # AI Agents in Production: Observability & Evaluation
 
-//todo: for game agent, add tracing in vs code locally and evulation
+//todo: for game agent, add tracing in vs code locally and evulation, call it agent_v68.py in apps-psr/psr-game-agent. follow agent_v1.py
 
 As AI agents move from experimental prototypes to real-world applications, the ability to understand their behavior, monitor their performance, and systematically evaluate their outputs becomes important.
 

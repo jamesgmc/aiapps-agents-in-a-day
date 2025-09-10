@@ -1,7 +1,7 @@
 # Using Agentic Protocols (MCP, A2A and NLWeb)
 
-//todo: for game agent, add mcp capability
-//todo: for game agent, add A2A
+//todo: for game agent, add mcp capability, call it agent_v61a.py in apps-psr/psr-game-agent. follow agent_v1.py
+//todo: for game agent, add A2A, call it agent_v61b.py in apps-psr/psr-game-agent. follow agent_v1.py
 
 As the use of AI agents grows, so does the need for protocols that ensure standardization, security, and support open innovation. In this lesson, we will cover 3 protocols looking to meet this need - Model Context Protocol (MCP), Agent to Agent (A2A) and Natural Language Web (NLWeb).
 

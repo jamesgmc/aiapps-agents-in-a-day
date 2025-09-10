@@ -1,7 +1,7 @@
 # Create First Agent using Agent Service
 
 
-//todo: for game agent, create agent using agent service, call it agent_v1.py in apps-psr/psr-game-agent
+//todo: for game agent, create agent using agent service, call it agent_v52.py in apps-psr/psr-game-agent. follow agent_v1.py
 
 In this exercise, you use the Azure AI Agent service tools in the [Azure AI Foundry portal](https://ai.azure.com/?WT.mc_id=academic-105485-koreyst) to create a agent for Flight Booking. The agent will be able to interact with users and provide information about flights.
 
