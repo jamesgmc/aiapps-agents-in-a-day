@@ -1,6 +1,11 @@
 import requests
 import json
+import logging
 from typing import Optional, Dict, Any
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class PSRGameClient:
     """Client for communicating with the PSR Game Server API"""
@@ -24,6 +29,7 @@ class PSRGameClient:
     def get_player_status(self, player_id: int) -> Dict[str, Any]:
         """Get current tournament status for a player"""
         url = f"{self.base_url}/api/player/{player_id}/status"
+        logger.info(f"GET {url}")
         
         try:
             response = self.session.get(url)
@@ -47,6 +53,7 @@ class PSRGameClient:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
+            print(e)
             return {"error": str(e)}
     
     def get_player_results(self, player_id: int) -> Dict[str, Any]:

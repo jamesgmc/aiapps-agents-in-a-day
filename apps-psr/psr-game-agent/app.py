@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from agent import GameAgent
+from game_processor import GameProcessor
 import threading
 
 app = Flask(__name__)
@@ -37,7 +37,7 @@ def start_game():
         return redirect(url_for('index'))
     
     # Create new game agent
-    game_agent = GameAgent(player_name)
+    game_agent = GameProcessor(player_name)
     
     # Register player
     if game_agent.register_player():
@@ -65,7 +65,7 @@ def reconnect_game():
         return redirect(url_for('index'))
     
     # Create game agent with existing player ID
-    game_agent = GameAgent(f"Player {player_id}")
+    game_agent = GameProcessor(f"Player {player_id}")
     game_agent.player_id = player_id
     
     # Verify the player exists by getting status

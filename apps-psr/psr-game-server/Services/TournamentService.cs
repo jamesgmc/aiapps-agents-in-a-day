@@ -287,8 +287,7 @@ public class TournamentService : ITournamentService
                 CurrentRoundStatus = currentRound?.Status,
                 CurrentQuestion = currentRound?.Status == RoundStatus.InProgress ? currentRound.Question : null,
                 CanSubmit = currentRound?.Status == RoundStatus.InProgress && 
-                          playerResult != null && 
-                          !playerResult.HasSubmitted
+                          (playerResult == null || (playerResult != null && !playerResult.HasSubmitted))
             };
         }
     }
