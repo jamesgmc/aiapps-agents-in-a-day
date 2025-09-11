@@ -1,6 +1,6 @@
 # Metacognition in AI Agents
 
-//todo: for game agent, add history and loss game, call it agent_v59.py in apps-psr/psr-game-agent. follow agent_v1.py
+//todo: for game agent, add history and loss game, call it agent_v61.py in apps-psr/psr-game-agent. follow agent_v1.py
 
 ## Introduction to Metacognition
 
