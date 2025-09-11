@@ -14,6 +14,20 @@ def index():
         # Show player name input form
         return render_template('index.html', show_form=True)
     else:
+        # Filter out consecutive duplicate log entries
+        filtered_log = []
+        last_log = None
+        for log_item in game_agent.status_log[-20:]:  # Get last 20 messages
+            # Extract message without timestamp for comparison
+            # Format: '[19:54:34] Tournament: Pending, Round 1: Not Started'
+            import re
+            log_without_timestamp = re.sub(r'^\[\d{2}:\d{2}:\d{2}\]\s*', '', log_item)
+            last_log_without_timestamp = re.sub(r'^\[\d{2}:\d{2}:\d{2}\]\s*', '', last_log) if last_log else None
+            
+            if log_without_timestamp != last_log_without_timestamp:
+                filtered_log.append(log_item)
+                last_log = log_item
+        
         # Show game status
         return render_template('index.html', 
                              show_form=False,
@@ -23,7 +37,7 @@ def index():
                              round_status=game_agent.round_status,
                              current_round=game_agent.current_round,
                              is_running=game_agent.is_running,
-                             status_log=game_agent.status_log[-20:][::-1],  # Show last 20 messages, latest first
+                             status_log=filtered_log[::-1],  # Show filtered messages, latest first
                              results=game_agent.results)
 
 @app.route('/start', methods=['POST'])
