@@ -294,12 +294,12 @@ The following diagram illustrates the process of function calling with Semantic 
 
 ![function calling](./images/functioncalling-diagram.png)
 
-In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the RPS tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the PSRTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
+In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the RPS tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the RPSTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
 
 ```python
 from semantic_kernel.functions import kernel_function
 
-class PSRTournamentPlugin:
+class RPSTournamentPlugin:
     """Plugin for RPS Tournament functionality"""
 
     @kernel_function(
@@ -351,7 +351,7 @@ from semantic_kernel import Kernel
 kernel = Kernel()
 
 # Create the plugin
-psr_tournament_plugin = PSRTournamentPlugin()
+psr_tournament_plugin = RPSTournamentPlugin()
 
 # Add the plugin to the kernel
 kernel.add_plugin(psr_tournament_plugin, plugin_name="psr_tournament")

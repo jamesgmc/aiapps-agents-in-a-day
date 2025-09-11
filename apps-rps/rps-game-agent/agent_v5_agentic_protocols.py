@@ -340,7 +340,7 @@ class A2AAgent(ABC):
         pass
 
 
-class PSRQuestionSpecialistA2A(A2AAgent):
+class RPSQuestionSpecialistA2A(A2AAgent):
     """A2A-compatible Question Specialist Agent"""
     
     def create_agent_card(self) -> AgentCard:
@@ -407,7 +407,7 @@ class PSRQuestionSpecialistA2A(A2AAgent):
         return {"answer": "Unknown", "confidence": 0.1, "source": "fallback"}
 
 
-class PSRStrategyAnalystA2A(A2AAgent):
+class RPSStrategyAnalystA2A(A2AAgent):
     """A2A-compatible Strategy Analyst Agent"""
     
     def create_agent_card(self) -> AgentCard:
@@ -570,8 +570,8 @@ class GameAgentV5:
         self.log_status(f"MCP Server initialized with {len(tools)} tools, {len(resources)} resources, {len(prompts)} prompts")
         
         # Setup A2A agents
-        question_agent = PSRQuestionSpecialistA2A("RPS Question Specialist")
-        strategy_agent = PSRStrategyAnalystA2A("RPS Strategy Analyst")
+        question_agent = RPSQuestionSpecialistA2A("RPS Question Specialist")
+        strategy_agent = RPSStrategyAnalystA2A("RPS Strategy Analyst")
         
         self.a2a_coordinator.register_agent(question_agent)
         self.a2a_coordinator.register_agent(strategy_agent)

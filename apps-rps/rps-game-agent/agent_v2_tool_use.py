@@ -43,7 +43,7 @@ except ImportError:
 from api_client import RPSGameClient
 
 
-class PSRTournamentToolsV2:
+class RPSTournamentToolsV2:
     """Comprehensive tool collection for RPS tournament functionality"""
     
     @kernel_function(name="answer_question", description="Answer tournament questions using comprehensive knowledge base")
@@ -365,7 +365,7 @@ class GameAgentV2:
         self.latest_score = 0
         
         # Tool system setup
-        self.tools = PSRTournamentToolsV2()
+        self.tools = RPSTournamentToolsV2()
         self.setup_tool_system()
         
     def log_status(self, message: str):

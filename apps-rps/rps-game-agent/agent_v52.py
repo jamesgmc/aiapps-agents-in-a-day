@@ -38,7 +38,7 @@ class GameAgentV52:
         
         # Agent instructions for RPS tournament (similar to FlightAgent but for game context)
         self.agent_instructions = """
-        You are PSRAgent, a virtual assistant specialized in handling Paper-Scissors-Rock tournament queries and decisions. Your role includes answering knowledge questions accurately and making strategic game moves. Follow the instructions below to ensure clarity and effectiveness in your responses:
+        You are RPSAgent, a virtual assistant specialized in handling Paper-Scissors-Rock tournament queries and decisions. Your role includes answering knowledge questions accurately and making strategic game moves. Follow the instructions below to ensure clarity and effectiveness in your responses:
 
         ### Task Instructions:
         1. **Answering Questions**:

@@ -28,7 +28,7 @@ except ImportError:
 from api_client import RPSGameClient
 
 
-class PSRKnowledgeBase:
+class RPSKnowledgeBase:
     """Simulated knowledge base for RPS tournament questions"""
     
     def __init__(self):
@@ -223,7 +223,7 @@ class PSRKnowledgeBase:
 class AgenticRAGEngine:
     """Core Agentic RAG engine for autonomous retrieval and reasoning"""
     
-    def __init__(self, knowledge_base: PSRKnowledgeBase):
+    def __init__(self, knowledge_base: RPSKnowledgeBase):
         self.kb = knowledge_base
         self.iteration_history = []
         self.max_iterations = 5
@@ -431,7 +431,7 @@ class GameAgentV3:
         self.latest_score = 0
         
         # Agentic RAG system setup
-        self.knowledge_base = PSRKnowledgeBase()
+        self.knowledge_base = RPSKnowledgeBase()
         self.rag_engine = AgenticRAGEngine(self.knowledge_base)
         self.setup_agentic_rag()
         
