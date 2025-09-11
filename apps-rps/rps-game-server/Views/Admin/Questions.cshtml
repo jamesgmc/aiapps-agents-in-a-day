@@ -1,4 +1,4 @@
-@model List<PsrGameServer.Models.QuestionAnswer>
+@model List<RpsGameServer.Models.QuestionAnswer>
 @{
     ViewData["Title"] = "Questions Management";
 }
@@ -55,9 +55,9 @@
                                             <td>@question.Question</td>
                                             <td>@question.Answer</td>
                                             <td>
-                                                <span class="badge badge-@(question.Type == PsrGameServer.Models.QuestionType.Text ? "secondary" : 
-                                                                          question.Type == PsrGameServer.Models.QuestionType.Audio ? "warning" :
-                                                                          question.Type == PsrGameServer.Models.QuestionType.Image ? "info" : "success")">
+                                                <span class="badge badge-@(question.Type == RpsGameServer.Models.QuestionType.Text ? "secondary" : 
+                                                                          question.Type == RpsGameServer.Models.QuestionType.Audio ? "warning" :
+                                                                          question.Type == RpsGameServer.Models.QuestionType.Image ? "info" : "success")">
                                                     @question.Type
                                                 </span>
                                             </td>

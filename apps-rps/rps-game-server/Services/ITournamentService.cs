@@ -1,6 +1,6 @@
-using PsrGameServer.Models;
+using RpsGameServer.Models;
 
-namespace PsrGameServer.Services;
+namespace RpsGameServer.Services;
 
 public interface ITournamentService
 {

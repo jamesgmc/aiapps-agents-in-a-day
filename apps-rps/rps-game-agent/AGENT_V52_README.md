@@ -2,20 +2,20 @@
 
 ## Overview
 
-`agent_v52.py` implements a PSR (Paper-Scissors-Rock) tournament game agent using Azure AI Agent service, following the concepts from the "52-create-first-agent" documentation.
+`agent_v52.py` implements a RPS (Paper-Scissors-Rock) tournament game agent using Azure AI Agent service, following the concepts from the "52-create-first-agent" documentation.
 
 ## Key Features
 
 ### Azure AI Agent Service Integration
 - Uses Azure AI Foundry Agent API endpoints when configured with an agent ID
 - Falls back to regular chat completions API for backward compatibility
-- Specialized agent instructions tailored for PSR tournament context
+- Specialized agent instructions tailored for RPS tournament context
 
 ### Agent Instructions
 The agent is configured with specialized instructions for:
 - **Question Answering**: Accurate and concise responses for math and knowledge questions
 - **Strategic Game Play**: Smart Rock-Paper-Scissors move selection for tournament play
-- **Tournament Context**: Understanding of competitive PSR tournament environment
+- **Tournament Context**: Understanding of competitive RPS tournament environment
 
 ### Robust Fallback System
 - **Azure AI Service**: Primary method using configured Azure endpoints
@@ -39,7 +39,7 @@ AZURE_AI_AGENT_ID=your-azure-agent-id-here
 
 ### Azure AI Foundry Agent Setup
 1. Create an agent in Azure AI Foundry portal
-2. Use PSR-specific instructions (similar to FlightAgent example)
+2. Use rps-specific instructions (similar to FlightAgent example)
 3. Deploy and obtain the agent ID
 4. Configure the agent ID in your environment
 
@@ -114,7 +114,7 @@ python agent_v52.py
 |---------|-------------|--------------|
 | API Endpoint | Chat Completions | Azure AI Agent Service |
 | Agent Configuration | System messages | Azure AI Foundry Agent |
-| Instructions | Basic prompts | Specialized PSR tournament agent |
+| Instructions | Basic prompts | Specialized RPS tournament agent |
 | Fallback | Random/simple | Enhanced local processing |
 | Configuration | Basic endpoint/key | Agent ID + endpoint/key |
 

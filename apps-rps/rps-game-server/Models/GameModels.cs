@@ -1,4 +1,4 @@
-namespace PsrGameServer.Models;
+namespace RpsGameServer.Models;
 
 public enum QuestionType
 {

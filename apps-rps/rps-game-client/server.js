@@ -421,7 +421,7 @@ function startGameMonitoring(sessionId) {
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`PSR Game Client running on http://localhost:${PORT}`);
+    console.log(`RPS Game Client running on http://localhost:${PORT}`);
     console.log(`Connecting to game server at: ${SERVER_URL}`);
 });
 

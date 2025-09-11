@@ -7,8 +7,8 @@ from typing import Optional, Dict, Any
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class PSRGameClient:
-    """Client for communicating with the PSR Game Server API"""
+class RPSGameClient:
+    """Client for communicating with the RPS Game Server API"""
     
     def __init__(self, base_url: str = "http://localhost:5289"):
         self.base_url = base_url.rstrip('/')

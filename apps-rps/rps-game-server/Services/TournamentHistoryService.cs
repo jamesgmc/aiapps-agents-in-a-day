@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using PsrGameServer.Data;
-using PsrGameServer.Models;
+using RpsGameServer.Data;
+using RpsGameServer.Models;
 
-namespace PsrGameServer.Services;
+namespace RpsGameServer.Services;
 
 public class TournamentHistoryService : ITournamentHistoryService
 {

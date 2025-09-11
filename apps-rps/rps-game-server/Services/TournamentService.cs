@@ -1,7 +1,7 @@
-using PsrGameServer.Models;
+using RpsGameServer.Models;
 using System.Collections.Concurrent;
 
-namespace PsrGameServer.Services;
+namespace RpsGameServer.Services;
 
 public class TournamentService : ITournamentService
 {

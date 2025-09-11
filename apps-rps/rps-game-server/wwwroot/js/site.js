@@ -13,7 +13,7 @@ function enableAutoRefresh() {
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Add any initialization code here
-    console.log('PSR Tournament application loaded');
+    console.log('RPS Tournament application loaded');
 });
 
 // Utility function to show notifications

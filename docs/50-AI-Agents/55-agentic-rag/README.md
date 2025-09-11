@@ -1,7 +1,7 @@
 
 # Agentic RAG
 
-//todo: for game agent, add RAG process, call it agent_v55.py in apps-psr/psr-game-agent. follow agent_v1.py
+//todo: for game agent, add RAG process, call it agent_v55.py in apps-rps/rps-game-agent. follow agent_v1.py
 
 This lesson provides a comprehensive overview of Agentic Retrieval-Augmented Generation (Agentic RAG), an emerging AI paradigm where large language models (LLMs) autonomously plan their next steps while pulling information from external sources. Unlike static retrieval-then-read patterns, Agentic RAG involves iterative calls to the LLM, interspersed with tool or function calls and structured outputs. The system evaluates results, refines queries, invokes additional tools if needed, and continues this cycle until a satisfactory solution is achieved.
 
@@ -23,7 +23,7 @@ This iterative “maker-checker” style of operation is designed to improve cor
 
 The distinguishing quality that makes a system “agentic” is its ability to own its reasoning process. Traditional RAG implementations often depend on humans pre-defining a path for the model: a chain-of-thought that outlines what to retrieve and when.
 But when a system is truly agentic, it internally decides how to approach the problem. It’s not just executing a script; it’s autonomously determining the sequence of steps based on the quality of the information it finds.
-For example, if it’s asked to answer a complex PSR tournament question and select an optimal move, it doesn’t rely solely on a prompt that spells out the entire research and decision-making workflow. Instead, the agentic model independently decides to:
+For example, if it’s asked to answer a complex RPS tournament question and select an optimal move, it doesn’t rely solely on a prompt that spells out the entire research and decision-making workflow. Instead, the agentic model independently decides to:
 
 1. Search its knowledge base for the specific question topic using vector search
 2. Retrieve related contextual information using Azure AI Search to enhance accuracy 
@@ -72,7 +72,7 @@ Key differences from more advanced AI forms include:
 
 Agentic RAG shines in scenarios requiring iterative refinement and precision:
 
-1. **Tournament Question Accuracy:** In PSR tournament settings where answer correctness is critical, the agentic model can repeatedly verify facts across multiple knowledge sources, cross-reference information, and rewrite queries until it produces a thoroughly vetted answer with high confidence.
+1. **Tournament Question Accuracy:** In RPS tournament settings where answer correctness is critical, the agentic model can repeatedly verify facts across multiple knowledge sources, cross-reference information, and rewrite queries until it produces a thoroughly vetted answer with high confidence.
 2. **Strategic Move Optimization:** When dealing with structured data where queries might often fail or need adjustment, the system can autonomously refine its queries using Azure SQL or Microsoft Fabric OneLake, ensuring the final retrieval aligns with the user’s intent.
 3. **Adaptive Tournament Performance:** Longer-running sessions might evolve as new information surfaces. Agentic RAG can continuously incorporate new data, shifting strategies as it learns more about the problem space.
 
@@ -90,9 +90,9 @@ Having tools that provide a clear record of actions is essential. Without them, 
 
 ![AgentRunExample2](./images/AgentRunExample2.png)
 
-## PSR Tournament Agentic RAG Example
+## RPS Tournament Agentic RAG Example
 
-Here's how an Agentic RAG system might work for a PSR tournament agent:
+Here's how an Agentic RAG system might work for a RPS tournament agent:
 
 **Initial Query:** "Answer this tournament question: 'What is the chemical symbol for gold?' and recommend my next move for round 4."
 

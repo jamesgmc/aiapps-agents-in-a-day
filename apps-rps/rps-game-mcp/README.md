@@ -1,5 +1,5 @@
 
-this is the Paper Scissors Rock MCP server
+this is the Rock-Paper-Scissors MCP server
 
 
 

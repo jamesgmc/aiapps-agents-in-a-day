@@ -1,4 +1,4 @@
-@model PsrGameServer.Models.TournamentHistory
+@model RpsGameServer.Models.TournamentHistory
 @{
     ViewData["Title"] = $"Tournament {Model.Id} Details";
 }
@@ -37,8 +37,8 @@
                             <tr>
                                 <td><strong>Status:</strong></td>
                                 <td>
-                                    <span class="badge badge-@(Model.Status == PsrGameServer.Models.TournamentStatus.Completed ? "success" : 
-                                                              Model.Status == PsrGameServer.Models.TournamentStatus.InProgress ? "warning" : "secondary")">
+                                    <span class="badge badge-@(Model.Status == RpsGameServer.Models.TournamentStatus.Completed ? "success" : 
+                                                              Model.Status == RpsGameServer.Models.TournamentStatus.InProgress ? "warning" : "secondary")">
                                         @Model.Status
                                     </span>
                                 </td>

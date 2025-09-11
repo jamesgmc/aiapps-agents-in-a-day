@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-Simple test script to verify PSR Game Agent functionality
+Simple test script to verify RPS Game Agent functionality
 """
 
 import time
 import requests
-from api_client import PSRGameClient
+from api_client import RPSGameClient
 
 def test_agent_apis():
     """Test the game agent's API integration"""
-    print("🧪 Testing PSR Game Agent API Integration...")
+    print("🧪 Testing RPS Game Agent API Integration...")
     
     # Initialize client
-    client = PSRGameClient()
+    client = RPSGameClient()
     
     print("\n1. Testing Player Registration...")
     response = client.register_player("TestBot")
@@ -91,20 +91,20 @@ def test_rps_selection():
 
 def main():
     """Run all tests"""
-    print("🎮 PSR Game Agent Test Suite")
+    print("🎮 RPS Game Agent Test Suite")
     print("=" * 40)
     
     try:
         # Test API connectivity
         response = requests.get("http://localhost:5289", timeout=5)
         if response.status_code == 200:
-            print("✅ PSR Game Server is running")
+            print("✅ RPS Game Server is running")
         else:
-            print("❌ PSR Game Server not responding properly")
+            print("❌ RPS Game Server not responding properly")
             return
     except requests.RequestException:
-        print("❌ PSR Game Server is not running on localhost:5289")
-        print("   Please start the server first: cd ../psr-game-server && dotnet run")
+        print("❌ RPS Game Server is not running on localhost:5289")
+        print("   Please start the server first: cd ../rps-game-server && dotnet run")
         return
     
     # Run tests
@@ -114,7 +114,7 @@ def main():
         
         print("\n🎉 All tests completed successfully!")
         print("\n📋 To test the full game flow:")
-        print("   1. Start the server: cd ../psr-game-server && dotnet run")
+        print("   1. Start the server: cd ../rps-game-server && dotnet run")
         print("   2. Start the agent: python app.py") 
         print("   3. Open http://localhost:5001 in browser")
         print("   4. Enter player name and watch autonomous gameplay")

@@ -1,7 +1,7 @@
 
 # Multi-agent design patterns
 
-//todo: for game agent, add second agent locally, call it agent_v58.py in apps-psr/psr-game-agent. follow agent_v1.py
+//todo: for game agent, add second agent locally, call it agent_v58.py in apps-rps/rps-game-agent. follow agent_v1.py
 
 As soon as you start working on a project that involves multiple agents, you will need to consider the multi-agent design pattern. However, it might not be immediately clear when to switch to multi-agents and what the advantages are.
 
@@ -90,11 +90,11 @@ Let's take an example where a user wants a recommendation on the best stock to b
 
 ![Recommendation](./images/multi-agent-filtering.png)
 
-## Scenario: PSR Tournament Coordination
+## Scenario: RPS Tournament Coordination
 
-Consider a scenario where a PSR tournament is being organized and managed, there can be quite a few agents involved in this process but let's divide it up between agents specific for this tournament process and general agents that can be used in other gaming processes.
+Consider a scenario where a RPS tournament is being organized and managed, there can be quite a few agents involved in this process but let's divide it up between agents specific for this tournament process and general agents that can be used in other gaming processes.
 
-**Agents specific for the PSR tournament process**:
+**Agents specific for the RPS tournament process**:
 
 Following are some agents that could be involved in the tournament process:
 
@@ -123,11 +123,11 @@ There's quite a few agents listed previously both for the specific tournament pr
 
 ## Assignment
 
-Design a multi-agent system for a PSR tournament coordination process. Identify the agents involved in the tournament, their roles and responsibilities, and how they interact with each other. Consider both agents specific to the tournament process and general agents that can be used in other parts of your gaming system.
+Design a multi-agent system for a RPS tournament coordination process. Identify the agents involved in the tournament, their roles and responsibilities, and how they interact with each other. Consider both agents specific to the tournament process and general agents that can be used in other parts of your gaming system.
 
 > Have a think before you read the following solution, you may need more agents than you think.
 
-> TIP: Think about the different stages of the PSR tournament process and also consider agents needed for any gaming system.
+> TIP: Think about the different stages of the RPS tournament process and also consider agents needed for any gaming system.
 
 ## Solution
 

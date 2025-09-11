@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using PsrGameServer.Data;
-using PsrGameServer.Services;
+using RpsGameServer.Data;
+using RpsGameServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

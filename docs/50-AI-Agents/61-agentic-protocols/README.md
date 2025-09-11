@@ -1,7 +1,7 @@
 # Using Agentic Protocols (MCP, A2A and NLWeb)
 
-//todo: for game agent, add mcp capability, call it agent_v61a.py in apps-psr/psr-game-agent. follow agent_v1.py
-//todo: for game agent, add A2A, call it agent_v61b.py in apps-psr/psr-game-agent. follow agent_v1.py
+//todo: for game agent, add mcp capability, call it agent_v61a.py in apps-rps/rps-game-agent. follow agent_v1.py
+//todo: for game agent, add A2A, call it agent_v61b.py in apps-rps/rps-game-agent. follow agent_v1.py
 
 As the use of AI agents grows, so does the need for protocols that ensure standardization, security, and support open innovation. In this lesson, we will cover 3 protocols looking to meet this need - Model Context Protocol (MCP), Agent to Agent (A2A) and Natural Language Web (NLWeb).
 
@@ -45,15 +45,15 @@ MCP offers significant advantages for AI Agents:
 
 Imagine a player wants to get tournament assistance using an AI agent powered by MCP.
 
-1. **Connection**: The PSR Tournament Agent (the MCP client) connects to an MCP server provided by a tournament knowledge service.
+1. **Connection**: The RPS Tournament Agent (the MCP client) connects to an MCP server provided by a tournament knowledge service.
 
 2. **Tool Discovery**: The client asks the knowledge service's MCP server, "What tools do you have available?" The server responds with tools like "answer_question", "analyze_strategy", and "get_opponent_stats".
 
-3. **Tool Invocation**: The tournament presents a question: "What is the capital of France?" The PSR Agent, using its LLM, identifies that it needs to call the "answer_question" tool and passes the relevant parameters (question, difficulty_level) to the MCP server.
+3. **Tool Invocation**: The tournament presents a question: "What is the capital of France?" The RPS Agent, using its LLM, identifies that it needs to call the "answer_question" tool and passes the relevant parameters (question, difficulty_level) to the MCP server.
 
-4. **Execution and Response**: The MCP server, acting as a wrapper, makes the actual call to the knowledge service's internal database API. It then receives the answer information (e.g., JSON data with answer and confidence) and sends it back to the PSR Agent.
+4. **Execution and Response**: The MCP server, acting as a wrapper, makes the actual call to the knowledge service's internal database API. It then receives the answer information (e.g., JSON data with answer and confidence) and sends it back to the RPS Agent.
 
-5. **Further Interaction**: The PSR Agent receives the answer "Paris" with high confidence. For the same round, it might also invoke the "analyze_strategy" tool on the same MCP server to determine the optimal Rock/Paper/Scissors move, completing the tournament round submission.
+5. **Further Interaction**: The RPS Agent receives the answer "Paris" with high confidence. For the same round, it might also invoke the "analyze_strategy" tool on the same MCP server to determine the optimal Rock/Paper/Scissors move, completing the tournament round submission.
 
 ## Agent-to-Agent Protocol (A2A)
 
@@ -98,7 +98,7 @@ This component is used for **handling updates and passing messages**. It is part
 
 ![A2A Diagram](./images/A2A-Diagram.png)
 
-Let's expand on our PSR tournament scenario, but this time using A2A to coordinate multiple specialized agents.
+Let's expand on our RPS tournament scenario, but this time using A2A to coordinate multiple specialized agents.
 
 1. **User Request to Multi-Agent**: A tournament coordinator interacts with a "Tournament Manager" A2A client/agent, perhaps by saying, "Please handle the complete tournament round for all 10 players, including question validation, strategy analysis, and performance tracking".
 

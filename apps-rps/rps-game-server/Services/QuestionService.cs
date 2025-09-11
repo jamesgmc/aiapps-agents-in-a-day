@@ -1,8 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PsrGameServer.Models;
+using RpsGameServer.Models;
 
-namespace PsrGameServer.Services;
+namespace RpsGameServer.Services;
 
 public class QuestionService : IQuestionService
 {

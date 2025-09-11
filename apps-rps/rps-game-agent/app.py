@@ -83,8 +83,8 @@ def reconnect_game():
     game_agent.player_id = player_id
     
     # Verify the player exists by getting status
-    from api_client import PSRGameClient
-    client = PSRGameClient()
+    from api_client import RPSGameClient
+    client = RPSGameClient()
     status_response = client.get_player_status(player_id)
     
     if "error" in status_response:

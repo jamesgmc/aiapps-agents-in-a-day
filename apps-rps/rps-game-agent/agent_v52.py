@@ -15,7 +15,7 @@ except ImportError:
 
 
 class GameAgentV52:
-    """Azure AI Agent service-based agent class for handling questions and move decisions in PSR Tournament using Azure AI Foundry Agent"""
+    """Azure AI Agent service-based agent class for handling questions and move decisions in RPS Tournament using Azure AI Foundry Agent"""
     
     def __init__(self, azure_ai_endpoint: Optional[str] = None, azure_ai_key: Optional[str] = None, agent_id: Optional[str] = None):
         """
@@ -36,7 +36,7 @@ class GameAgentV52:
             'Authorization': f'Bearer {self.azure_ai_key}' if self.azure_ai_key else None
         }
         
-        # Agent instructions for PSR tournament (similar to FlightAgent but for game context)
+        # Agent instructions for RPS tournament (similar to FlightAgent but for game context)
         self.agent_instructions = """
         You are PSRAgent, a virtual assistant specialized in handling Paper-Scissors-Rock tournament queries and decisions. Your role includes answering knowledge questions accurately and making strategic game moves. Follow the instructions below to ensure clarity and effectiveness in your responses:
 

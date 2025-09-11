@@ -1,4 +1,4 @@
-@model PsrGameServer.Models.Tournament
+@model RpsGameServer.Models.Tournament
 @{
     ViewData["Title"] = "Tournament Dashboard";
 }
@@ -10,7 +10,7 @@
                 <h3>Tournament Status: @Model.Status</h3>
             </div>
             <div class="card-body">
-                @if (Model.Status == PsrGameServer.Models.TournamentStatus.Pending)
+                @if (Model.Status == RpsGameServer.Models.TournamentStatus.Pending)
                 {
                     <div class="text-center">
                         <p class="lead">Tournament is waiting for players to join!</p>
@@ -19,11 +19,11 @@
                         </a>
                     </div>
                 }
-                else if (Model.Status == PsrGameServer.Models.TournamentStatus.InProgress)
+                else if (Model.Status == RpsGameServer.Models.TournamentStatus.InProgress)
                 {
-                    <p>Current Round: @Model.CurrentRound / @PsrGameServer.Models.Tournament.MaxRounds</p>
+                    <p>Current Round: @Model.CurrentRound / @RpsGameServer.Models.Tournament.MaxRounds</p>
                     
-                    @if (Model.Rounds.Any() && Model.CurrentRound <= PsrGameServer.Models.Tournament.MaxRounds)
+                    @if (Model.Rounds.Any() && Model.CurrentRound <= RpsGameServer.Models.Tournament.MaxRounds)
                     {
                         var currentRound = Model.Rounds.FirstOrDefault(r => r.RoundNumber == Model.CurrentRound);
                         if (currentRound != null)
@@ -31,7 +31,7 @@
                             <div class="mt-3">
                                 <h5>Round @currentRound.RoundNumber Status: @currentRound.Status</h5>
                                 
-                                @if (currentRound.Status == PsrGameServer.Models.RoundStatus.Pending)
+                                @if (currentRound.Status == RpsGameServer.Models.RoundStatus.Pending)
                                 {
                                     <p>Click to start round @currentRound.RoundNumber with a random question.</p>
                                     <form method="post" asp-action="StartRound" class="mt-2">
@@ -39,7 +39,7 @@
                                         <button type="submit" class="btn btn-success">Start Round @currentRound.RoundNumber</button>
                                     </form>
                                 }
-                                else if (currentRound.Status == PsrGameServer.Models.RoundStatus.InProgress)
+                                else if (currentRound.Status == RpsGameServer.Models.RoundStatus.InProgress)
                                 {
                                     <p><strong>Question:</strong> @currentRound.Question</p>
                                     <p><strong>Server Move:</strong> @currentRound.ServerMove</p>
@@ -54,7 +54,7 @@
                                 }
                             </div>
                         }
-                        else if (Model.CurrentRound > PsrGameServer.Models.Tournament.MaxRounds)
+                        else if (Model.CurrentRound > RpsGameServer.Models.Tournament.MaxRounds)
                         {
                             <div class="mt-3">
                                 <p>All rounds completed!</p>
@@ -65,7 +65,7 @@
                         }
                     }
                 }
-                else if (Model.Status == PsrGameServer.Models.TournamentStatus.Completed)
+                else if (Model.Status == RpsGameServer.Models.TournamentStatus.Completed)
                 {
                     <div class="text-center">
                         <h4 class="text-success">🏆 Tournament Complete! 🏆</h4>
@@ -106,7 +106,7 @@
             </div>
         </div>
         
-        @if (Model.Status == PsrGameServer.Models.TournamentStatus.InProgress && Model.CurrentRound < PsrGameServer.Models.Tournament.MaxRounds - 1)
+        @if (Model.Status == RpsGameServer.Models.TournamentStatus.InProgress && Model.CurrentRound < RpsGameServer.Models.Tournament.MaxRounds - 1)
         {
             <div class="card mt-3">
                 <div class="card-header">
@@ -138,7 +138,7 @@
 
 <script>
     // Auto-refresh every 5 seconds during tournament
-    @if (Model.Status == PsrGameServer.Models.TournamentStatus.InProgress)
+    @if (Model.Status == RpsGameServer.Models.TournamentStatus.InProgress)
     {
         <text>
         setInterval(function() {

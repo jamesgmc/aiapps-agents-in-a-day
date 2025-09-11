@@ -3,7 +3,7 @@ import re
 
 
 class GameAgent:
-    """Agent class for handling questions and move decisions in PSR Tournament"""
+    """Agent class for handling questions and move decisions in RPS Tournament"""
     
     def __init__(self):
         """Initialize the game agent"""

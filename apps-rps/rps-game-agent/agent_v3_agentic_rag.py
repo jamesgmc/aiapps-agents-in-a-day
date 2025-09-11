@@ -1,5 +1,5 @@
 """
-PSR Game Agent V3 - Enhanced with Agentic RAG
+RPS Game Agent V3 - Enhanced with Agentic RAG
 This version demonstrates the concepts from lesson 55 (Agentic RAG)
 - Implements iterative retrieval-augmented generation
 - Autonomous query refinement and source selection
@@ -25,11 +25,11 @@ except ImportError:
         def Annotated(type_hint, description):
             return type_hint
 
-from api_client import PSRGameClient
+from api_client import RPSGameClient
 
 
 class PSRKnowledgeBase:
-    """Simulated knowledge base for PSR tournament questions"""
+    """Simulated knowledge base for RPS tournament questions"""
     
     def __init__(self):
         # Simulated vector database with knowledge entries
@@ -405,7 +405,7 @@ class AgenticRAGEngine:
 
 class GameAgentV3:
     """
-    PSR Game Agent V3 - Enhanced with Agentic RAG
+    RPS Game Agent V3 - Enhanced with Agentic RAG
     
     This version demonstrates lesson 55 concepts:
     - Agentic Retrieval-Augmented Generation implementation
@@ -419,7 +419,7 @@ class GameAgentV3:
     
     def __init__(self, player_name: str):
         self.player_name = player_name
-        self.client = PSRGameClient()
+        self.client = RPSGameClient()
         self.player_id: Optional[int] = None
         self.current_round = 1
         self.tournament_status = "Not Started"

@@ -1,4 +1,4 @@
-@model PsrGameServer.Controllers.RoundCompleteViewModel
+@model RpsGameServer.Controllers.RoundCompleteViewModel
 @{
     ViewData["Title"] = $"Round {Model.CompletedRoundNumber} Complete";
 }
@@ -20,7 +20,7 @@
             <div class="card shadow-lg">
                 <div class="card-header bg-info text-white text-center">
                     <h3><i class="fas fa-trophy"></i> Updated Leaderboard</h3>
-                    <p class="mb-0">After Round @Model.CompletedRoundNumber of @PsrGameServer.Models.Tournament.MaxRounds</p>
+                    <p class="mb-0">After Round @Model.CompletedRoundNumber of @RpsGameServer.Models.Tournament.MaxRounds</p>
                 </div>
                 <div class="card-body">
                     <div class="leaderboard-container">
@@ -70,8 +70,8 @@
         </div>
     </div>
 
-    @if (Model.CompletedRoundNumber < PsrGameServer.Models.Tournament.MaxRounds - 1 || 
-         (Model.CompletedRoundNumber >= PsrGameServer.Models.Tournament.MaxRounds - 1 && Model.CompletedRoundNumber < PsrGameServer.Models.Tournament.MaxRounds))
+    @if (Model.CompletedRoundNumber < RpsGameServer.Models.Tournament.MaxRounds - 1 || 
+         (Model.CompletedRoundNumber >= RpsGameServer.Models.Tournament.MaxRounds - 1 && Model.CompletedRoundNumber < RpsGameServer.Models.Tournament.MaxRounds))
     {
         <div class="row mt-4">
             <div class="col-md-6 mx-auto">

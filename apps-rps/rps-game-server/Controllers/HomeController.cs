@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using PsrGameServer.Models;
-using PsrGameServer.Services;
+using RpsGameServer.Models;
+using RpsGameServer.Services;
 
-namespace PsrGameServer.Controllers;
+namespace RpsGameServer.Controllers;
 
 public class HomeController : Controller
 {

@@ -1,6 +1,6 @@
 
 the game server should have a asp.net web frontend showing the game state in a tournament style/display.
-all games server code should be placed in the apps-psr/psr-game-server directory.
+all games server code should be placed in the apps-rps/rps-game-server directory.
 
 all the backend actions are exposed as REST APIs for the game clients (you dont need to implement client)
 

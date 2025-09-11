@@ -1,5 +1,5 @@
 """
-PSR Game Agent V4 - Enhanced with Multi-Agent Coordination
+RPS Game Agent V4 - Enhanced with Multi-Agent Coordination
 This version demonstrates the concepts from lesson 58 (Multi-Agent Design Patterns)
 - Implements specialized agents for different tournament functions
 - Agent communication and coordination mechanisms
@@ -27,7 +27,7 @@ except ImportError:
         def Annotated(type_hint, description):
             return type_hint
 
-from api_client import PSRGameClient
+from api_client import RPSGameClient
 
 
 class AgentRole(Enum):
@@ -565,7 +565,7 @@ class PerformanceMonitorAgent(BaseAgent):
 class TournamentCoordinatorAgent(BaseAgent):
     """Main coordinator agent that orchestrates the multi-agent system"""
     
-    def __init__(self, agent_id: str, message_bus: MessageBus, client: PSRGameClient):
+    def __init__(self, agent_id: str, message_bus: MessageBus, client: RPSGameClient):
         super().__init__(agent_id, AgentRole.COORDINATOR, message_bus)
         
         self.client = client
@@ -704,7 +704,7 @@ class TournamentCoordinatorAgent(BaseAgent):
 
 class GameAgentV4:
     """
-    PSR Game Agent V4 - Enhanced with Multi-Agent Coordination
+    RPS Game Agent V4 - Enhanced with Multi-Agent Coordination
     
     This version demonstrates lesson 58 concepts:
     - Multi-agent design patterns implementation
@@ -718,7 +718,7 @@ class GameAgentV4:
     
     def __init__(self, player_name: str):
         self.player_name = player_name
-        self.client = PSRGameClient()
+        self.client = RPSGameClient()
         self.player_id: Optional[int] = None
         self.current_round = 1
         self.tournament_status = "Not Started"

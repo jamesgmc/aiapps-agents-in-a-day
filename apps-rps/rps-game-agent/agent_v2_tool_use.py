@@ -1,8 +1,8 @@
 """
-PSR Game Agent V2 - Enhanced with Advanced Tool Use
+RPS Game Agent V2 - Enhanced with Advanced Tool Use
 This version demonstrates the concepts from lesson 54 (Tool Use Design Pattern)
 - Implements comprehensive tool/function calling capabilities
-- Multiple specialized tools for different PSR tournament tasks
+- Multiple specialized tools for different RPS tournament tasks
 - Error handling and validation for tool usage
 - State management across tool interactions
 """
@@ -40,11 +40,11 @@ except ImportError:
             return func
         return decorator
 
-from api_client import PSRGameClient
+from api_client import RPSGameClient
 
 
 class PSRTournamentToolsV2:
-    """Comprehensive tool collection for PSR tournament functionality"""
+    """Comprehensive tool collection for RPS tournament functionality"""
     
     @kernel_function(name="answer_question", description="Answer tournament questions using comprehensive knowledge base")
     async def answer_tournament_question(
@@ -339,7 +339,7 @@ class PSRTournamentToolsV2:
 
 class GameAgentV2:
     """
-    PSR Game Agent V2 - Enhanced with Advanced Tool Use
+    RPS Game Agent V2 - Enhanced with Advanced Tool Use
     
     This version demonstrates lesson 54 concepts:
     - Tool Use Design Pattern implementation
@@ -353,7 +353,7 @@ class GameAgentV2:
     
     def __init__(self, player_name: str):
         self.player_name = player_name
-        self.client = PSRGameClient()
+        self.client = RPSGameClient()
         self.player_id: Optional[int] = None
         self.current_round = 1
         self.tournament_status = "Not Started"

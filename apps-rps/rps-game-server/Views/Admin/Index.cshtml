@@ -1,4 +1,4 @@
-@model PsrGameServer.Models.Tournament
+@model RpsGameServer.Models.Tournament
 @{
     ViewData["Title"] = "Admin Panel";
 }
@@ -38,7 +38,7 @@
                         <h4>Tournament Status</h4>
                         <div class="alert alert-info">
                             <strong>Status:</strong> @Model.Status<br>
-                            <strong>Current Round:</strong> @Model.CurrentRound / @PsrGameServer.Models.Tournament.MaxRounds<br>
+                            <strong>Current Round:</strong> @Model.CurrentRound / @RpsGameServer.Models.Tournament.MaxRounds<br>
                             <strong>Total Players:</strong> @Model.Players.Count
                         </div>
                     </div>

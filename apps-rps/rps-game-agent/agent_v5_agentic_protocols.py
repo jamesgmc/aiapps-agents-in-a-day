@@ -1,5 +1,5 @@
 """
-PSR Game Agent V5 - Enhanced with Agentic Protocols (MCP & A2A)
+RPS Game Agent V5 - Enhanced with Agentic Protocols (MCP & A2A)
 This version demonstrates the concepts from lesson 61 (Agentic Protocols)
 - Implements Model Context Protocol (MCP) for tool discovery and execution
 - Supports Agent-to-Agent (A2A) protocol for multi-agent collaboration
@@ -28,7 +28,7 @@ except ImportError:
         def Annotated(type_hint, description):
             return type_hint
 
-from api_client import PSRGameClient
+from api_client import RPSGameClient
 
 
 # ==================== MCP Protocol Implementation ====================
@@ -61,7 +61,7 @@ class MCPPrompt:
 
 
 class MCPServer:
-    """Simulated MCP Server for PSR Tournament Knowledge"""
+    """Simulated MCP Server for RPS Tournament Knowledge"""
     
     def __init__(self, server_name: str):
         self.server_name = server_name
@@ -71,7 +71,7 @@ class MCPServer:
         self.setup_capabilities()
     
     def setup_capabilities(self):
-        """Setup MCP server capabilities for PSR tournament"""
+        """Setup MCP server capabilities for RPS tournament"""
         
         # Register tools
         self.tools["answer_question"] = MCPTool(
@@ -345,8 +345,8 @@ class PSRQuestionSpecialistA2A(A2AAgent):
     
     def create_agent_card(self) -> AgentCard:
         return AgentCard(
-            name="PSR Question Specialist",
-            description="Specialized agent for answering PSR tournament questions with high accuracy",
+            name="RPS Question Specialist",
+            description="Specialized agent for answering RPS tournament questions with high accuracy",
             skills=[
                 {"name": "answer_geography", "description": "Answer geography questions (capitals, landmarks, etc.)"},
                 {"name": "answer_science", "description": "Answer science questions (chemistry, physics, biology)"},
@@ -354,7 +354,7 @@ class PSRQuestionSpecialistA2A(A2AAgent):
                 {"name": "answer_history", "description": "Answer historical questions and dates"},
                 {"name": "validate_answers", "description": "Validate correctness of provided answers"}
             ],
-            endpoint_url="a2a://psr-question-specialist/v1",
+            endpoint_url="a2a://rps-question-specialist/v1",
             version="1.0.0",
             capabilities=["streaming", "batch_processing", "confidence_scoring"]
         )
@@ -412,7 +412,7 @@ class PSRStrategyAnalystA2A(A2AAgent):
     
     def create_agent_card(self) -> AgentCard:
         return AgentCard(
-            name="PSR Strategy Analyst",
+            name="RPS Strategy Analyst",
             description="Advanced strategy analysis for Rock, Paper, Scissors gameplay",
             skills=[
                 {"name": "analyze_opponent", "description": "Analyze opponent patterns and tendencies"},
@@ -420,7 +420,7 @@ class PSRStrategyAnalystA2A(A2AAgent):
                 {"name": "evaluate_strategy", "description": "Evaluate effectiveness of different strategies"},
                 {"name": "predict_outcomes", "description": "Predict likely game outcomes based on current state"}
             ],
-            endpoint_url="a2a://psr-strategy-analyst/v1",
+            endpoint_url="a2a://rps-strategy-analyst/v1",
             version="1.0.0",
             capabilities=["real_time_analysis", "pattern_recognition", "predictive_modeling"]
         )
@@ -521,7 +521,7 @@ class A2ACoordinator:
 
 class GameAgentV5:
     """
-    PSR Game Agent V5 - Enhanced with Agentic Protocols (MCP & A2A)
+    RPS Game Agent V5 - Enhanced with Agentic Protocols (MCP & A2A)
     
     This version demonstrates lesson 61 concepts:
     - Model Context Protocol (MCP) for tool discovery and execution
@@ -535,7 +535,7 @@ class GameAgentV5:
     
     def __init__(self, player_name: str):
         self.player_name = player_name
-        self.client = PSRGameClient()
+        self.client = RPSGameClient()
         self.player_id: Optional[int] = None
         self.current_round = 1
         self.tournament_status = "Not Started"
@@ -547,7 +547,7 @@ class GameAgentV5:
         self.latest_score = 0
         
         # Protocol setup
-        self.mcp_server = MCPServer("PSR Tournament Knowledge Server")
+        self.mcp_server = MCPServer("RPS Tournament Knowledge Server")
         self.a2a_coordinator = A2ACoordinator()
         self.setup_protocols()
         
@@ -570,8 +570,8 @@ class GameAgentV5:
         self.log_status(f"MCP Server initialized with {len(tools)} tools, {len(resources)} resources, {len(prompts)} prompts")
         
         # Setup A2A agents
-        question_agent = PSRQuestionSpecialistA2A("PSR Question Specialist")
-        strategy_agent = PSRStrategyAnalystA2A("PSR Strategy Analyst")
+        question_agent = PSRQuestionSpecialistA2A("RPS Question Specialist")
+        strategy_agent = PSRStrategyAnalystA2A("RPS Strategy Analyst")
         
         self.a2a_coordinator.register_agent(question_agent)
         self.a2a_coordinator.register_agent(strategy_agent)
@@ -616,8 +616,8 @@ class GameAgentV5:
         # Create A2A request
         request = A2ARequest(
             id=str(uuid.uuid4()),
-            sender_agent="PSR Tournament Coordinator",
-            target_agent="PSR Strategy Analyst",
+            sender_agent="RPS Tournament Coordinator",
+            target_agent="RPS Strategy Analyst",
             task="analyze strategy and recommend move",
             context={
                 "round_number": round_number,
@@ -866,7 +866,7 @@ if __name__ == "__main__":
         request = A2ARequest(
             id=str(uuid.uuid4()),
             sender_agent="Test Coordinator",
-            target_agent="PSR Question Specialist",
+            target_agent="RPS Question Specialist",
             task="answer question",
             context={"question": "What is the chemical symbol for gold?"}
         )

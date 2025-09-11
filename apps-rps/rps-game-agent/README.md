@@ -1,4 +1,4 @@
-# PSR Game Agent
+# RPS Game Agent
 
 A Python web application that acts as an autonomous player for the Paper-Scissors-Rock Tournament Game Server.
 
@@ -21,7 +21,7 @@ A Python web application that acts as an autonomous player for the Paper-Scissor
 ## Prerequisites
 
 - Python 3.8 or higher
-- PSR Game Server running on localhost:5289
+- RPS Game Server running on localhost:5289
 - pip (Python package manager)
 - Azure AI Foundry endpoint and API key (optional, for enhanced question answering)
 
@@ -43,7 +43,7 @@ AZURE_AI_KEY=your-azure-ai-api-key-here
 
 1. Navigate to the agent directory:
    ```bash
-   cd apps-psr/psr-game-agent
+   cd apps-rps/rps-game-agent
    ```
 
 2. Set up environment variables:
@@ -63,15 +63,15 @@ AZURE_AI_KEY=your-azure-ai-api-key-here
 
 ## Running the Agent
 
-1. Make sure the PSR Game Server is running:
+1. Make sure the RPS Game Server is running:
    ```bash
-   cd ../psr-game-server
+   cd ../rps-game-server
    dotnet run
    ```
 
 2. In a new terminal, start the agent:
    ```bash
-   cd apps-psr/psr-game-agent
+   cd apps-rps/rps-game-agent
    python app.py
    ```
 
@@ -120,8 +120,8 @@ The agent communicates with these server endpoints:
 
 To test the complete flow:
 
-1. Start the PSR Game Server
-2. Start the PSR Game Agent
+1. Start the RPS Game Server
+2. Start the RPS Game Agent
 3. Register a player through the agent web interface
 4. Use the server's web interface (localhost:5289) to:
    - Start the tournament
@@ -140,7 +140,7 @@ To test the complete flow:
 ## Troubleshooting
 
 **Agent not connecting to server:**
-- Verify PSR Game Server is running on localhost:5289
+- Verify RPS Game Server is running on localhost:5289
 - Check server logs for any errors
 
 **Agent not responding to rounds:**

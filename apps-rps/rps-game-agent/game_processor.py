@@ -2,16 +2,16 @@ import random
 import time
 import threading
 from typing import Optional, List, Dict, Any
-from api_client import PSRGameClient
+from api_client import RPSGameClient
 # from agent import GameAgent
 from agent_v1 import GameAgent
 
 class GameProcessor:
-    """Autonomous game agent for PSR Tournament"""
+    """Autonomous game agent for RPS Tournament"""
     
     def __init__(self, player_name: str):
         self.player_name = player_name
-        self.client = PSRGameClient()
+        self.client = RPSGameClient()
         self.agent = GameAgent()
         self.player_id: Optional[int] = None
         self.current_round = 1

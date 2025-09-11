@@ -1,4 +1,4 @@
-@model PsrGameServer.Controllers.GridViewModel
+@model RpsGameServer.Controllers.GridViewModel
 @{
     ViewData["Title"] = "Grid View - All Results";
 }
@@ -49,9 +49,9 @@
                                             {
                                                 <span class="badge bg-warning">Tie</span>
                                             }
-                                            else if ((playerResult.Move.Value == PsrGameServer.Models.Move.Rock && round.ServerMove == PsrGameServer.Models.Move.Scissors) ||
-                                                    (playerResult.Move.Value == PsrGameServer.Models.Move.Paper && round.ServerMove == PsrGameServer.Models.Move.Rock) ||
-                                                    (playerResult.Move.Value == PsrGameServer.Models.Move.Scissors && round.ServerMove == PsrGameServer.Models.Move.Paper))
+                                            else if ((playerResult.Move.Value == RpsGameServer.Models.Move.Rock && round.ServerMove == RpsGameServer.Models.Move.Scissors) ||
+                                                    (playerResult.Move.Value == RpsGameServer.Models.Move.Paper && round.ServerMove == RpsGameServer.Models.Move.Rock) ||
+                                                    (playerResult.Move.Value == RpsGameServer.Models.Move.Scissors && round.ServerMove == RpsGameServer.Models.Move.Paper))
                                             {
                                                 <span class="badge bg-success">Win</span>
                                             }

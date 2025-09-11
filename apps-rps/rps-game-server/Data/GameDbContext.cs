@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PsrGameServer.Models;
+using RpsGameServer.Models;
 
-namespace PsrGameServer.Data;
+namespace RpsGameServer.Data;
 
 public class GameDbContext : DbContext
 {

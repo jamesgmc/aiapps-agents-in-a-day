@@ -1,7 +1,7 @@
 
 # Tool Use Design Pattern
 
-//todo: for game agent, add tool use, call it agent_v54.py in apps-psr/psr-game-agent. follow agent_v1.py
+//todo: for game agent, add tool use, call it agent_v54.py in apps-rps/rps-game-agent. follow agent_v1.py
 
 Tools are interesting because they allow AI agents to have a broader range of capabilities. Instead of the agent having a limited set of actions it can perform, by adding a tool, the agent can now perform a wide range of actions. In this chapter, we will look at the Tool Use Design Pattern, which describes how AI agents can use specific tools to achieve their goals.
 
@@ -68,13 +68,13 @@ Let's use the example of getting the current time in a city to illustrate:
     We will then take this schema and pass it to the client created previously, along with the users request to find the time in San Francisco. What's important to note is that a **tool call** is what is returned, **not** the final answer to the question. As mentioned earlier, the LLM returns the name of the function it selected for the task, and the arguments that will be passed to it.
 
     ```python
-    # Function description for the model to read - PSR Tournament Tools
+    # Function description for the model to read - RPS Tournament Tools
     tools = [
         {
             "type": "function",
             "function": {
                 "name": "answer_tournament_question",
-                "description": "Answer a PSR tournament question using knowledge base",
+                "description": "Answer a RPS tournament question using knowledge base",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -124,8 +124,8 @@ Let's use the example of getting the current time in a city to illustrate:
    
     ```python
   
-    # Initial user message - PSR tournament scenario
-    messages = [{"role": "user", "content": "I need to answer this question for the PSR tournament: 'What is the capital of Japan?' and select my next move for round 3"}] 
+    # Initial user message - RPS tournament scenario
+    messages = [{"role": "user", "content": "I need to answer this question for the RPS tournament: 'What is the capital of Japan?' and select my next move for round 3"}] 
   
     # First API call: Ask the model to use the function
       response = client.chat.completions.create(
@@ -152,12 +152,12 @@ Let's use the example of getting the current time in a city to illustrate:
   
 1. **The function code required to carry out the task:**
 
-    Now that the LLM has chosen which functions need to be run, the code that carries out the PSR tournament tasks needs to be implemented and executed.
+    Now that the LLM has chosen which functions need to be run, the code that carries out the RPS tournament tasks needs to be implemented and executed.
     We can implement the code to answer tournament questions and select optimal moves. We will also need to write the code to extract the name and arguments from the response_message to get the final result.
 
     ```python
       def answer_tournament_question(question, difficulty="medium"):
-        """Answer a PSR tournament question using knowledge base"""
+        """Answer a RPS tournament question using knowledge base"""
         print(f"answer_tournament_question called with question: {question}, difficulty: {difficulty}")
         
         question_lower = question.lower()
@@ -230,7 +230,7 @@ Let's use the example of getting the current time in a city to illustrate:
     ```
 
      ```python
-     # Handle PSR tournament function calls
+     # Handle RPS tournament function calls
       if response_message.tool_calls:
           for tool_call in response_message.tool_calls:
               function_args = json.loads(tool_call.function.arguments)
@@ -294,16 +294,16 @@ The following diagram illustrates the process of function calling with Semantic 
 
 ![function calling](./images/functioncalling-diagram.png)
 
-In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the PSR tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the PSRTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
+In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the RPS tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the PSRTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
 
 ```python
 from semantic_kernel.functions import kernel_function
 
 class PSRTournamentPlugin:
-    """Plugin for PSR Tournament functionality"""
+    """Plugin for RPS Tournament functionality"""
 
     @kernel_function(
-        description="Answer a PSR tournament question using knowledge base"
+        description="Answer a RPS tournament question using knowledge base"
     )
     def answer_tournament_question(self, question: str, difficulty: str = "medium") -> str:
         """Answer tournament questions with varying difficulty levels"""

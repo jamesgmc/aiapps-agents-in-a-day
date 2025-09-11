@@ -1,5 +1,5 @@
 """
-Example usage of GameAgentV1 with the PSR Game Server API
+Example usage of GameAgentV1 with the RPS Game Server API
 This demonstrates how to integrate the Azure AI Agent with the tournament system.
 """
 
@@ -12,8 +12,8 @@ from agent_v1 import GameAgentV1
 # Add the current directory to Python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-class PSRGameClient:
-    """Client for interacting with PSR Game Server using Azure AI Agent V1"""
+class RPSGameClient:
+    """Client for interacting with RPS Game Server using Azure AI Agent V1"""
     
     def __init__(self, server_url: str = "http://localhost:5289", player_name: str = "AI_Agent_V1"):
         self.server_url = server_url.rstrip('/')
@@ -86,7 +86,7 @@ class PSRGameClient:
     
     def play_tournament(self):
         """Main game loop for participating in the tournament"""
-        print(f"🚀 Starting PSR Tournament Client with Azure AI Agent V1")
+        print(f"🚀 Starting RPS Tournament Client with Azure AI Agent V1")
         print(f"🎯 Agent using: {'Azure AI Service' if self.agent.use_azure_ai else 'Local Processing'}")
         print("=" * 60)
         
@@ -181,13 +181,13 @@ class PSRGameClient:
 
 
 def main():
-    """Main function to run the PSR game client"""
+    """Main function to run the RPS game client"""
     # You can customize these parameters
     server_url = "http://localhost:5289"  # Updated to match actual server port
     player_name = "Azure_AI_Agent_V1"
     
     # Create and run the game client
-    client = PSRGameClient(server_url, player_name)
+    client = RPSGameClient(server_url, player_name)
     try:
         client.play_tournament()
     except KeyboardInterrupt:

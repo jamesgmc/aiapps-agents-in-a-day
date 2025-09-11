@@ -1,4 +1,4 @@
-# PSR Game Client
+# RPS Game Client
 
 A Node.js web application that acts as a player client for the Paper-Scissors-Rock tournament game server.
 
@@ -25,7 +25,7 @@ A Node.js web application that acts as a player client for the Paper-Scissors-Ro
 
 ## API Communication
 
-The client communicates with the PSR game server via these REST endpoints:
+The client communicates with the RPS game server via these REST endpoints:
 
 - `POST /api/player/register` - Register player with name
 - `GET /api/player/{id}/status` - Get tournament and round status
@@ -37,13 +37,13 @@ The client communicates with the PSR game server via these REST endpoints:
 ### Prerequisites
 
 - Node.js 16+ 
-- PSR Game Server running on http://localhost:5000
+- RPS Game Server running on http://localhost:5000
 
 ### Steps
 
 1. Navigate to the client directory:
    ```bash
-   cd apps-psr/psr-game-client
+   cd apps-rps/rps-game-client
    ```
 
 2. Install dependencies:
@@ -75,8 +75,8 @@ The client communicates with the PSR game server via these REST endpoints:
 
 To test the complete game flow:
 
-1. Start the PSR game server (`cd apps-psr/psr-game-server && dotnet run`)
-2. Start this client (`cd apps-psr/psr-game-client && npm start`)
+1. Start the RPS game server (`cd apps-rps/rps-game-server && dotnet run`)
+2. Start this client (`cd apps-rps/rps-game-client && npm start`)
 3. Open the client in browser (http://localhost:3000)
 4. Enter player name and register
 5. Use the server web interface (http://localhost:5000) to start tournament and rounds

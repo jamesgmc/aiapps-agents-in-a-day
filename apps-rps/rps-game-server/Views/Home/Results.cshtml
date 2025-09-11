@@ -1,11 +1,11 @@
-@model PsrGameServer.Models.Tournament
+@model RpsGameServer.Models.Tournament
 @{
     ViewData["Title"] = "Tournament Results";
 }
 
 <h2>Tournament Results</h2>
 
-@if (Model.Status == PsrGameServer.Models.TournamentStatus.Completed)
+@if (Model.Status == RpsGameServer.Models.TournamentStatus.Completed)
 {
     <div class="alert alert-success">
         <h4>🏆 Tournament Completed!</h4>
@@ -91,11 +91,11 @@ else
     </div>
 }
 
-@if (Model.Rounds.Any(r => r.Status == PsrGameServer.Models.RoundStatus.Completed))
+@if (Model.Rounds.Any(r => r.Status == RpsGameServer.Models.RoundStatus.Completed))
 {
     <div class="mt-4">
         <h3>Round Results</h3>
-        @foreach (var round in Model.Rounds.Where(r => r.Status == PsrGameServer.Models.RoundStatus.Completed).OrderBy(r => r.RoundNumber))
+        @foreach (var round in Model.Rounds.Where(r => r.Status == RpsGameServer.Models.RoundStatus.Completed).OrderBy(r => r.RoundNumber))
         {
             <div class="card mt-3">
                 <div class="card-header">
@@ -140,9 +140,9 @@ else
                                                 {
                                                     <span class="badge bg-warning">Tie</span>
                                                 }
-                                                else if ((result.Move.Value == PsrGameServer.Models.Move.Rock && round.ServerMove == PsrGameServer.Models.Move.Scissors) ||
-                                                        (result.Move.Value == PsrGameServer.Models.Move.Paper && round.ServerMove == PsrGameServer.Models.Move.Rock) ||
-                                                        (result.Move.Value == PsrGameServer.Models.Move.Scissors && round.ServerMove == PsrGameServer.Models.Move.Paper))
+                                                else if ((result.Move.Value == RpsGameServer.Models.Move.Rock && round.ServerMove == RpsGameServer.Models.Move.Scissors) ||
+                                                        (result.Move.Value == RpsGameServer.Models.Move.Paper && round.ServerMove == RpsGameServer.Models.Move.Rock) ||
+                                                        (result.Move.Value == RpsGameServer.Models.Move.Scissors && round.ServerMove == RpsGameServer.Models.Move.Paper))
                                                 {
                                                     <span class="badge bg-success">Win</span>
                                                 }

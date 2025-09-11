@@ -440,7 +440,7 @@ resource staticWebApp 'Microsoft.Web/staticSites@2022-09-01' = {
     repositoryUrl: ''
     branch: ''
     buildProperties: {
-      appLocation: '/apps-psr/psr-game-client'
+      appLocation: '/apps-rps/rps-game-client'
       apiLocation: ''
       outputLocation: 'dist'
     }

@@ -1,4 +1,4 @@
-@model List<PsrGameServer.Models.TournamentHistory>
+@model List<RpsGameServer.Models.TournamentHistory>
 @{
     ViewData["Title"] = "Tournament History";
 }
@@ -55,8 +55,8 @@
                                         <td>@tournament.StartedAt.ToString("yyyy-MM-dd HH:mm")</td>
                                         <td>@(tournament.EndedAt?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")</td>
                                         <td>
-                                            <span class="badge badge-@(tournament.Status == PsrGameServer.Models.TournamentStatus.Completed ? "success" : 
-                                                                      tournament.Status == PsrGameServer.Models.TournamentStatus.InProgress ? "warning" : "secondary")">
+                                            <span class="badge badge-@(tournament.Status == RpsGameServer.Models.TournamentStatus.Completed ? "success" : 
+                                                                      tournament.Status == RpsGameServer.Models.TournamentStatus.InProgress ? "warning" : "secondary")">
                                                 @tournament.Status
                                             </span>
                                         </td>
