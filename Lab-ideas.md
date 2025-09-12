@@ -5,7 +5,7 @@
 ### Part 1: Build a Basic Agent
 - Introduction to agentic AI concepts (prompt → plan → act → reflect loop)
 - Use Azure OpenAI for chat, planning, and coding
-- Hands-on: Build a simple agent that can play Scissor Paper Rock via prompt-response
+- Hands-on: Build a simple agent that can play Rock Paper Scissor via prompt-response
 - Explore Semantic Kernel for basic agent memory
 
 **tech**
@@ -30,7 +30,7 @@ tool to query webapi and response
 langchain lib (use previous lab)
 
 ### Tournament A:
-15 minutes: Scissor Paper Rock Rookie Tournament
+15 minutes: Rock Paper Scissor Rookie Tournament
 
 For each round:
 - agent to enrol the game by following instructions (say the magic word)
@@ -63,7 +63,7 @@ connect agent to logic app
 
 
 ### Part 4: MCP, Deploy, Competition
-- Enable multi-agent orchestration (agents collaborate, compete, or strategize in Scissor Paper Rock Tournament)
+- Enable multi-agent orchestration (agents collaborate, compete, or strategize in Rock Paper Scissor Tournament)
 - Implement strategies for agents to adapt and learn from opponents
 - Prepare the app for production: security, scaling, monitoring, and operational excellence
 - Hands-on: Agents interact and compete in the tournament, demonstrating orchestration and monitoring
@@ -80,7 +80,7 @@ build github action /ci/cd deployment (no bicep, az resource are provisioned in 
 
 
 ### Tournament B:
-15 minutes: Scissor Paper Rock Championship
+15 minutes: Rock Paper Scissor Championship
 
 For each round:
 - agent to enrol the game by following instructions (say the magic word)
@@ -109,7 +109,7 @@ Agent
 - 
 
 
-# Scissor Paper Rock Tournament:
+# Rock Paper Scissor Tournament:
 
 ## API Server Design
 
