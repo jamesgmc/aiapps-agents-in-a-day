@@ -1,4 +1,4 @@
-# AI Agents in Production: Observability & Evaluation
+# Observability & Evaluation
 
 //todo: for game agent, add tracing in vs code locally and evulation, call it agent_v68.py in apps-rps/rps-game-agent. follow agent_v1.py
 

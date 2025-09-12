@@ -1,4 +1,4 @@
-# Using Agentic Protocols (MCP, A2A and NLWeb)
+# Agentic Protocols
 
 //todo: for game agent, add mcp capability, call it agent_v61a.py in apps-rps/rps-game-agent. follow agent_v1.py
 //todo: for game agent, add A2A, call it agent_v61b.py in apps-rps/rps-game-agent. follow agent_v1.py

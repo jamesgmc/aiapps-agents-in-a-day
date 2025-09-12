@@ -1,5 +1,5 @@
 
-# Multi-agent design patterns
+# Multi-agent Orchestration
 
 //todo: for game agent, add second agent locally, call it agent_v58.py in apps-rps/rps-game-agent. follow agent_v1.py
 

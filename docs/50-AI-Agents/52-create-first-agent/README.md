@@ -1,4 +1,4 @@
-# Create First Agent in Foundry
+# First Agent in Foundry
 
 //todo: for game agent, create agent VS Code AI Toolkit
 //todo: for game agent, create agent using agent service, call it agent_v52.py in apps-rps/rps-game-agent. follow agent_v1.py
