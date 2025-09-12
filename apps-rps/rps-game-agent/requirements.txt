@@ -2,6 +2,10 @@ flask==3.0.0
 requests==2.31.0
 azure-identity>=1.15.0
 azure-ai-projects
-azure-ai-agents=1.2.0b3
+azure-ai-agents>=1.2.0b3
 openai>=1.0.0
 python-dotenv>=1.0.0
+opentelemetry-api==1.37.0
+opentelemetry-sdk==1.37.0
+opentelemetry-exporter-otlp-proto-http==1.37.0
+azure-monitor-opentelemetry
