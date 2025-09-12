@@ -34,6 +34,7 @@ Large Language Models (LLMs) can generate structured output (e.g. JSON) that is 
 The following Python snippet demonstrates a simple planning agent decomposing a goal into subtasks and generating a structured plan:
 
 ```python
+//todo update this example to use agent service / lib directly, dont use Autogen
 from pydantic import BaseModel
 from enum import Enum
 from typing import List, Optional, Union

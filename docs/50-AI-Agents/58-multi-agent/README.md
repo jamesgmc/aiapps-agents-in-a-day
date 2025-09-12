@@ -129,6 +129,11 @@ Design a multi-agent system for a RPS tournament coordination process. Identify 
 
 > TIP: Think about the different stages of the RPS tournament process and also consider agents needed for any gaming system.
 
+
+```python
+connect agents in ai agent service example here
+```
+
 ## Solution
 
 [Solution](./solution/solution.md)

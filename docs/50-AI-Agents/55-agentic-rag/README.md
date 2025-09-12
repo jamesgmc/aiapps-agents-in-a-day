@@ -90,7 +90,7 @@ Having tools that provide a clear record of actions is essential. Without them, 
 
 ![AgentRunExample2](./images/AgentRunExample2.png)
 
-## RPS Tournament Agentic RAG Example
+## Agentic RAG Example for Game Agent
 
 Here's how an Agentic RAG system might work for a RPS tournament agent:
 
@@ -100,7 +100,6 @@ Here's how an Agentic RAG system might work for a RPS tournament agent:
 ```
 1. Initial Assessment
    - Question type: Chemistry/Science
-   - Round: 4 (mid-tournament)
    - Confidence needed: High (tournament critical)
 
 2. Knowledge Retrieval Loop
@@ -109,21 +108,13 @@ Here's how an Agentic RAG system might work for a RPS tournament agent:
    - Cross-validate: Check periodic table references
    - Confidence: High (95%+)
 
-3. Strategic Analysis Loop  
-   - Query tournament database for opponent patterns
-   - Retrieve: Historical move data for rounds 1-3
-   - Analyze: Opponent favors Rock in even rounds
-   - Strategy: Select Paper to counter expected Rock
-
-4. Validation Loop
+3. Validation Loop
    - Verify answer accuracy against chemistry knowledge base
-   - Confirm move selection against game theory principles
    - Check confidence thresholds met
    - Final decision: Proceed with submission
 
-5. Response Synthesis
+4. Response Synthesis
    - Answer: "Au" (confidence: 96%)
-   - Move: "Paper" (strategic reasoning: counters opponent pattern)
    - Ready for tournament submission
 ```
 
@@ -132,6 +123,10 @@ This demonstrates the key Agentic RAG principles:
 - **Iterative refinement:** Multiple loops to ensure accuracy and strategy
 - **Tool orchestration:** Combined knowledge retrieval, data analysis, and validation
 - **Self-correction:** Would retry with different sources if confidence was low
+
+```python
+add knowledge base retrieval tool to game agent
+```
 
 ## Conclusion
 
