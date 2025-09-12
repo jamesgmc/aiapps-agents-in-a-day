@@ -2,7 +2,8 @@ import re
 import os
 import requests
 from dotenv import load_dotenv
-
+# https://learn.microsoft.com/en-us/azure/ai-foundry/agents/how-to/tools/function-calling?pivots=python
+# https://code.visualstudio.com/mcp
 load_dotenv()
 
 

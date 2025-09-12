@@ -1,0 +1,8 @@
+
+
+```
+add a tool use function here following the readme.md. do not change the overall pattern of the current file, just add more for the tool calls that is relevent to the game
+```
+
+
+
