@@ -9,9 +9,10 @@ load_dotenv()
 class GameAgentV52:
     """Azure AI Foundry Agent service for RPS Tournament"""
     
-    def __init__(self, project_endpoint=None, model_deployment_name=None):
+    def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
         self.project_endpoint = project_endpoint or os.getenv('PROJECT_ENDPOINT')
         self.model_deployment_name = model_deployment_name or os.getenv('MODEL_DEPLOYMENT_NAME')
+        self.player_name = player_name or os.getenv('PLAYER_NAME', 'default-player')
         
         self.project_client = AIProjectClient(
             endpoint=self.project_endpoint,
@@ -20,14 +21,51 @@ class GameAgentV52:
         
         self.agent = None
         self.thread = None
+        self._client_context = None
+        self.agent_name = f"rps-game-agent-{self.player_name}"
+    
+    def __enter__(self):
+        self._client_context = self.project_client.__enter__()
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self._client_context:
+            return self.project_client.__exit__(exc_type, exc_val, exc_tb)
+    
+    def _find_existing_agent(self):
+        """Find existing agent by name"""
+     
+        agents = self.project_client.agents.list_agents()
+        for agent in agents:
+            if agent.name == self.agent_name:
+                return agent
+ 
+        return None
+    
+    def cleanup_old_agents(self):
+        """Clean up old agents with the same name (optional maintenance method)"""
+        try:
+            agents = self.project_client.agents.list_agents()
+            for agent in agents:
+                if agent.name == self.agent_name and agent.id != (self.agent.id if self.agent else None):
+                    self.project_client.agents.delete(agent.id)
+        except Exception:
+            pass
     
     def _setup_agent(self):
-        """Setup the Azure AI agent"""
-        self.agent = self.project_client.agents.create_agent(
-            model=self.model_deployment_name,
-            name="rps-game-agent",
-            instructions="You are a helpful assistant that can answer questions and play Rock-Paper-Scissors games."
-        )
+        """Setup the Azure AI agent - reuse existing or create new"""
+        existing_agent = self._find_existing_agent()
+        
+        if existing_agent:
+            self.agent = existing_agent
+            print(f"Reusing existing agent: {self.agent_name}")
+        else:
+            self.agent = self.project_client.agents.create_agent(
+                model=self.model_deployment_name,
+                name=self.agent_name,
+                instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games."
+            )
+            print(f"Created new agent: {self.agent_name}")
         
         self.thread = self.project_client.agents.threads.create()
     
@@ -76,26 +114,26 @@ class GameAgentV52:
             return 2
         
         return 0
-# Backward compatibility - maintain same interface as original GameAgent
+    
+
 class GameAgent(GameAgentV52):
     """Alias for backward compatibility with existing code"""
     pass
 
 
 if __name__ == "__main__":
-    agent = GameAgentV52()
-    
     test_questions = [
-        "What is 15 + 27?",
-        "What is the capital of France?",
-        "What color is the sky?",
-        "What is 100 - 35?"
+        "What is 15 + 27?"
     ]
     
     print("Testing Azure AI Foundry Agent V52:")
     print("=" * 50)
     
-    with agent.project_client:
+    with GameAgentV52() as agent:
+        print(f"Player Name: {agent.player_name}")
+        print(f"Agent Name: {agent.agent_name}")
+        print()
+        
         for question in test_questions:
             answer = agent.answer_question(question)
             print(f"Q: {question}")
@@ -104,8 +142,7 @@ if __name__ == "__main__":
         
         print("RPS Move Selection Test:")
         move_names = ["Rock", "Paper", "Scissors"]
-        for i in range(5):
-            move = agent.choose_rps_move()
-            print(f"Move {i+1}: {move_names[move]} ({move})")
+        move = agent.choose_rps_move()
+        print(f"Move: {move_names[move]} ({move})")
     
     print("\nAgent V52 testing complete!")
