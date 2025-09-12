@@ -61,11 +61,12 @@ When you’re using the previous design principles, use the following guidelines
 2. **Control**: Enable the user to customize, specify preferences and personalize, and have control over the system and its attributes (including the ability to forget).
 3. **Consistency**: Aim for consistent, multi-modal experiences across devices and endpoints. Use familiar UI/UX elements where possible (e.g., microphone icon for voice interaction) and reduce the customer’s cognitive load as much as possible (e.g., aim for concise responses, visual aids, and ‘Learn More’ content).
 
-## How To Design a Travel Agent using These Principles and Guidelines
+## How To Design an Agent using These Principles and Guidelines
 
-Imagine you are designing a Travel Agent, here is how you could think about using the Design Principles and Guidelines:
+Imagine you are designing a Rock Paper Scissors Agent, here is how you could think about using the Design Principles and Guidelines:
 
-1. **Transparency** – Let the user know that the Travel Agent is an AI-enabled Agent. Provide some basic instructions on how to get started (e.g., a “Hello” message, sample prompts). Clearly document this on the product page. Show the list of prompts a user has asked in the past. Make it clear how to give feedback (thumbs up and down, Send Feedback button, etc.). Clearly articulate if the Agent has usage or topic restrictions.
-2. **Control** – Make sure it’s clear how the user can modify the Agent after it’s been created with things like the System Prompt. Enable the user to choose how verbose the Agent is, its writing style, and any caveats on what the Agent should not talk about. Allow the user to view and delete any associated files or data, prompts, and past conversations.
-3. **Consistency** – Make sure the icons for Share Prompt, add a file or photo and tag someone or something are standard and recognizable. Use the paperclip icon to indicate file upload/sharing with the Agent, and an image icon to indicate graphics upload.
+1. **Transparency** – Let the user know that the Rock Paper Scissors Agent is an AI-enabled Agent. Provide clear instructions on how to participate in tournaments (e.g., registration process, game rules explanation). Show the tournament bracket and current standings. Make it clear how players can view their game history and provide feedback on match results. Clearly communicate tournament rules, scoring system, and when results will be revealed.
 
+2. **Control** – Enable players to customize their gameplay strategy preferences and view their complete match history. Allow players to opt out of tournaments, delete their participation data, and control notifications about game status. Provide clear options for players to modify their registration information and game preferences.
+
+3. **Consistency** – Use recognizable gaming icons for rock, paper, and scissors moves. Implement familiar tournament bracket visualizations and leaderboard displays. Use standard gaming UI elements like "Start Tournament", "Submit Move", and progress indicators. Maintain consistent visual feedback for wins, losses, and ties across all game interfaces.

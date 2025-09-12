@@ -1,4 +1,6 @@
 
+## game rules
+
 the game server should have a asp.net web frontend showing the game state in a tournament style/display.
 all games server code should be placed in the apps-rps/rps-game-server directory.
 
@@ -28,3 +30,10 @@ the server should have:
 1- web to display the game state
 2- server side restful api
 
+## coding
+
+for any of the coding examples for the agent client python
+
+don't add any fail back or exception handling
+keep the code as readable as possible
+dont write any comments for function name or parameters.
