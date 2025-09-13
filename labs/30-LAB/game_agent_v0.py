@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 # https://learn.microsoft.com/en-us/azure/ai-foundry/agents/how-to/tools/function-calling?pivots=python
 # https://code.visualstudio.com/mcp
 # https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-agents/samples/agents_telemetry/sample_agents_basics_async_with_azure_monitor_tracing.py
+# https://learn.microsoft.com/en-us/azure/ai-foundry/agents/how-to/tools/model-context-protocol-samples?pivots=python
 load_dotenv()
 
 
