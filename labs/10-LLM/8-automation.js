@@ -11,7 +11,7 @@ async function main() {
     new AzureKeyCredential("<AZURE_OPENAI_API_KEY>")
   );
 
-  const deploymentId = "completions";
+  const deploymentId = "gpt-4o";
   console.log("The chatbot is ready. Type 'exit' to quit.");
 
   const getLightStatus = {
@@ -105,7 +105,7 @@ async function main() {
     }
 
     const chatResponse = await client.getChatCompletions(
-      "completions",
+      "gpt-4o",
       [
         {
           role: "system",

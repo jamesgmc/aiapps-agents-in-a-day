@@ -41,7 +41,7 @@ async function main() {
 
 
     console.log('Connected to Azure OpenAI Service');
-    const chatResponse = oaiClient.getChatCompletions("completions", [
+    const chatResponse = oaiClient.getChatCompletions("gpt-4o", [
         { role: "user", content: "G'day" },
     ]);
 

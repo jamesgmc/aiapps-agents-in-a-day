@@ -8,7 +8,7 @@ var dbname = process.env.MONGODB_Name;
 
 // set up the Azure OpenAI client
 const embeddingsDeploymentName = "embeddings";
-const completionsDeploymentName = "completions";
+const completionsDeploymentName = "gpt-4o";
 const aoaiClient = new OpenAIClient(
   "https://" +
     process.env.AZURE_OPENAI_API_INSTANCE_NAME +
