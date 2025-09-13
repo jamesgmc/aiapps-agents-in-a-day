@@ -34,6 +34,9 @@ const Move = {
     Scissors: 2
 };
 
+// Move names for display
+const MoveNames = ['Rock', 'Paper', 'Scissors'];
+
 // API client functions
 class GameClient {
     static async registerPlayer(name) {
