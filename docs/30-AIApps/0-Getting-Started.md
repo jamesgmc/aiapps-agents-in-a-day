@@ -39,7 +39,7 @@ Each tutorial follows a consistent structure:
 
 You'll be using a custom playground built on top of Azure OpenAI Service. This playground provides hands-on experience with AI APIs and helps you understand how to integrate them into applications.
 
-**AI Proxy Playground:** https://arg-syd-aiaaa-playground.azurewebsites.net
+**AI Proxy Playground:** https://aiaaa-s2-playground.azurewebsites.net
 
 ### Authentication
 
