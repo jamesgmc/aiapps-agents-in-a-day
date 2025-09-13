@@ -6,7 +6,7 @@ The backend api is a Node.js web application, using Express and Swagger, that wi
 
 When developing a backend api, it is often useful to run the application locally to test and debug. This section outlines how to run the backend api locally while watching the file system for code changes. Any detected changes will automatically restart the backend api.
 
-1. Open the backend api folder location in VS Code: `apps-chat/api`
+1. Open the backend api folder location in VS Code: `apps-chat/chatbot-backend`
 
 2. Open a **Terminal** window in VS Code (<kbd>CTRL</kbd>+<kbd>`</kbd>).
 
@@ -16,16 +16,16 @@ When developing a backend api, it is often useful to run the application locally
 
 1. In the previous task, we created a LangChain agent that is capable of generating responses using RAG. Now, let's integrate this code into our Backend API service.
 
-2. Compare `labs\30-LAB-03\5-Chatbot-Backend\agent.js` and `labs\30-LAB-03\5-Chatbot-Backend\langchain-agent.js`. You will notice that additional code has been added to the function to manage chat history.
+2. Compare `labs\20-Chatbot\4b-agent.js` and `labs\20-Chatbot\4a-langchain-agent.js`. You will notice that additional code has been added to the function to manage chat history.
 
    ![alt text](images/chatbot-frontend-image-1.png)
 
-3. The `agent.js` is used in `apps-chat/api/bikestore/agent.js` to enable the backend to connect to both CosmosDb and OpenAI service.
+3. The `agent.js` is used in `apps-chat/chatbot-backend/bikestore/agent.js` to enable the backend to connect to both CosmosDb and OpenAI service.
 
 4. Take your time and have a look at these files:
-   - `apps-chat\api\app.js` configures node.js app
-   - `apps-chat\api\swagger.js` configures swagger
-   - `apps-chat\api\bikestore\agent.js` contains Langchain agent logics
+   - `apps-chat\chatbot-backend\app.js` configures node.js app
+   - `apps-chat\chatbot-backend\swagger.js` configures swagger
+   - `apps-chat\chatbot-backend\bikestore\agent.js` contains Langchain agent logics
 
 
 ## Test out Backend API Swagger

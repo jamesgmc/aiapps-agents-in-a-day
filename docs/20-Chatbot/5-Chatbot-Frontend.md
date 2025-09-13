@@ -4,7 +4,7 @@ In the previous lab, we configured and hosted the backend API code locally. The 
 
 ## Connect Chatbot FrontEnd with BackEnd API
 
-1. The frontend chatbot app is located in `apps-chat/chatbot`. update backend url in `.env` file. While the code for the SPA web application is outside the scope of this dev guide. It's worth noting that the Web App is configured with the URL for the Backend API in `.env`.
+1. The frontend chatbot app is located in `apps-chat/chatbot-frontend`. update backend url in `.env` file. While the code for the SPA web application is outside the scope of this dev guide. It's worth noting that the Web App is configured with the URL for the Backend API in `.env`.
 
    :::info
    If you are running the `codespaces` in web browser, please replace the `BACKEND_URI` with the actual `codespaces` url of backend, similar to below. Make sure no trailing slash in URL.
@@ -27,9 +27,9 @@ In the previous lab, we configured and hosted the backend API code locally. The 
    ```
    
 3. Take your time and have a look at these files:
-   - `apps-chat\chatbot\scr\api.index.ts` points to backend api
-   - `apps-chat\chatbot\scr\pages\chat\Chat.tsx` manages chat conversations
-   - `apps-chat\chatbot\scr\components\Answer\Answer.tsx` manages chat response
+   - `apps-chat\chatbot-frontend\scr\api.index.ts` points to backend api
+   - `apps-chat\chatbot-frontend\scr\pages\chat\Chat.tsx` manages chat conversations
+   - `apps-chat\chatbot-frontend\scr\components\Answer\Answer.tsx` manages chat response
 
 4. Navigating to local URL in the browser accesses the front-end application. Through this front-end application User Interface, questions can be submitted to the Azure OpenAI model about the Bike Store company data, then it will generate responses accordingly.
 
