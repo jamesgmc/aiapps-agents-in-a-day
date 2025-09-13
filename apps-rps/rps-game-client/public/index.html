@@ -669,9 +669,9 @@
                 const sortedResults = results.sort((a, b) => b.RoundNumber - a.RoundNumber);
                 
                 sortedResults.forEach(result => {
-                    totalScore += result.Score;
-                    const moveText = result.Move !== null ? MoveNames[result.Move] : 'N/A';
-                    const answerCorrect = result.AnswerCorrect ? '✅' : '❌';
+                    totalScore += result.score;
+                    const moveText = result.move !== null ? MoveNames[result.move] : 'undefined';
+                    const answerCorrect = result.answerCorrect ? '✅' : '❌';
                     
                     html += `
                         <div class="round-result">
