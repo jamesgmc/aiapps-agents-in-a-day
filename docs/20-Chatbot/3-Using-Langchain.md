@@ -8,14 +8,14 @@ Throughout this lab, notice how much more concise the code is compared to the pr
 
 ## Setup the lab environment
 
-1. Navigate to the lab folder `~/labs/30-LAB-03/4-Using-Langchain/start` within the repository.
+1. Navigate to the lab folder `~/labs/20-Chatbot` within the repository.
 
     ```bash
-    cd  labs/30-LAB-03/4-Using-Langchain/start
+    cd  labs/20-Chatbot4-Using-Langchain/start
     ```
 
     :::info
-    The `~/labs/30-LAB-03/4-Using-Langchain/completed` folder contains the completed solution for this lab. Please use `start` folder to carry out the exercise. You can compare your code with the files in `completed` folder if your code does not run correctly.
+    The `~/labs/20-Chatbot/completed` folder contains the completed solution for this lab. You can compare your code with the files in `completed` folder if your code does not run correctly.
     :::
 
 2. Check `.env` file has correct configurations. Placeholder string should be all replaced in earlier `Lab Setup` step.
@@ -24,19 +24,17 @@ Throughout this lab, notice how much more concise the code is compared to the pr
    The Azure OpenAI service name is not the full endpoint. Only the service name is required. For example, if the endpoint is `https://myservicename.openai.azure.com/`, then the service name is `myservicename`.
    :::
 
-3. In Visual Studio Code, open a terminal window and navigate to the lab folder `start`.
-
-4. Install the langchain packages by running the following command in the terminal window.
+3. Install the langchain packages by running the following command in the terminal window.
 
    ```bash
    npm install langchain@0.1.21 --save
    npm install @langchain/community@0.0.32 --save
    ```
 
-5. This will install the package and save it as a dependency in your project's `package.json` file.
+4. This will install the package and save it as a dependency in your project's `package.json` file.
    ![alt text](images/rag_chain_image.png)
 
-6. Install the required packages by running the following command in the terminal window:
+5. Install the required packages by running the following command in the terminal window:
 
    ```bash
    npm install
@@ -50,7 +48,7 @@ When establishing the connection to the vector store, recall that in the previou
 
 The return value of a vector search in LangChain is a list of `Document` objects. The LangChain `Document` class contains two properties: `pageContent`, that represents the textual content that is typically used to augment the prompt, and `metadata` that contains all other attributes of the document. In the cell below, we'll use the `_id` field as the `pageContent`, and the rest of the fields are returned as metadata.
 
-1. Open the `vector-search.js` file in the Visual Studio Code editor. Notice it has the basic MongoDB connection setup.
+1. Open the `3a-vector-search.js` file in the Visual Studio Code editor. Notice it has the basic MongoDB connection setup.
 
 2. Add the following complete code block where the `TODO: Set up Azure Cosmos DB vector store and perform vector search` comment appears:
 
@@ -84,12 +82,12 @@ The return value of a vector search in LangChain is a list of `Document` objects
    console.log(results);
    ```
 
-3. Save the `vector-search.js` file.
+3. Save the `3a-vector-search.js` file.
 
 4. Run the application by executing the following command in the terminal window:
 
    ```bash
-   node vector-search.js
+   node 3a-vector-search.js
    ```
 
    The output will be a list of `Document` objects that contain the metadata of the documents that are most similar to the user's input.
@@ -110,7 +108,7 @@ In this section, we'll implement the RAG pattern using LangChain. In LangChain, 
 
 We'll also define a reusable RAG chain to control the flow and behavior of the call into the LLM. This chain is defined using the LCEL syntax (LangChain Expression Language).
 
-1. Open the `langchain-rag.js` file in the Visual Studio Code editor.
+1. Open the `3b-langchain-rag.js` file in the Visual Studio Code editor.
 
 ## RAG with LangChain
 
@@ -118,7 +116,7 @@ In this section, we'll implement the RAG pattern using LangChain. In LangChain, 
 
 We'll also define a reusable RAG chain to control the flow and behavior of the call into the LLM. This chain is defined using the LCEL syntax (LangChain Expression Language).
 
-1. Open the `langchain-rag.js` file. Notice it has the basic MongoDB connection setup.
+1. Open the `3b-langchain-rag.js` file. Notice it has the basic MongoDB connection setup.
 
 2. Add the following complete code block where the `TODO: Set up Azure Cosmos DB vector store for LangChain RAG` comment appears:
 
@@ -239,12 +237,12 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
    }
    ```
 
-4. Save the `langchain-rag.js` file.
+4. Save the `3b-langchain-rag.js` file.
 
 5. Run the application by executing the following command in the terminal window:
 
    ```bash
-   node langchain-rag.js
+   node 3b-langchain-rag.js
    ```
 
    ![The console output shows the response from the LLM based on the augmented prompt and returns the LLM response.](images/rag_chain_output.png "RAG chain output")
@@ -269,7 +267,7 @@ In this section, we'll implement a LangChain agent that will be used to interact
 
 In this scenario, an agent will be equipped with two tools, one that uses a retriever chain from the vector store, and another that will perform a MongoDB lookup based on a SKU value. The reason the SKU lookup tool is introduced is because the vector store is built for semantic search. Some fields, such as the `_id` or `sku` fields do not have semantic meaning and therefore a direct lookup is more appropriate.
 
-1. Open the `langchain-agent.js` file in the Visual Studio Code editor.
+1. Open the `3c-langchain-agent.js` file in the Visual Studio Code editor.
 
 2. Immediately after the `const { StringOutputParser } = require("@langchain/core/output_parsers");` line of code, add the following dependencies to support the creation of the LangChain agent:
 
@@ -429,12 +427,12 @@ In this scenario, an agent will be equipped with two tools, one that uses a retr
    );
    ```
 
-5. Save the `langchain-agent.js` file.
+5. Save the `3c-langchain-agent.js` file.
 
 6. Run the application by executing the following command in the terminal window:
 
    ```bash
-   node langchain-agent.js
+   node 3c-langchain-agent.js
    ```
 
    ![The console output shows the response from the LangChain agent based on the user input.](images/agent_output.png "LangChain agent output")
@@ -443,12 +441,12 @@ In this scenario, an agent will be equipped with two tools, one that uses a retr
 
 8. Find the commented line of code `//returnIntermediateSteps: true` in the `executeAgent` function and uncomment it to enable verbose output of the tool usage of the agent. This will output the intermediate steps of the agent that includes the function calls and their outputs.
 
-9. Save the `langchain-agent.js` file.
+9. Save the `3c-langchain-agent.js` file.
 
 10. Run the application by executing the following command in the terminal window:
 
     ```bash
-    node langchain-agent.js
+    node 3c-langchain-agent.js
     ```
 
     ![Partial console output shows the verbose output of the tool usage of the LangChain agent.](images/agent_verbose_output.png "LangChain agent verbose output")
@@ -458,7 +456,7 @@ In this scenario, an agent will be equipped with two tools, one that uses a retr
 11. If desired, comment out the line of code `//returnIntermediateSteps: true` in the `executeAgent` function to disable verbose output of the tool usage of the agent.
 
 :::info
-Please think about the difference between `langchain-rag.js` and `langchain-agent.js`. Which one do you think is better?
+Please think about the difference between `3b-langchain-rag.js` and `3c-langchain-agent.js`. Which one do you think is better?
 :::
 
 12. Experiment with additional questions of your own. For example, change the question in the `executeAgent` function to `What's the top 2 Tire based on feedback?`. It will use `productFeedbackTool` to invoike API call to Graph RAG endpoint.

@@ -14,21 +14,19 @@ The product catalog data is shared in a CSV file. You will be writing a custom s
 
 ## Setup the lab environment
 
-1. Open repo in `VS Code` and then open `Terminial` -> `New Terminal`. Navigate to the lab folder `~/labs/30-LAB-03/2-Load-Data/start` within the repository.
+1. Open repo in `VS Code` and then open `Terminial` -> `New Terminal`. Navigate to the lab folder `~/labs/20-Chatbot/` within the repository.
 
    ```bash
-   cd labs/30-LAB-03/2-Load-Data/start
+   cd labs/20-Chatbot
    ```
 
 :::info
-The `~/labs/30-LAB-03/2-Load-Data/completed` folder contains the completed solution for this lab. Please use `start` folder to carry out the exercise. You can compare your code with the files in `completed` folder if your code does not run correctly.
+The `~/labs/20-Chatbot/completed` folder contains the completed solution for this lab. Please use `start` folder to carry out the exercise. You can compare your code with the files in `completed` folder if your code does not run correctly.
 :::
 
 2. Check `.env` file has correct configurations. Placeholder string should be all replaced in earlier `Lab Setup` step.
 
-3. In Visual Studio Code, open a terminal window and navigate to `start` folder.
-
-4. To install the required packages, execute the following command in the terminal window:
+3. To install the required packages, execute the following command in the terminal window:
 
    ```bash
    npm install
@@ -44,7 +42,7 @@ The `product` data set is located in the `data\product.csv` file. It has the fol
 
    ![alt text](images/rag_load_data_image.png)
 
-2. The `convert.js` file already contains the complete code to convert the CSV file to JSON format and fix data type issues. The file includes proper handling for:
+2. The `1a-convert.js` file already contains the complete code to convert the CSV file to JSON format and fix data type issues. The file includes proper handling for:
    - Parsing the CSV file format
    - Converting the tags field from JSON strings
    - Converting the price field to a proper float value
@@ -52,7 +50,7 @@ The `product` data set is located in the `data\product.csv` file. It has the fol
 3. Run the conversion script to generate the `product.json` file:
 
    ```bash
-   node convert.js
+   node 1a-convert.js
    ```
 
 4. Open the generated `product.json` file to verify the data has been correctly formatted:
@@ -64,7 +62,7 @@ The `product` data set is located in the `data\product.csv` file. It has the fol
 
 There are multiple options available for performing bulk operations in Cosmos DB. In this section, we will focus on using the `bulkWrite` method. The `bulkWrite` method allows you to execute multiple write operations in a single batch, including insert, update, and delete operations.
 
-1. Open the `import.js` file. You'll see it already has the basic MongoDB connection setup. Now add the following code block where indicated by the `TODO: Add product data loading code here` comment:
+1. Open the `1b-1b-import.js` file. You'll see it already has the basic MongoDB connection setup. Now add the following code block where indicated by the `TODO: Add product data loading code here` comment:
 
    ```javascript
    // Load product data
@@ -133,12 +131,12 @@ There are multiple options available for performing bulk operations in Cosmos DB
    console.log(`${result.insertedCount} sales inserted`);
    ```
 
-3. Save the `import.js` file.
+3. Save the `1b-import.js` file.
 
 4. Run the application by executing the following command in the terminal window:
 
    ```bash
-   node import.js
+   node 1b-import.js
    ```
 
    ![A console window displays indicating products have been inserted into the products collection](images/rag_load_data_products_loaded.png "Products loaded")
