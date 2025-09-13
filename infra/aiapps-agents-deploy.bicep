@@ -1,6 +1,6 @@
 // Main bicep template for AI Apps and Agents infrastructure
 @description('Location for all resources')
-param location string = resourceGroup().location
+param location string = 'eastus'
 
 @description('Application name prefix')
 param appName string = 'aiapps-agents'
@@ -8,8 +8,21 @@ param appName string = 'aiapps-agents'
 @description('Unique suffix for resource names')
 param uniqueSuffix string = uniqueString(resourceGroup().id)
 
+@description('Specifies the SKU for the Azure App Service plan. Defaults to **S1**')
+param appServiceSku string = 'S1'
+
+@description('Specifies the SKU for the Azure OpenAI resource. Defaults to **S0**')
+param openAiSku string = 'S0'
+
+@description('MongoDB vCore user Name. No dashes.')
+param mongoDbUserName string
+
+@description('MongoDB vCore password. 8-256 characters, 3 of the following: lower case, upper case, numeric, symbol.')
+@secure()
+param mongoDbPassword string
+
 // Variables
-var resourcePrefix = '${appName}'
+var resourcePrefix = appName
 var storageAccountName = replace('${resourcePrefix}st${uniqueSuffix}', '-', '')
 var keyVaultName = '${resourcePrefix}-kv-${uniqueSuffix}'
 var cosmosDbAccountName = '${resourcePrefix}-cosmos-${uniqueSuffix}'
@@ -22,7 +35,84 @@ var logicAppName = '${resourcePrefix}-logic-${uniqueSuffix}'
 var webAppName = '${resourcePrefix}-webapp-${uniqueSuffix}'
 var staticWebAppName = '${resourcePrefix}-swa-${uniqueSuffix}'
 var aiFoundryWorkspaceName = '${resourcePrefix}-ai-workspace-${uniqueSuffix}'
-// var aiFoundryProjectName = '${resourcePrefix}-ai-project-${uniqueSuffix}' // Reserved for future AI project creation
+var openAiName = '${resourcePrefix}-openai-${uniqueSuffix}'
+var mongoClusterName = '${resourcePrefix}-mongo-${uniqueSuffix}'
+
+// OpenAI model configurations
+var openAiSettings = {
+  name: openAiName
+  sku: openAiSku
+  maxConversationTokens: '100'
+  maxCompletionTokens: '500'
+  gptModel: {
+    name: 'gpt-4o'
+    version: '2024-05-13'
+    deployment: {
+      name: 'gpt4o'
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 300
+    }
+  }
+  completionsModel: {
+    name: 'gpt-4o'
+    version: '2024-05-13'
+    deployment: {
+      name: 'completions'
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 300
+    }
+  }
+  embeddingsModel: {
+    name: 'text-embedding-3-small'
+    version: '1'
+    deployment: {
+      name: 'embeddings'
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 300
+    }
+  }
+  dalleModel: {
+    name: 'dall-e-3'
+    version: '3.0'
+    deployment: {
+      name: 'dalle3'
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 1
+    }
+  }
+}
+
+// MongoDB cluster settings
+var mongovCoreSettings = {
+  mongoClusterName: mongoClusterName
+  mongoClusterLogin: mongoDbUserName
+  mongoClusterPassword: mongoDbPassword
+}
+
+// App service settings
+var appServiceSettings = {
+  plan: {
+    name: '${resourcePrefix}-web'
+    sku: appServiceSku
+  }
+  playground: {
+    name: '${resourcePrefix}-playground'
+  }
+  api: {
+    name: '${resourcePrefix}-api'
+  }
+  chat: {
+    name: '${resourcePrefix}-chat'
+  }
+}
 
 // Log Analytics Workspace (required for Application Insights)
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
@@ -111,6 +201,10 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
   }
 }
 
+// -----------------------
+// AI Apps
+// -----------------------
+
 // Cosmos DB Account
 resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
   name: cosmosDbAccountName
@@ -144,6 +238,267 @@ resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
     }
   }
 }
+
+// MongoDB vCore Cluster
+resource mongoCluster 'Microsoft.DocumentDB/mongoClusters@2023-03-01-preview' = {
+  name: mongovCoreSettings.mongoClusterName
+  location: location
+  properties: {
+    administratorLogin: mongovCoreSettings.mongoClusterLogin
+    administratorLoginPassword: mongovCoreSettings.mongoClusterPassword
+    serverVersion: '5.0'
+    nodeGroupSpecs: [
+      {
+        kind: 'Shard'
+        sku: 'M30'
+        diskSizeGB: 128
+        enableHa: false
+        nodeCount: 1
+      }
+    ]
+  }
+}
+
+resource mongoFirewallRulesAllowAzure 'Microsoft.DocumentDB/mongoClusters/firewallRules@2023-03-01-preview' = {
+  parent: mongoCluster
+  name: 'allowAzure'
+  properties: {
+    startIpAddress: '0.0.0.0'
+    endIpAddress: '0.0.0.0'
+  }
+}
+
+resource mongoFirewallRulesAllowAll 'Microsoft.DocumentDB/mongoClusters/firewallRules@2023-03-01-preview' = {
+  parent: mongoCluster
+  name: 'allowAll'
+  properties: {
+    startIpAddress: '0.0.0.0'
+    endIpAddress: '255.255.255.255'
+  }
+}
+
+
+// Azure OpenAI Service
+resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+  name: openAiSettings.name
+  location: location
+  sku: {
+    name: openAiSettings.sku    
+  }
+  kind: 'OpenAI'
+  properties: {
+    customSubDomainName: openAiSettings.name
+    publicNetworkAccess: 'Enabled'
+  }
+}
+
+resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+  parent: openAiAccount
+  name: openAiSettings.embeddingsModel.deployment.name  
+  sku: {
+    name: openAiSettings.embeddingsModel.sku.name
+    capacity: openAiSettings.embeddingsModel.sku.capacity
+  }
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: openAiSettings.embeddingsModel.name
+      version: openAiSettings.embeddingsModel.version
+    }
+  }
+}
+
+resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+  parent: openAiAccount
+  name: openAiSettings.gptModel.deployment.name
+  dependsOn: [
+    openAiEmbeddingsModelDeployment
+  ]
+  sku: {
+    name: openAiSettings.gptModel.sku.name
+    capacity: openAiSettings.gptModel.sku.capacity
+  }
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: openAiSettings.gptModel.name
+      version: openAiSettings.gptModel.version
+    }    
+  }
+}
+
+resource openAiCompletionsModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+  parent: openAiAccount
+  name: openAiSettings.completionsModel.deployment.name
+  dependsOn: [
+    openAiEmbeddingsModelDeployment
+    openAiGpt4oModelDeployment
+  ]
+  sku: {
+    name: openAiSettings.completionsModel.sku.name
+    capacity: openAiSettings.completionsModel.sku.capacity
+  }
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: openAiSettings.completionsModel.name
+      version: openAiSettings.completionsModel.version
+    }    
+  }
+}
+
+resource openAiDalleModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+  parent: openAiAccount
+  name: openAiSettings.dalleModel.deployment.name
+  dependsOn: [
+    openAiEmbeddingsModelDeployment
+    openAiCompletionsModelDeployment
+    openAiGpt4oModelDeployment
+  ]
+  sku: {
+    name: openAiSettings.dalleModel.sku.name
+    capacity: openAiSettings.dalleModel.sku.capacity
+  }
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: openAiSettings.dalleModel.name
+      version: openAiSettings.dalleModel.version
+    }    
+  }
+}
+
+// Computer Vision Service
+resource computerVision 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+  name: '${resourcePrefix}-cv-${uniqueSuffix}'
+  location: location
+  kind: 'ComputerVision'
+  properties: {
+    customSubDomainName: '${resourcePrefix}-cv-${uniqueSuffix}'
+    publicNetworkAccess: 'Enabled'
+  }
+  sku: {
+    name: 'S1'
+  }
+}
+
+// Speech Service
+resource speechService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
+  name: '${resourcePrefix}-speech-${uniqueSuffix}'
+  location: location
+  kind: 'SpeechServices'
+  sku: {
+    name: 'S0'
+  }
+  properties: {
+    apiProperties: {
+      qnaRuntimeEndpoint: 'https://${resourcePrefix}-speech-${uniqueSuffix}.api.cognitive.microsoft.com'
+    }
+  }
+}
+
+// Translator Service
+resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
+  name: '${resourcePrefix}-translator-${uniqueSuffix}'
+  location: location
+  kind: 'TextTranslation'
+  sku: {
+    name: 'S1'
+  }
+  properties: {
+    apiProperties: {
+      qnaRuntimeEndpoint: 'https://${resourcePrefix}-translator-${uniqueSuffix}.api.cognitive.microsoft.com'
+    }
+  }
+}
+
+
+
+// Additional App Services from azuredeploy.bicep
+resource appServicePlanLinux 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: '${appServiceSettings.plan.name}-asp'
+  location: location
+  sku: {
+    name: appServiceSettings.plan.sku
+  }
+  kind: 'linux'
+  properties: {
+    reserved: true
+  }
+}
+
+resource appServicePlayground 'Microsoft.Web/sites@2022-03-01' = {
+  name: appServiceSettings.playground.name
+  location: location
+  properties: {
+    serverFarmId: appServicePlanLinux.id
+    httpsOnly: true
+    siteConfig: {
+      linuxFxVersion: 'NODE|20-lts'
+      appCommandLine: 'pm2 serve /home/site/wwwroot/dist --no-daemon --spa'
+      alwaysOn: true
+    }
+  }
+}
+
+resource appServicePlaygroundSettings 'Microsoft.Web/sites/config@2022-03-01' = {
+  parent: appServicePlayground
+  name: 'appsettings'
+  kind: 'string'
+  properties: {
+    APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
+  }
+}
+
+resource appServiceApi 'Microsoft.Web/sites@2022-03-01' = {
+  name: appServiceSettings.api.name
+  location: location
+  properties: {
+    serverFarmId: appServicePlanLinux.id
+    httpsOnly: true
+    siteConfig: {
+      linuxFxVersion: 'NODE|20-lts'
+      appCommandLine: 'pm2 start app.js --no-daemon'
+      alwaysOn: true
+    }
+  }
+}
+
+resource appServiceApiSettings 'Microsoft.Web/sites/config@2022-03-01' = {
+  parent: appServiceApi
+  name: 'appsettings'
+  kind: 'string'
+  properties: {
+    APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
+  }
+}
+
+resource appServiceChat 'Microsoft.Web/sites@2022-03-01' = {
+  name: appServiceSettings.chat.name
+  location: location
+  properties: {
+    serverFarmId: appServicePlanLinux.id
+    httpsOnly: true
+    siteConfig: {
+      linuxFxVersion: 'NODE|20-lts'
+      appCommandLine: 'pm2 serve /home/site/wwwroot/dist --no-daemon --spa'
+      alwaysOn: true
+    }
+  }
+}
+
+resource appServiceChatSettings 'Microsoft.Web/sites/config@2022-03-01' = {
+  parent: appServiceChat
+  name: 'appsettings'
+  kind: 'string'
+  properties: {
+    APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
+  }
+}
+
+// -----------------------
+// AI Agents
+// -----------------------
 
 // Azure AI Search
 resource searchService 'Microsoft.Search/searchServices@2023-11-01' = {
@@ -389,7 +744,6 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
     keyVaultReferenceIdentity: 'SystemAssigned'
   }
 }
-
 // Azure Logic App
 resource logicApp 'Microsoft.Logic/workflows@2019-05-01' = {
   name: logicAppName
@@ -492,6 +846,14 @@ output resourceGroupName string = resourceGroup().name
 output storageAccountName string = storageAccount.name
 output keyVaultName string = keyVault.name
 output cosmosDbAccountName string = cosmosDbAccount.name
+output mongoClusterName string = mongoCluster.name
+output openAiAccountName string = openAiAccount.name
+output computerVisionName string = computerVision.name
+output speechServiceName string = speechService.name
+output translatorServiceName string = translatorService.name
+output playgroundAppName string = appServicePlayground.name
+output apiAppName string = appServiceApi.name
+output chatAppName string = appServiceChat.name
 output searchServiceName string = searchService.name
 output appInsightsName string = appInsights.name
 output acrName string = containerRegistry.name
@@ -500,6 +862,5 @@ output webAppName string = webApp.name
 output logicAppName string = logicApp.name
 output staticWebAppName string = staticWebApp.name
 output aiFoundryWorkspaceName string = aiFoundryWorkspace.name
-// output storageAccountKey string = storageAccount.listKeys().keys[0].value // Removed to avoid exposing secrets in outputs
 output appInsightsInstrumentationKey string = appInsights.properties.InstrumentationKey
 output appInsightsConnectionString string = appInsights.properties.ConnectionString
