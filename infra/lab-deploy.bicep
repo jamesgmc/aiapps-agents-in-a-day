@@ -52,17 +52,6 @@ var openAiSettings = {
       capacity: 300
     }
   }
-  completionsModel: {
-    name: 'gpt-4o'
-    version: '2024-05-13'
-    deployment: {
-      name: 'completions'
-    }
-    sku: {
-      name: 'Standard'
-      capacity: 300
-    }
-  }
   embeddingsModel: {
     name: 'text-embedding-3-small'
     version: '1'
@@ -551,32 +540,12 @@ resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deploy
   }
 }
 
-resource openAiCompletionsModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
-  parent: openAiAccount
-  name: openAiSettings.completionsModel.deployment.name
-  dependsOn: [
-    openAiEmbeddingsModelDeployment
-    openAiGpt4oModelDeployment
-  ]
-  sku: {
-    name: openAiSettings.completionsModel.sku.name
-    capacity: openAiSettings.completionsModel.sku.capacity
-  }
-  properties: {
-    model: {
-      format: 'OpenAI'
-      name: openAiSettings.completionsModel.name
-      version: openAiSettings.completionsModel.version
-    }    
-  }
-}
 
 resource openAiDalleModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: openAiAccount
   name: openAiSettings.dalleModel.deployment.name
   dependsOn: [
     openAiEmbeddingsModelDeployment
-    openAiCompletionsModelDeployment
     openAiGpt4oModelDeployment
   ]
   sku: {
