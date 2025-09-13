@@ -1,6 +1,5 @@
 ---
 title: "Computer Vision Analysis"
-slug: /40-AI-Apps-Vision
 ---
 
 :::info TUTORIAL OVERVIEW
@@ -28,7 +27,7 @@ By the end of this tutorial, you will be able to:
 
 Your customer service team needs to process product images efficiently. The goal is to deliver a seamless and efficient customer service experience that enhances operational accuracy and accelerates processing times through automated image analysis.
 
-## Challenge
+## Goal
 
 Leverage GPT-4o's vision capabilities for accurate analysis and verification of product photos. This reduces processing time while ensuring consistency and reliability in decision-making, ultimately enhancing the customer experience.
 
@@ -47,7 +46,7 @@ GPT-4o with vision can:
 
 ### Step 2: Examine the Vision Component
 
-Navigate to `apps-chat\chatbot\pages\vision\Vision.tsx`. You'll find:
+Navigate to `apps-chat\chatbot-frontend\pages\vision\Vision.tsx`. You'll find:
 - An image upload input for local files
 - A text input for questions about the image
 - A describe button to trigger analysis
@@ -103,64 +102,8 @@ const messages = [
 ];
 ```
 
-### Step 5: Advanced Vision Applications
 
-#### Product Quality Inspection
-```typescript
-const systemPrompt = `You are a quality control inspector. 
-Analyze the product image for:
-- Manufacturing defects
-- Damage or wear
-- Compliance with specifications
-- Overall condition assessment`;
-```
-
-#### Document Analysis
-```typescript
-const systemPrompt = `Extract and structure information from this document:
-- Key data points
-- Tables and forms
-- Signatures and stamps
-- Text content`;
-```
-
-#### Inventory Management
-```typescript
-const systemPrompt = `Analyze this inventory image:
-- Count visible items
-- Identify product types
-- Assess organization and storage
-- Note any issues or discrepancies`;
-```
-
-### Step 6: Error Handling and Validation
-
-Implement robust error handling for:
-- Unsupported file formats
-- File size limitations
-- Network connectivity issues
-- API rate limiting
-- Content policy violations
-
-```typescript
-async function validateImage(file: File): Promise<boolean> {
-    // Check file type
-    const supportedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!supportedTypes.includes(file.type)) {
-        throw new Error('Unsupported file type');
-    }
-    
-    // Check file size (example: 10MB limit)
-    const maxSize = 10 * 1024 * 1024;
-    if (file.size > maxSize) {
-        throw new Error('File too large');
-    }
-    
-    return true;
-}
-```
-
-## Solution Reference
+### Step 5: Solution Reference
 
 <details>
 <summary>View Complete Solution</summary>
@@ -303,7 +246,38 @@ export default Page;
 </details>
 </details>
 
-## Real-World Applications
+### Step 5: Advanced Vision Applications
+
+#### Product Quality Inspection
+```typescript
+const systemPrompt = `You are a quality control inspector. 
+Analyze the product image for:
+- Manufacturing defects
+- Damage or wear
+- Compliance with specifications
+- Overall condition assessment`;
+```
+
+#### Document Analysis
+```typescript
+const systemPrompt = `Extract and structure information from this document:
+- Key data points
+- Tables and forms
+- Signatures and stamps
+- Text content`;
+```
+
+#### Inventory Management
+```typescript
+const systemPrompt = `Analyze this inventory image:
+- Count visible items
+- Identify product types
+- Assess organization and storage
+- Note any issues or discrepancies`;
+```
+
+
+### Real-World Applications
 
 ### Quality Control
 - Automated defect detection in manufacturing
@@ -325,27 +299,8 @@ export default Page;
 - Access control verification
 - Safety compliance monitoring
 
-## Best Practices
 
-### Performance Optimization
-- Compress images before processing
-- Implement caching for repeated analyses
-- Use appropriate image resolutions
-- Batch process multiple images when possible
-
-### Security Considerations
-- Validate all uploaded files
-- Implement virus scanning
-- Secure image storage and transmission
-- Audit and log all processing activities
-
-### User Experience
-- Provide clear upload guidelines
-- Show processing progress indicators
-- Enable preview before processing
-- Implement drag-and-drop functionality
-
-## Integration Opportunities
+### Integration Opportunities
 
 Consider combining vision analysis with:
 
@@ -353,13 +308,6 @@ Consider combining vision analysis with:
 2. **Database Integration**: Store analysis results for reporting
 3. **Notification Systems**: Alert users to specific visual conditions
 4. **ML Model Training**: Use results to improve custom models
-
-## Next Steps
-
-1. Move on to Tutorial 4: Speech Processing
-2. Explore combining vision with other AI modalities
-3. Build custom vision models for specific use cases
-4. Implement real-time video analysis
 
 ## Additional Resources
 

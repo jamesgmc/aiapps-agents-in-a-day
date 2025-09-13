@@ -1,6 +1,5 @@
 ---
 title: "Speech Processing"
-slug: /40-AI-Apps-Speech
 ---
 
 :::info TUTORIAL OVERVIEW
@@ -28,7 +27,7 @@ By the end of this tutorial, you will be able to:
 
 Your retail store wants to enhance accessibility and provide a more natural, engaging experience for customers. The goal is to implement text-to-speech (TTS) to improve efficiency and self-service capabilities, allowing shoppers to receive audio information about products, navigation, and promotions.
 
-## Challenge
+## Goal
 
 Implement text-to-speech functionality that reduces reliance on staff while maintaining a personalized touch through natural-sounding voice interactions.
 
@@ -47,7 +46,7 @@ Azure Speech Services provides:
 
 ### Step 2: Examine the Speech Component
 
-Navigate to `apps-chat\chatbot\pages\speech\Speech.tsx`. You'll find:
+Navigate to `apps-chat\chatbot-frontend\pages\speech\Speech.tsx`. You'll find:
 - A text input for content to be spoken
 - A read button to trigger speech synthesis
 - Placeholder for audio playback controls
@@ -350,39 +349,12 @@ async function speakMultipleTexts(texts: string[]) {
 }
 ```
 
-## Best Practices
-
-### Performance
-- Cache frequently used audio
-- Implement proper cleanup for audio resources
-- Use appropriate audio formats for different devices
-- Implement streaming for long texts
-
-### User Experience
-- Provide visual feedback during speech processing
-- Allow users to interrupt or skip speech
-- Offer playback controls (pause, resume, stop)
-- Support keyboard shortcuts
-
-### Security and Privacy
-- Don't log or store spoken content
-- Implement rate limiting
-- Validate input text for appropriate content
-- Use secure connections for API calls
-
-## Integration Opportunities
+### Integration Opportunities
 
 1. **Chatbot Integration**: Add voice responses to chat interactions
 2. **Notification Systems**: Speak important alerts and updates
 3. **Workflow Automation**: Voice-guided step-by-step processes
 4. **Multilingual Support**: Combine with translation for global accessibility
-
-## Next Steps
-
-1. Move on to Tutorial 5: SEO Content Generation
-2. Explore speech-to-text for voice input
-3. Build voice-controlled interfaces
-4. Implement conversation systems with speech
 
 ## Additional Resources
 

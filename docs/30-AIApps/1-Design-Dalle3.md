@@ -1,6 +1,5 @@
 ---
 title: "Design with DALL-E"
-slug: /40-AI-Apps-Design
 ---
 
 :::info TUTORIAL OVERVIEW
@@ -28,7 +27,7 @@ By the end of this tutorial, you will be able to:
 
 You're tasked with developing a feature that helps product designers generate creative concepts quickly. The goal is to develop visually compelling designs that align with brand values and enhance brand identity, ensuring they captivate customer interest and drive engagement.
 
-## Challenge
+## Goal
 
 Elevate product design creativity by harnessing the power of DALL-E model to generate unique, high-quality artwork. This will facilitate concept development, streamline the brainstorming process, and inspire innovative design solutions that push creative boundaries.
 
@@ -40,12 +39,12 @@ Elevate product design creativity by harnessing the power of DALL-E model to gen
 
 First, ensure you have access to:
 - Azure OpenAI service with DALL-E deployment
-- The chatbot application (`apps-chat\chatbot`)
+- The chatbot application (`apps-chat\chatbot-frontend`)
 - Your API keys properly configured
 
 ### Step 2: Examine the Existing Code
 
-Navigate to the Design page located at `apps-chat\chatbot\pages\design\Design.tsx`. You'll find:
+Navigate to the Design page located at `apps-chat\chatbot-frontend\pages\design\Design.tsx`. You'll find:
 - An input textbox for design descriptions
 - A button to trigger AI image generation
 - A placeholder for displaying generated images
@@ -78,39 +77,7 @@ async function dalleApi(prompt: string): Promise<string> {
 }
 ```
 
-### Step 5: Testing Your Implementation
-
-1. Enter a creative description in the input field
-2. Click the Generate button
-3. Verify the image loads correctly
-4. Test with various prompts to ensure robustness
-
-## Advanced Considerations
-
-Once you have the basic functionality working, consider these enhancements:
-
-### Security
-- Secure API key storage (environment variables, Azure Key Vault)
-- Input validation and sanitization
-- Rate limiting implementation
-
-### Content Safety
-- Handle content safety filter responses
-- Provide user feedback for rejected content
-- Implement fallback mechanisms
-
-### User Experience
-- Loading states and progress indicators
-- Image download and save functionality
-- Prompt suggestion features
-- History of generated images
-
-### Integration
-- Integrate with the main chatbot conversation flow
-- Save generated images to storage
-- Share functionality
-
-## Solution Reference
+### Step 5: Code Solution
 
 <details>
 <summary>View Complete Solution</summary>
@@ -198,13 +165,13 @@ export default Page;
 </details>
 </details>
 
-## Next Steps
 
-Once you've completed this tutorial, you can:
-1. Move on to Tutorial 2: Translation Services
-2. Explore integrating multiple AI services
-3. Build more complex design workflows
-4. Add user authentication and personalization
+### Step 6: Testing it out
+
+1. Enter a creative description in the input field
+2. Click the Generate button
+3. Verify the image loads correctly
+4. Test with various prompts to ensure robustness
 
 ## Additional Resources
 

@@ -1,6 +1,5 @@
 ---
 title: "Multilingual Translation Services"
-slug: /40-AI-Apps-Translation
 ---
 
 :::info TUTORIAL OVERVIEW
@@ -28,7 +27,7 @@ By the end of this tutorial, you will be able to:
 
 Your company receives customer reviews in multiple languages, and you need to extract meaningful insights from this multilingual feedback. The goal is to leverage translation services to interpret customer feedback across various languages, enabling efficient summarization and analysis for data-driven decision-making.
 
-## Challenge
+## Goal
 
 Build a feature that takes non-English customer reviews and translates them to English, allowing your team to understand and respond to global customer feedback effectively.
 
@@ -46,7 +45,7 @@ Azure Translator is a cloud-based machine translation service that supports:
 
 ### Step 2: Examine the Translation Component
 
-Navigate to `apps-chat\chatbot\pages\translation\Translation.tsx`. You'll find:
+Navigate to `apps-chat\chatbot-frontend\pages\translation\Translation.tsx`. You'll find:
 - An input field for original text
 - A translate button
 - A display area for translated results
@@ -81,64 +80,8 @@ async function translationApi(text: string): Promise<string> {
 }
 ```
 
-### Step 5: Advanced Features to Consider
 
-#### Automatic Language Detection
-Instead of specifying source language, let Azure detect it:
-```typescript
-const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en`;
-```
-
-#### Multiple Target Languages
-Support translation to multiple languages:
-```typescript
-const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en&to=es&to=fr`;
-```
-
-#### Language Detection Endpoint
-Use the detect endpoint to identify the source language:
-```typescript
-const detect_url = `https://api.cognitive.microsofttranslator.com/detect?api-version=3.0`;
-```
-
-### Step 6: Testing Your Implementation
-
-1. Test with different languages (French, Spanish, German, etc.)
-2. Try complex sentences with technical terms
-3. Test with mixed-language content
-4. Verify error handling with invalid input
-
-## Enhanced Features
-
-### Sentiment Analysis Integration
-Combine translation with sentiment analysis:
-
-```typescript
-async function analyzeTranslatedReview(translatedText: string) {
-    // Use Azure Cognitive Services Text Analytics
-    // to determine sentiment of translated review
-}
-```
-
-### Review Summarization
-Use GPT models to summarize translated reviews:
-
-```typescript
-async function summarizeReview(translatedText: string) {
-    // Use Azure OpenAI to generate concise summaries
-    // of customer feedback
-}
-```
-
-### Language Confidence Scoring
-Display confidence levels for translations:
-
-```typescript
-// Azure Translator provides confidence scores
-// for translation quality assessment
-```
-
-## Solution Reference
+### Step 5: Code Solution
 
 <details>
 <summary>View Complete Solution</summary>
@@ -221,27 +164,34 @@ export default Page;
 </details>
 </details>
 
-## Best Practices
 
-### Security
-- Store API keys securely in environment variables
-- Use Azure Key Vault for production environments
-- Implement rate limiting to prevent abuse
-- Validate and sanitize input text
+### Step 6: Testing Your Implementation
 
-### Performance
-- Cache common translations
-- Implement request batching for multiple texts
-- Use appropriate timeout values
-- Monitor API usage and costs
+1. Test with different languages (French, Spanish, German, etc.)
+2. Try complex sentences with technical terms
+3. Test with mixed-language content
+4. Verify error handling with invalid input
 
-### User Experience
-- Show loading indicators during translation
-- Provide language detection feedback
-- Allow users to correct detected languages
-- Implement undo/redo functionality
+### Step 7: Advanced Features to Consider
 
-## Integration Ideas
+#### Automatic Language Detection
+Instead of specifying source language, let Azure detect it:
+```typescript
+const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en`;
+```
+
+#### Multiple Target Languages
+Support translation to multiple languages:
+```typescript
+const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en&to=es&to=fr`;
+```
+
+#### Language Detection Endpoint
+Use the detect endpoint to identify the source language:
+```typescript
+const detect_url = `https://api.cognitive.microsofttranslator.com/detect?api-version=3.0`;
+```
+#### Integration Ideas
 
 Consider integrating this translation feature with:
 
@@ -249,13 +199,6 @@ Consider integrating this translation feature with:
 2. **Content Management**: Translate website content for global audiences
 3. **Social Media Monitoring**: Analyze international brand mentions
 4. **E-commerce Reviews**: Understand global customer feedback
-
-## Next Steps
-
-1. Move on to Tutorial 3: Computer Vision
-2. Explore combining translation with other AI services
-3. Build multilingual chatbot capabilities
-4. Implement real-time translation features
 
 ## Additional Resources
 

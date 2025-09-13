@@ -1,6 +1,5 @@
 ---
 title: "Content Generation"
-slug: /40-AI-Apps-SEO
 ---
 
 :::info TUTORIAL OVERVIEW
@@ -28,7 +27,7 @@ By the end of this tutorial, you will be able to:
 
 Your marketing team needs to improve website traffic and search engine rankings. The goal is to automate the creation of SEO-optimized content by analyzing existing web pages and generating relevant keywords, compelling titles, and effective meta tags to enhance online visibility.
 
-## Challenge
+## Goal
 
 Build a system that can automatically retrieve web page content, analyze it for SEO opportunities, and generate optimized metadata that drives organic growth through improved search engine rankings.
 
@@ -47,7 +46,7 @@ Key SEO elements to generate:
 
 ### Step 2: Examine the SEO Component
 
-Navigate to `apps-chat\chatbot\pages\seo\Seo.tsx`. You'll find:
+Navigate to `apps-chat\chatbot-frontend\pages\seo\Seo.tsx`. You'll find:
 - A URL input field for target web pages
 - A generate button to trigger analysis
 - A display area for generated SEO content
@@ -96,59 +95,8 @@ async function seoApi(url: string): Promise<string> {
 }
 ```
 
-### Step 6: Structured SEO Output
 
-Define the SEO metadata structure:
-
-```typescript
-interface SEOMetadata {
-    seoTitle: string;
-    seoDescription: string;
-    seoKeywords: string[];
-    headings: {
-        h1: string[];
-        h2: string[];
-        h3: string[];
-    };
-    focusKeyword: string;
-    readabilityScore: number;
-    suggestions: string[];
-}
-```
-
-## Advanced SEO Features
-
-### Keyword Research Integration
-```typescript
-async function analyzeKeywordDensity(content: string): Promise<KeywordAnalysis> {
-    // Calculate keyword frequency
-    // Identify primary and secondary keywords
-    // Analyze keyword distribution
-    // Suggest optimization opportunities
-}
-```
-
-### Competitor Analysis
-```typescript
-async function analyzeCompetitors(keyword: string): Promise<CompetitorData> {
-    // Research top-ranking pages for target keywords
-    // Analyze competitor content strategies
-    // Identify content gaps and opportunities
-    // Generate competitive insights
-}
-```
-
-### Content Optimization Suggestions
-```typescript
-async function generateOptimizationSuggestions(content: string): Promise<string[]> {
-    // Analyze content length and structure
-    // Check for SEO best practices
-    // Suggest improvements for readability
-    // Recommend internal linking opportunities
-}
-```
-
-## Solution Reference
+### Step 6: Code Solution
 
 <details>
 <summary>View Complete Solution</summary>
@@ -317,71 +265,38 @@ export default Page;
 </details>
 </details>
 
-## SEO Best Practices
+## Advanced SEO Features
 
-### Technical SEO
-- **Page Speed**: Optimize loading times
-- **Mobile Responsiveness**: Ensure mobile-friendly design
-- **URL Structure**: Create clean, descriptive URLs
-- **Internal Linking**: Build strategic link architecture
-
-### Content Optimization
-- **Keyword Density**: Maintain 1-3% keyword density
-- **Content Length**: Target 1000+ words for competitive keywords
-- **Readability**: Use clear, engaging language
-- **Content Freshness**: Regular updates and new content
-
-### Meta Tag Optimization
-```html
-<!-- Optimized title tag -->
-<title>Primary Keyword | Brand Name</title>
-
-<!-- Compelling meta description -->
-<meta name="description" content="Engaging description with primary keyword that encourages clicks">
-
-<!-- Open Graph tags for social sharing -->
-<meta property="og:title" content="Social Media Optimized Title">
-<meta property="og:description" content="Social media description">
-```
-
-## Advanced Features
-
-### Schema Markup Generation
+### Keyword Research Integration
 ```typescript
-async function generateSchemaMarkup(content: any): Promise<string> {
-    // Generate JSON-LD structured data
-    // Support Product, Article, Organization schemas
-    // Include relevant business information
-    // Return formatted schema markup
+async function analyzeKeywordDensity(content: string): Promise<KeywordAnalysis> {
+    // Calculate keyword frequency
+    // Identify primary and secondary keywords
+    // Analyze keyword distribution
+    // Suggest optimization opportunities
 }
 ```
 
-### Local SEO Optimization
+### Competitor Analysis
 ```typescript
-interface LocalSEOData {
-    businessName: string;
-    address: string;
-    phoneNumber: string;
-    businessHours: string;
-    localKeywords: string[];
-}
-
-async function optimizeForLocalSEO(data: LocalSEOData): Promise<string> {
-    // Generate location-specific content
-    // Include local keywords and phrases
-    // Create Google My Business optimization suggestions
+async function analyzeCompetitors(keyword: string): Promise<CompetitorData> {
+    // Research top-ranking pages for target keywords
+    // Analyze competitor content strategies
+    // Identify content gaps and opportunities
+    // Generate competitive insights
 }
 ```
 
-### Content Gap Analysis
+### Content Optimization Suggestions
 ```typescript
-async function analyzeContentGaps(url: string, competitors: string[]): Promise<ContentGaps> {
-    // Compare content coverage across competitors
-    // Identify missing topics and keywords
-    // Suggest content creation opportunities
-    // Provide competitive advantage insights
+async function generateOptimizationSuggestions(content: string): Promise<string[]> {
+    // Analyze content length and structure
+    // Check for SEO best practices
+    // Suggest improvements for readability
+    // Recommend internal linking opportunities
 }
 ```
+
 
 ## Integration Opportunities
 
@@ -422,13 +337,6 @@ async function analyzeContentGaps(url: string, competitors: string[]): Promise<C
 - International SEO strategies
 - Technical SEO auditing
 - Brand reputation management
-
-## Next Steps
-
-1. Move on to Tutorial 6: Store Automation
-2. Explore advanced SEO analytics
-3. Build comprehensive SEO auditing tools
-4. Implement automated content optimization
 
 ## Additional Resources
 
