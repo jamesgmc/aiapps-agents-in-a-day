@@ -1,34 +1,17 @@
-#!/usr/bin/env pwsh
 
-$ResourceGroupName = "rg-aiapps-agents"
-$Location = "Australia East"
-$bicepPath = "aiapps-agents-deploy.bicep"
-$parametersPath = "aiapps-agents-deploy.parameters.json"
 
-# Create resource group if it doesn't exist
-$rgExists = az group exists --name $ResourceGroupName
-if ($rgExists -eq "false") {
-    az group create --name $ResourceGroupName --location $Location
-}
+# Log in to Azure
+az login
+az login --tenant a2ebc691-c318-4ec2-998a-a87c528378e0
 
-# Validate Bicep template
-Write-Host "Validating Bicep template..." -ForegroundColor Yellow
-$validationResult = az deployment group validate `
-    --resource-group $ResourceGroupName `
-    --template-file $bicepPath `
-    --parameters $parametersPath
+# Set the subscription context
+az account set --subscription 9df3a442-42f1-40dd-8547-958c3e01597a
 
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Template validation failed!" -ForegroundColor Red
-    exit 1
-}
-Write-Host "Template validation successful!" -ForegroundColor Green
+# Create a new resource group
+az group create --name rg-aiapps-agents --location eastus
 
-# Deploy Bicep template
-$deploymentName = "main-deployment-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-Write-Host "Starting deployment: $deploymentName" -ForegroundColor Yellow
-az deployment group create `
-    --resource-group $ResourceGroupName `
-    --template-file $bicepPath `
-    --parameters $parametersPath `
-    --name $deploymentName
+#  What-If using the Bicep template and parameters file
+az deployment group create --resource-group rg-aiapps-agents --template-file ./azuredeploy.bicep --parameters ./azuredeploy.parameters.json --what-if
+
+# Deploy resources using the Bicep template and parameters file
+az deployment group create --resource-group rg-aiapps-agents --template-file ./azuredeploy.bicep --parameters ./azuredeploy.parameters.json

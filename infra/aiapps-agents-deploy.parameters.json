@@ -7,16 +7,6 @@
     },
     "location": { 
         "value": "eastus2"
-    },
-    "openAiSku": {
-        "value": "S0"
-    },        
-    "mongoDbUserName": {
-        "value": "aiaaaadmin"
-    },
-    
-    "mongoDbPassword": {
-        "value": "aiaaaP@ssword123"
-    }  
+    }
   }
 }
