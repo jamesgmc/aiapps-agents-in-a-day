@@ -11,7 +11,7 @@ var logAnalyticsName = '${resourcePrefix}-la'
 var appInsightsName = '${resourcePrefix}-ai'
 var storageAccountName = replace('${resourcePrefix}st', '-', '')
 var keyVaultName = '${resourcePrefix}-kv'
-var acrName = replace('${resourcePrefix}acr$', '-', '')
+var acrName = replace('${resourcePrefix}acr', '-', '')
 
 var cosmosDbAccountName = '${resourcePrefix}-cosmos'
 var searchServiceName = '${resourcePrefix}-search'
