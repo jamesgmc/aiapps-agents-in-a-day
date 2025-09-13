@@ -16,14 +16,14 @@ export async function eventInfo(
 
     const data = {
       capabilities: {
-        "openai-chat": ["completions"],
+        "openai-chat": ["gpt-4o"],
         "openai-dalle3": ["dalle3"]
       },
       event_code: eventCode,
       event_image_url: '',
       max_token_cap: 999999,
       is_authorized: true,
-      organizer_name: 'AI App in 1 day',
+      organizer_name: 'AI Apps and Agents in a day',
       organizer_email: '',
     };
 
