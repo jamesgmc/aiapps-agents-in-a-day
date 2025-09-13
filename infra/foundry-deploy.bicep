@@ -17,6 +17,8 @@ var keyVaultName = '${resourcePrefix}-kv-${resourceGroupSuffix}'
 
 // Web app service names
 var openAiName = '${resourcePrefix}-openai-${resourceGroupSuffix}'
+var aiFoundryWorkspaceName = '${resourcePrefix}-ai-workspace'
+var aiFoundryProjectName = '${resourcePrefix}-ai-project'
 
 
 // OpenAI model configurations
@@ -154,29 +156,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
 // AI Services
 // -----------------------
 
-// Azure AI Foundry Workspace (formerly ML Services)
-resource aiFoundryWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-07-01-preview' = {
-  name: '${resourcePrefix}-foundry-${resourceGroupSuffix}'
-  location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    friendlyName: 'AI Foundry Workspace for ${appName}'
-    description: 'Azure AI Foundry workspace for building AI applications'
-    keyVault: keyVault.id
-    storageAccount: storageAccount.id
-    applicationInsights: appInsights.id
-    publicNetworkAccess: 'Enabled'
-    hbiWorkspace: false
-    v1LegacyMode: false
-    systemDatastoresAuthMode: 'Identity'
-    managedNetwork: {
-      isolationMode: 'Disabled'
-    }
-  }
-}
-
 // Azure OpenAI Service
 resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openAiSettings.name
@@ -291,3 +270,47 @@ resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
   }
 }
 
+
+// Azure AI Foundry Workspace (formerly ML Services)
+resource aiFoundryWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-07-01-preview' = {
+  name: aiFoundryWorkspaceName
+  location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    friendlyName: 'AI Foundry Workspace for ${appName}'
+    description: 'Azure AI Foundry workspace for building AI applications'
+    keyVault: keyVault.id
+    storageAccount: storageAccount.id
+    applicationInsights: appInsights.id
+    publicNetworkAccess: 'Enabled'
+    hbiWorkspace: false
+    v1LegacyMode: false
+    systemDatastoresAuthMode: 'Identity'
+    managedNetwork: {
+      isolationMode: 'Disabled'
+    }
+  }
+}
+
+// Azure AI Foundry Project (AI Studio Project)
+resource aiFoundryProject 'Microsoft.MachineLearningServices/workspaces@2025-07-01-preview' = {
+  name: aiFoundryProjectName
+  location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    friendlyName: 'AI Project for RPS Game'
+    description: 'Azure AI project for Rock Paper Scissors game with AI agents'
+    hubResourceId: aiFoundryWorkspace.id
+    publicNetworkAccess: 'Enabled'
+    hbiWorkspace: false
+    v1LegacyMode: false
+    systemDatastoresAuthMode: 'Identity'
+    managedNetwork: {
+      isolationMode: 'Disabled'
+    }
+  }
+}
