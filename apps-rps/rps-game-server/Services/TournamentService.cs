@@ -182,6 +182,8 @@ public class TournamentService : ITournamentService
             round.Status = RoundStatus.InProgress;
             round.Question = qa.Question;
             round.CorrectAnswer = qa.Answer;
+            round.QuestionType = qa.Type;
+            round.MediaUrl = qa.MediaUrl;
             round.ServerMove = GenerateRandomMove();
             round.StartedAt = DateTime.UtcNow;
 
