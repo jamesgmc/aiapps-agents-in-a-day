@@ -38,19 +38,24 @@ This is a fast-moving landscape, but there are some things that are common acros
 
 ## AI Agent Frameworks
 
-There are many ways to compare these frameworks, but let's look at some key differences in terms of their design, capabilities, and target use cases:
-
-
-## Difference between these frameworks?
- 
-It does sound like there is a lot of overlap between these frameworks, but there are some key differences in terms of their design, capabilities, and target use cases:
-
-- **LangChain**: Is a widely adopted open-source framework for building applications powered by language models. It provides a suite of tools and abstractions to facilitate the development of AI-driven applications. 
-- **AutoGen**: Is an experimentation framework focused on leading-edge research on multi-agent systems. It is the best place to experiment and prototype sophisticated multi-agent systems.
-- **Semantic Kernel**: Is a production-ready agent library for building enterprise agentic applications. Focuses on event-driven, distributed agentic applications, enabling multiple LLMs and SLMs, tools, and single/multi-agent design patterns.
 - **Azure AI Agent Service**: Is a platform and deployment service in Azure Foundry for agents. It offers building connectivity to services support by Azure Found like Azure OpenAI, Azure AI Search, Bing Search and code execution.
- 
-Still not sure which one to choose? Let's see if we can help you by going through some common use cases:
+- **Semantic Kernel**: Is a production-ready agent library for building enterprise agentic applications. Focuses on event-driven, distributed agentic applications, enabling multiple LLMs and SLMs, tools, and single/multi-agent design patterns.
+- **AutoGen**: Is an experimentation framework focused on leading-edge research on multi-agent systems. It is the best place to experiment and prototype sophisticated multi-agent systems.
+- **LangChain**: Is a widely adopted open-source framework for building applications powered by language models. It provides a suite of tools and abstractions to facilitate the development of AI-driven applications. 
+
+There are many ways to compare these frameworks, we can look at some key differences in terms of their design, capabilities, and target use cases. It does sound like there is a lot of overlap between these frameworks, but there are some key differences in terms of their design, capabilities, and target use cases.
+
+Let's summarize the key differences in a table:
+
+| Framework | Focus | Core Concepts | Use Cases |
+| --- | --- | --- | --- |
+| LangChain | Understanding and generating human-like text content | Agents, Modular Components, Collaboration | Natural language understanding, content generation |
+| AutoGen | Event-driven, distributed agentic applications | Agents, Personas, Functions, Data | Code generation, data analysis tasks |
+| Semantic Kernel | Understanding and generating human-like text content | Agents, Modular Components, Collaboration | Natural language understanding, content generation |
+| Azure AI Agent Service | Flexible models, enterprise security, Code generation, Tool calling | Modularity, Collaboration, Process Orchestration | Secure, scalable, and flexible AI agent deployment |
+
+
+Common use cases:
  
 > Q: I'm experimenting, learning and building proof-of-concept agent applications, and I want to be able to build and experiment quickly
 >
@@ -70,15 +75,6 @@ Still not sure which one to choose? Let's see if we can help you by going throug
 >
 > A: A great choice is to build your application in Semantic Kernel first and then use Azure AI Agent Service to deploy your agent. This approach allows you to easily persist your agents while leveraging the power to build multi-agent systems in Semantic Kernel. Additionally, Semantic Kernel has a connector in AutoGen, making it easy to use both frameworks together.
  
-Let's summarize the key differences in a table:
-
-| Framework | Focus | Core Concepts | Use Cases |
-| --- | --- | --- | --- |
-| LangChain | Understanding and generating human-like text content | Agents, Modular Components, Collaboration | Natural language understanding, content generation |
-| AutoGen | Event-driven, distributed agentic applications | Agents, Personas, Functions, Data | Code generation, data analysis tasks |
-| Semantic Kernel | Understanding and generating human-like text content | Agents, Modular Components, Collaboration | Natural language understanding, content generation |
-| Azure AI Agent Service | Flexible models, enterprise security, Code generation, Tool calling | Modularity, Collaboration, Process Orchestration | Secure, scalable, and flexible AI agent deployment |
-
 What's the ideal use case for each of these frameworks?
 
 ## Integrate existing Azure ecosystem tools
