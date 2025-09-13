@@ -31,7 +31,7 @@ const Layout = () => {
                             </li>
                         </ul>
                     </nav>
-                    <h4 className={styles.headerRightText}>AI App in 1 Day</h4>
+                    <h4 className={styles.headerRightText}>AI Apps and Agents in a Day</h4>
                 </div>
             </header>
 
