@@ -1,5 +1,5 @@
 
-# Trustworthy AI Agents
+# Trustworthy & Safety
 
 //todo: for game agent, add a human in the loop action, call it agent_v67.py in apps-rps/rps-game-agent. follow agent_v1.py
 
