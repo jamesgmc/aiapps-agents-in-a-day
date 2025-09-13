@@ -1,110 +1,96 @@
 import os
 from dotenv import load_dotenv
-from azure.ai.projects import AIProjectClient
-from azure.identity import DefaultAzureCredential
+import autogen
+from autogen import ConversableAgent
 
 load_dotenv()
 
 
 class GameAgentV52:
-    """Azure AI Foundry Agent service for RPS Tournament"""
+    """AutoGen Agent service for RPS Tournament"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
-        self.project_endpoint = project_endpoint or os.getenv('PROJECT_ENDPOINT')
-        self.model_deployment_name = model_deployment_name or os.getenv('MODEL_DEPLOYMENT_NAME')
         self.player_name = player_name or os.getenv('PLAYER_NAME', 'default-player')
+        self.agent_name = f"rps-game-agent-{self.player_name}"
         
-        self.project_client = AIProjectClient(
-            endpoint=self.project_endpoint,
-            credential=DefaultAzureCredential()
-        )
+        # Configure LLM for AutoGen
+        self.llm_config = {
+            "config_list": [
+                {
+                    "model": os.getenv('AZURE_OPENAI_MODEL_DEPLOYMENT_NAME'),
+                    "api_key": os.getenv('AZURE_OPENAI_API_KEY'),
+                    "base_url": os.getenv('AZURE_OPENAI_ENDPOINT'),
+                    "api_type": "azure",
+                    "api_version": "2024-02-15-preview"
+                }
+            ],
+            "temperature": 0.7,
+        }
         
         self.agent = None
-        self.thread = None
-        self._client_context = None
-        self.agent_name = f"rps-game-agent-{self.player_name}"
     
     def __enter__(self):
-        self._client_context = self.project_client.__enter__()
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self._client_context:
-            return self.project_client.__exit__(exc_type, exc_val, exc_tb)
-    
-    def _find_existing_agent(self):
-        """Find existing agent by name"""
-     
-        agents = self.project_client.agents.list_agents()
-        for agent in agents:
-            if agent.name == self.agent_name:
-                return agent
- 
-        return None
-    
-    def cleanup_old_agents(self):
-        """Clean up old agents with the same name (optional maintenance method)"""
-        try:
-            agents = self.project_client.agents.list_agents()
-            for agent in agents:
-                if agent.name == self.agent_name and agent.id != (self.agent.id if self.agent else None):
-                    self.project_client.agents.delete(agent.id)
-        except Exception:
-            pass
+        pass
     
     def _setup_agent(self):
-        """Setup the Azure AI agent - reuse existing or create new"""
-        existing_agent = self._find_existing_agent()
-        
-        if existing_agent:
-            self.agent = existing_agent
-            print(f"Reusing existing agent: {self.agent_name}")
-        else:
-            self.agent = self.project_client.agents.create_agent(
-                model=self.model_deployment_name,
+        """Setup the AutoGen agent"""
+        if not self.agent:
+            self.agent = ConversableAgent(
                 name=self.agent_name,
-                instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games."
+                system_message=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. Be concise and direct in your responses.",
+                llm_config=self.llm_config,
+                human_input_mode="NEVER",
+                max_consecutive_auto_reply=1,
             )
-            print(f"Created new agent: {self.agent_name}")
-        
-        self.thread = self.project_client.agents.threads.create()
+            print(f"Created AutoGen agent: {self.agent_name}")
     
-    def _call_azure_ai_agent(self, message):
-        """Call Azure AI Foundry Agent service"""
-        self.project_client.agents.messages.create(
-            thread_id=self.thread.id,
-            role="user",
-            content=message
+    def _call_autogen_agent(self, message):
+        """Call AutoGen agent"""
+        if not self.agent:
+            self._setup_agent()
+        
+        # Create a temporary user agent to chat with our game agent
+        user_proxy = ConversableAgent(
+            name="user_proxy",
+            system_message="You are a user proxy.",
+            code_execution_config=False,
+            human_input_mode="NEVER",
+            max_consecutive_auto_reply=0,
         )
         
-        run = self.project_client.agents.runs.create_and_process(
-            thread_id=self.thread.id,
-            agent_id=self.agent.id
+        # Initiate chat and get response
+        chat_result = user_proxy.initiate_chat(
+            self.agent,
+            message=message,
+            max_turns=3,
+            silent=True
         )
         
-        messages = self.project_client.agents.messages.list(thread_id=self.thread.id)
-        
-        for message in messages:
-            if message.role == "assistant":
-                return message.content[0].text.value
+        # Extract the last message from the agent
+        if chat_result.chat_history:
+            for msg in reversed(chat_result.chat_history):
+                if msg.get('name') == self.agent_name:
+                    return msg.get('content', 'No response')
         
         return "No response"
     
-    
     def answer_question(self, question):
-        """Generate an answer to the question using Azure AI Foundry Agent service"""
+        """Generate an answer to the question using AutoGen agent"""
         if not self.agent:
             self._setup_agent()
-        return self._call_azure_ai_agent(question)
+        return self._call_autogen_agent(question)
         
     def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using Azure AI Foundry Agent service"""
+        """Choose Rock (0), Paper (1), or Scissors (2) using AutoGen agent"""
         prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
         
         if not self.agent:
             self._setup_agent()
-        azure_choice = self._call_azure_ai_agent(prompt)
-        choice_lower = azure_choice.lower().strip()
+        autogen_choice = self._call_autogen_agent(prompt)
+        choice_lower = autogen_choice.lower().strip()
         
         if 'rock' in choice_lower:
             return 0
@@ -117,7 +103,7 @@ class GameAgentV52:
     
 
 class GameAgent(GameAgentV52):
-    """Alias for backward compatibility with existing code"""
+    """Alias for backward compatibility with existing code - uses AutoGen"""
     pass
 
 
@@ -126,7 +112,7 @@ if __name__ == "__main__":
         "What is 15 + 27?"
     ]
     
-    print("Testing Azure AI Foundry Agent V52:")
+    print("Testing AutoGen Agent V52:")
     print("=" * 50)
     
     with GameAgentV52() as agent:
@@ -145,4 +131,4 @@ if __name__ == "__main__":
         move = agent.choose_rps_move()
         print(f"Move: {move_names[move]} ({move})")
     
-    print("\nAgent V52 testing complete!")
+    print("\nAutoGen Agent V52 testing complete!")
