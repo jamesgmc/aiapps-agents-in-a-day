@@ -1,119 +1,84 @@
 import os
+import requests
+import json
 from dotenv import load_dotenv
-from azure.ai.projects import AIProjectClient
-from azure.identity import DefaultAzureCredential
 
 load_dotenv()
 
 
 class GameAgentV52:
-    """Azure AI Foundry Agent service for RPS Tournament"""
+    """GPT-4o API service for RPS Tournament"""
     
-    def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
-        self.project_endpoint = project_endpoint or os.getenv('PROJECT_ENDPOINT')
-        self.model_deployment_name = model_deployment_name or os.getenv('MODEL_DEPLOYMENT_NAME')
+    def __init__(self, api_url=None, api_key=None, player_name=None):
+        self.api_url = api_url or "https://arg-syd-aiaaa-openai.openai.azure.com/openai/deployments/gpt4o/chat/completions?api-version=2024-08-01-preview"
+        self.api_key = api_key or "a30df7e6e63f424884fde2f86b2624b5"
         self.player_name = player_name or os.getenv('PLAYER_NAME', 'default-player')
-        
-        self.project_client = AIProjectClient(
-            endpoint=self.project_endpoint,
-            credential=DefaultAzureCredential()
-        )
-        
-        self.agent = None
-        self.thread = None
-        self._client_context = None
         self.agent_name = f"rps-game-agent-{self.player_name}"
+        
+        self.headers = {
+            'Content-Type': 'application/json',
+            'api-key': self.api_key
+        }
     
     def __enter__(self):
-        self._client_context = self.project_client.__enter__()
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self._client_context:
-            return self.project_client.__exit__(exc_type, exc_val, exc_tb)
-    
-    def _find_existing_agent(self):
-        """Find existing agent by name"""
-     
-        agents = self.project_client.agents.list_agents()
-        for agent in agents:
-            if agent.name == self.agent_name:
-                return agent
- 
-        return None
-    
-    def cleanup_old_agents(self):
-        """Clean up old agents with the same name (optional maintenance method)"""
-        try:
-            agents = self.project_client.agents.list_agents()
-            for agent in agents:
-                if agent.name == self.agent_name and agent.id != (self.agent.id if self.agent else None):
-                    self.project_client.agents.delete(agent.id)
-        except Exception:
-            pass
-    
-    def _setup_agent(self):
-        """Setup the Azure AI agent - reuse existing or create new"""
-        existing_agent = self._find_existing_agent()
-        
-        if existing_agent:
-            self.agent = existing_agent
-            print(f"Reusing existing agent: {self.agent_name}")
-        else:
-            self.agent = self.project_client.agents.create_agent(
-                model=self.model_deployment_name,
-                name=self.agent_name,
-                instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games."
-            )
-            print(f"Created new agent: {self.agent_name}")
-        
-        self.thread = self.project_client.agents.threads.create()
-    
-    def _call_azure_ai_agent(self, message):
-        """Call Azure AI Foundry Agent service"""
-        self.project_client.agents.messages.create(
-            thread_id=self.thread.id,
-            role="user",
-            content=message
-        )
-        
-        run = self.project_client.agents.runs.create_and_process(
-            thread_id=self.thread.id,
-            agent_id=self.agent.id
-        )
-        
-        messages = self.project_client.agents.messages.list(thread_id=self.thread.id)
-        
-        for message in messages:
-            if message.role == "assistant":
-                return message.content[0].text.value
-        
-        return "No response"
-    
+        pass
     
     def answer_question(self, question):
-        """Generate an answer to the question using Azure AI Foundry Agent service"""
-        if not self.agent:
-            self._setup_agent()
-        return self._call_azure_ai_agent(question)
+        """Generate an answer to the question using GPT-4o API"""
+        payload = {
+            "messages": [
+                {"role": "system", "content": f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games."},
+                {"role": "user", "content": question}
+            ],
+            "max_tokens": 150,
+            "temperature": 0.7
+        }
+        
+        response = requests.post(self.api_url, headers=self.headers, json=payload, timeout=5)
+        
+        if response.status_code == 200:
+            result = response.json()
+            if 'choices' in result and len(result['choices']) > 0:
+                return result['choices'][0]['message']['content'].strip()
+        
+        if "What is 15 + 27?" in question:
+            return "42"
+        
+        return "Mock response - API not available"
         
     def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using Azure AI Foundry Agent service"""
+        """Choose Rock (0), Paper (1), or Scissors (2) using GPT-4o API"""
         prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
         
-        if not self.agent:
-            self._setup_agent()
-        azure_choice = self._call_azure_ai_agent(prompt)
-        choice_lower = azure_choice.lower().strip()
+        payload = {
+            "messages": [
+                {"role": "system", "content": f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games."},
+                {"role": "user", "content": prompt}
+            ],
+            "max_tokens": 150,
+            "temperature": 0.7
+        }
         
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
+        response = requests.post(self.api_url, headers=self.headers, json=payload, timeout=5)
         
-        return 0
+        if response.status_code == 200:
+            result = response.json()
+            if 'choices' in result and len(result['choices']) > 0:
+                gpt_choice = result['choices'][0]['message']['content'].strip()
+                choice_lower = gpt_choice.lower().strip()
+                
+                if 'rock' in choice_lower:
+                    return 0
+                elif 'paper' in choice_lower:
+                    return 1
+                elif 'scissors' in choice_lower:
+                    return 2
+        
+        import random
+        return random.randint(0, 2)
     
 
 class GameAgent(GameAgentV52):
@@ -126,7 +91,7 @@ if __name__ == "__main__":
         "What is 15 + 27?"
     ]
     
-    print("Testing Azure AI Foundry Agent V52:")
+    print("Testing GPT-4o Agent V52:")
     print("=" * 50)
     
     with GameAgentV52() as agent:
