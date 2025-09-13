@@ -1,5 +1,5 @@
 {  
-  "name": "mongodb-nodejs-devguide-langchain",  
+  "name": "lab-chatbot",  
   "version": "1.0.0",  
   "description": "A Node.js application that uses LangChain to perform RAG search and function calling.",
   "main": "index.js",  
