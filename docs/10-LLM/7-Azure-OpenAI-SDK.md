@@ -1,4 +1,4 @@
-# Using Azure OpenAI SDK
+# Azure OpenAI SDK
 
 :::tip Azure OpenAI SDK
 Azure OpenAI SDK is a set of libraries that allow you to interact with Azure OpenAI services from your code. The SDK are available for multiple programming languages, including Python, Node.js, and C#.
