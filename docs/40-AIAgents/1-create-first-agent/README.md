@@ -1,22 +1,20 @@
 # First Agent in Foundry
 
-//todo: for game agent, create agent VS Code AI Toolkit
-//todo: for game agent, create agent using agent service, call it agent_v52.py in apps-rps/rps-game-agent. follow agent_v1.py
-
 :::info
 
-Key concepts and frameworks for agents
+Let's start to create our first agent in Foundry
 
 :::
 
 In this exercise, you use the Azure AI Agent service tools in the [Azure AI Foundry portal](https://ai.azure.com/) to create a agent for Flight Booking. The agent will be able to interact with users and provide information about flights.
 
-## Create an Azure AI Foundry hub
+## Access Azure AI Foundry
 
 > **Note:** Azure AI Foundry was formerly known as Azure AI Studio.
 
-1. Follow these guidelines from the [Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-studio/) blog post for creating an Azure AI Foundry hub.
-2.  When your project is created, close any tips that are displayed and review the project page in Azure AI Foundry portal, which should look similar to the following image:
+1. We have provisioned an shared Foundry environment for you to use. Open the following link in your browser: [https://ai.azure.com/](https://ai.azure.com/) and sign in with your provided Azure lab account.
+2. At home, you can follow these guidelines from the [Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-studio/) blog post for creating an Azure AI Foundry hub yourself.
+3. Azure AI Foundry portal should look like below:
 
     ![Azure AI Foundry Project](./images/azure-ai-foundry.png)
 
@@ -24,7 +22,7 @@ In this exercise, you use the Azure AI Agent service tools in the [Azure AI Foun
 
 1. In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
 2. In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, select **Deploy base model**.
-3. Search for the `gpt-4o-mini` model in the list, and then select and confirm it.
+3. Search for the `gpt-4o` model in the list, and then select and confirm it. **We have deployed the gpt-4o model already, you can skip the actual creation step.***
 
     > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using.
 
@@ -36,8 +34,8 @@ Now that you have deployed a model, you can create an agent. An agent is a conve
 
 1. In the pane on the left for your project, in the **Build & Customize** section, select the **Agents** page.
 2. Click **+ Create agent** to create a new agent. Under the **Agent Setup** dialog box:
-    - Enter a name for the agent, such as `Game Agent`.
-    - Ensure that the `gpt-4o-mini` model deployment you created previously is selected
+    - Enter a name for the agent, such as `Game Agent - {yourname}`. Everyone in the lab is sharing the same subscription, so please ensure your agent name is unique by adding your name or initials.
+    - Ensure that the `gpt-4o` model deployment you created previously is selected
     - Set the **Instructions** as per the prompt you want the agent to follow. Here is an example:
     ```
     You are a Rock Paper Scissors agent. Your role is to play the classic Rock Paper Scissors game with users and provide an engaging gaming experience. Follow the instructions below to ensure clear and fun gameplay:
