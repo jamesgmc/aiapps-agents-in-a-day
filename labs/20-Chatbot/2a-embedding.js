@@ -12,6 +12,7 @@ const aoaiClient = new OpenAIClient(
     new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY)
 );
 
+
 // set up the MongoDB client
 const dbClient = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
 var dbname = process.env.MONGODB_Name;
@@ -22,8 +23,8 @@ async function main() {
         console.log('Connected to MongoDB');
         const db = dbClient.db(dbname);
 
-        // TODO: Test the generateEmbeddings function
-        // This will be filled during the lab exercise
+        console.log(await generateEmbeddings("Hello, world!"));
+
 
     } catch (err) {
         console.error(err);
@@ -44,3 +45,4 @@ async function generateEmbeddings(text) {
 }
 
 main().catch(console.error);
+
