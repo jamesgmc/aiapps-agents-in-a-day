@@ -8,7 +8,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "AI Apps and Agents in one day",
+  title: "AI Apps and Agents in a day",
   tagline:
     "Accelerate Your AI Journey: Build AI Apps and Agents",
   url: "https://github-insight-anz-lab.github.io",
@@ -56,7 +56,7 @@ const config = {
       },
 
       navbar: {
-        title: "Build AI Apps and Agents in one day",
+        title: "Build AI Apps and Agents in a day",
         logo: {
           alt: "Workshop: Build AI Apps and Agents",
           src: "img/logo.png",

@@ -1,6 +1,6 @@
-# AI Apps and Agents in one day (Draft)
+# AI Apps and Agents in a day (Draft)
 
-![AI Apps and Agents in one day Cover](res/workshop-cover.png)
+![AI Apps and Agents in a day Cover](res/workshop-cover.png)
 
 ## Overview
 - Duration: 9am to 4pm

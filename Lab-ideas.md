@@ -1,4 +1,4 @@
-# AI Apps and Agents in one day (Lab)
+# AI Apps and Agents in a day (Lab)
 
 ## Lab Structure
 

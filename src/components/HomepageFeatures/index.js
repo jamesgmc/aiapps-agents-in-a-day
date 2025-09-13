@@ -79,7 +79,7 @@ export default function HomepageFeatures() {
             backgroundClip: 'text',
             marginBottom: '1rem'
           }}>
-            Master AI Agents in One Day 🚀
+            Master AI Agents in a day 🚀
           </h2>
           <p style={{
             fontSize: '1.25rem',
