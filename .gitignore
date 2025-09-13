@@ -195,3 +195,4 @@ PublishProfiles/
 
 # Bicep build artifacts
 *.json.arm
+__pycache__/
