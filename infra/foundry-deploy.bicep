@@ -8,7 +8,7 @@ param appName string = 'aiapps-agents'
 // Variables
 var resourceGroupName = resourceGroup().name
 // Create a suffix using the last part of the resource group name, safely handling short names
-var resourceGroupSuffix = take(replace(resourceGroupName, '-', ''), 6)
+var resourceGroupSuffix = take(replace(guid(resourceGroupName), '-', ''), 6)
 var resourcePrefix = appName
 var logAnalyticsName = '${resourcePrefix}-logs-${resourceGroupSuffix}'
 var appInsightsName = '${resourcePrefix}-ai-${resourceGroupSuffix}'
@@ -290,36 +290,4 @@ resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
     }
   }
 }
-
-// -----------------------
-// Outputs
-// -----------------------
-
-@description('The name of the Azure AI Foundry workspace')
-output aiFoundryWorkspaceName string = aiFoundryWorkspace.name
-
-@description('The resource ID of the Azure AI Foundry workspace')
-output aiFoundryWorkspaceId string = aiFoundryWorkspace.id
-
-@description('The discovery URL of the Azure AI Foundry workspace')
-output aiFoundryWorkspaceDiscoveryUrl string = aiFoundryWorkspace.properties.discoveryUrl
-
-@description('The workspace ID of the Azure AI Foundry workspace')
-output aiFoundryWorkspaceWorkspaceId string = aiFoundryWorkspace.properties.workspaceId
-
-@description('The name of the OpenAI account')
-output openAiAccountName string = openAiAccount.name
-
-@description('The endpoint of the OpenAI account')
-output openAiEndpoint string = openAiAccount.properties.endpoint
-
-@description('The name of the Key Vault')
-output keyVaultName string = keyVault.name
-
-@description('The name of the storage account')
-output storageAccountName string = storageAccount.name
-
-@description('The name of Application Insights')
-output applicationInsightsName string = appInsights.name
-
 
