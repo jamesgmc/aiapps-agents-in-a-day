@@ -2,3 +2,5 @@ httpx
 uvicorn
 starlette
 mcp
+fastmcp
+requests
