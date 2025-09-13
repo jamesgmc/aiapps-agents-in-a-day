@@ -32,6 +32,7 @@ var appGameClientName = '${resourcePrefix}-game-client'
 var openAiName = '${resourcePrefix}-openai'
 var aiFoundryWorkspaceName = '${resourcePrefix}-ai-workspace'
 var aiFoundryProjectName = '${resourcePrefix}-ai-project'
+var aiServicesName = '${resourcePrefix}-aiservices'
 
 
 // OpenAI model configurations
@@ -486,6 +487,21 @@ resource staticWebApp 'Microsoft.Web/staticSites@2022-09-01' = {
 // AI Services
 // -----------------------
 
+// AI Services (Multi-service account)
+resource aiServices 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+  name: aiServicesName
+  location: location
+  sku: {
+    name: 'S0'
+  }
+  kind: 'AIServices'
+  properties: {
+    publicNetworkAccess: 'Enabled'
+    customSubDomainName: toLower(aiServicesName)
+    apiProperties: {}
+  }
+}
+
 // Azure OpenAI Service
 resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openAiSettings.name
@@ -621,83 +637,92 @@ resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
 }
 
 
-// Azure AI Foundry Workspace (formerly ML Services)
-resource aiFoundryWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-07-01-preview' = {
+// -----------------------
+// Azure AI Foundry Hub
+// -----------------------
+
+// Azure AI Foundry Hub Workspace
+resource aiFoundryHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview' = {
   name: aiFoundryWorkspaceName
   location: location
+  kind: 'Hub'
   identity: {
     type: 'SystemAssigned'
   }
   properties: {
-    friendlyName: 'AI Foundry Workspace for ${appName}'
-    description: 'Azure AI Foundry workspace for building AI applications'
-    keyVault: keyVault.id
+    friendlyName: aiFoundryWorkspaceName
     storageAccount: storageAccount.id
-    applicationInsights: appInsights.id
+    keyVault: keyVault.id
     publicNetworkAccess: 'Enabled'
-    hbiWorkspace: false
-    v1LegacyMode: false
-    systemDatastoresAuthMode: 'Identity'
     managedNetwork: {
       isolationMode: 'Disabled'
     }
-  }
-}
-
-// Azure AI Foundry Project (AI Studio Project)
-resource aiFoundryProject 'Microsoft.MachineLearningServices/workspaces@2025-07-01-preview' = {
-  name: aiFoundryProjectName
-  location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    friendlyName: 'AI Project for RPS Game'
-    description: 'Azure AI project for Rock Paper Scissors game with AI agents'
-    hubResourceId: aiFoundryWorkspace.id
-    publicNetworkAccess: 'Enabled'
-    hbiWorkspace: false
-    v1LegacyMode: false
-    systemDatastoresAuthMode: 'Identity'
-    managedNetwork: {
-      isolationMode: 'Disabled'
+    workspaceHubConfig: {
+      defaultWorkspaceResourceGroup: resourceGroup().id
     }
   }
+  dependsOn: [
+    aiServices
+  ]
 }
 
-// AI Foundry Connection to OpenAI Service
-resource aiFoundryOpenAiConnection 'Microsoft.MachineLearningServices/workspaces/connections@2025-07-01-preview' = {
-  name: 'openai-connection'
-  parent: aiFoundryWorkspace
+// AI Services Connection to the Hub
+resource aiServicesConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-07-01-preview' = {
+  parent: aiFoundryHub
+  name: aiServicesName
   properties: {
-    category: 'AzureOpenAI'
-    target: openAiAccount.properties.endpoint
     authType: 'ApiKey'
+    category: 'AIServices'
+    target: 'https://${aiServicesName}.cognitiveservices.azure.com/'
+    useWorkspaceManagedIdentity: true
+    isSharedToAll: true
+    sharedUserList: []
+    peRequirement: 'NotRequired'
+    peStatus: 'NotApplicable'
+    credentials: {
+      key: aiServices.listKeys().key1
+    }
+    metadata: {
+      ApiType: 'Azure'
+      ResourceId: aiServices.id
+    }
+  }
+}
+
+// Azure OpenAI Connection to the Hub
+resource aoaiConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-07-01-preview' = {
+  parent: aiFoundryHub
+  name: '${openAiSettings.name}_aoai'
+  properties: {
+    authType: 'ApiKey'
+    category: 'AzureOpenAI'
+    target: 'https://${openAiSettings.name}.openai.azure.com/'
+    useWorkspaceManagedIdentity: true
+    isSharedToAll: true
+    sharedUserList: []
+    peRequirement: 'NotRequired'
+    peStatus: 'NotApplicable'
     credentials: {
       key: openAiAccount.listKeys().key1
     }
     metadata: {
-      ApiVersion: '2024-02-01'
-      ApiType: 'azure'
+      ApiType: 'Azure'
       ResourceId: openAiAccount.id
     }
   }
 }
 
-// AI Foundry Connection to AI Search
-resource aiFoundrySearchConnection 'Microsoft.MachineLearningServices/workspaces/connections@2025-07-01-preview' = {
-  name: 'aisearch-connection'
-  parent: aiFoundryWorkspace
+// Azure AI Foundry Project Workspace
+resource aiFoundryProject 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview' = {
+  name: aiFoundryProjectName
+  location: location
+  kind: 'Project'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
-    category: 'CognitiveSearch'
-    target: 'https://${searchService.name}.search.windows.net'
-    authType: 'ApiKey'
-    credentials: {
-      key: searchService.listAdminKeys().primaryKey
-    }
-    metadata: {
-      ApiVersion: '2023-11-01'
-      ResourceId: searchService.id
-    }
+    friendlyName: aiFoundryProjectName
+    hubResourceId: aiFoundryHub.id
+    publicNetworkAccess: 'Enabled'
   }
 }
