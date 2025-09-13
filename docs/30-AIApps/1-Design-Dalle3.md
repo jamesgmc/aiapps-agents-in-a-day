@@ -147,7 +147,7 @@ const Page = () => {
         const size = '1024x1024';
         const n = 1;
         
-        var openai_url = "https://arg-syd-aiaaa-openai.openai.azure.com";
+        var openai_url = "https://aiaaa-s2-openai.openai.azure.com/";
         var openai_key = "<API_KEY>";
         const client = new OpenAIClient(
             openai_url,

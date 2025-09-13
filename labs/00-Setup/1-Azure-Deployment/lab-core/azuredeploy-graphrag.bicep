@@ -335,7 +335,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
             }
             {
               name: 'GRAPHRAG_API_BASE'
-              value: 'https://arg-syd-aiaaa-openai.openai.azure.com'
+              value: 'https://aiaaa-s2-openai.openai.azure.com/'
             }
             {
               name: 'GRAPHRAG_API_VERSION'

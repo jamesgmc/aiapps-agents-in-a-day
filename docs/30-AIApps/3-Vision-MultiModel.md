@@ -216,7 +216,7 @@ const Page = () => {
             api_version: "2024-08-01-preview"
         };
 
-        const openai_url = "https://arg-syd-aiaaa-openai.openai.azure.com";
+        const openai_url = "https://aiaaa-s2-openai.openai.azure.com/";
         const openai_key = "<API_KEY>";
         const client = new OpenAIClient(
             openai_url,

@@ -12,14 +12,13 @@ In this lab, you will learn how to use the Azure OpenAI SDK to interact with Azu
 
 ![alt text](images/openterminal.png)
 
-2. **Create** a new directory `labs/10-LAB-01/7-Using-Azure-OpenAI-SDK/openai-nodejs` and navigate to the directory.
+2. Go to a lab directory `labs/10-LLM/` 
 
 ```bash
-cd labs/10-LAB-01/7-Using-Azure-OpenAI-SDK
-mkdir openai-nodejs
-cd openai-nodejs
+cd labs/10-LLM/
 ```
 ![alt text](images/creatfolder.png)
+//todo: update iamge
 
 3. Run the following command to create a new Node.js project:
 
@@ -34,39 +33,34 @@ npm init -y
 npm install @azure/openai@1.0.0-beta.11
 ```
 
-5. Locate `openai-nodejs` folder in VS code `Explorer`. Create a new `app.js` file for the Node.js program using the `+` icon or `File -> New Text File -> Save`. Then add the following variable definition to the `app.js` file using `require` to use the OpenAI library.
+5. Locate `10-LLM` folder in VS code `Explorer`. Create a new `7a-openai-sdk.js` file for the Node.js program using the `+` icon or `File -> New Text File -> Save`. 
+
+
+6. Then add the following variable definition to the `7a-openai-sdk.js` file using `require` to use the OpenAI library. Create the Azure OpenAI client to call the Azure OpenAI Chat completion API. Have a look at Azure OpenAI service endpoint and Azure OpenAI service key in the code below. Please copy below Javascript code into `7a-openai-sdk.js` below earlier block.
 
 ```javascript
 const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
+
+const client = new OpenAIClient(
+  "https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/",
+  new AzureKeyCredential("<AZURE_OPENAI_API_KEY>")
+);
 ```
 
-6. Create the Azure OpenAI client to call the Azure OpenAI Chat completion API. Have a look at Azure OpenAI service endpoint and Azure OpenAI service key in the code below. Please copy below Javascript code into `app.js` below earlier block.
-
-```javascript
-  const client = new OpenAIClient(
-    "https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/",
-    new AzureKeyCredential("<AZURE_OPENAI_API_KEY>")
-  );
-```
-
-7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://arg-syd-aiaaa-openai.openai.azure.com`. If not sure about the value of AZURE_OPENAI_API_INSTANCE_NAME, please refer to `Lab Setup` step.
+7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://aiaaa-s2-openai.openai.azure.com/`. If not sure about the value of AZURE_OPENAI_API_INSTANCE_NAME, please refer to `Lab Setup` step.
 
 :::info
 More information on the Azure OpenAI client methods can be found in the [@azure/openai package](https://learn.microsoft.com/en-us/javascript/api/%40azure/openai/?view=azure-node-preview) documentation. 
 :::
 
-8. Once the Azure OpenAI client has been created, the next step is to call the `.getCompletions` method on the client to perform a chat completion.
+8. Once the Azure OpenAI client has been created, the next step is to call the `.getCompletions` method on the client to perform a chat completion. And print the response from Azure OpenAI to the console.
 
 ```javascript
 // Block Reference 1
 const chatResponse = client.getChatCompletions("gpt-4o", [
   { role: "user", content: "What are the different types of road bikes?" },
 ]);
-```
 
-9. Print the response from Azure OpenAI to the console.
-
-```javascript
 // Block Reference 2
 chatResponse
   .then((result) => {
@@ -77,10 +71,10 @@ chatResponse
   .catch((err) => console.log(`Error: ${JSON.stringify(err)}`));
 ```
 
-10. Open terminal window in VS code, and run below command. You should see the response from the Azure OpenAI service in the console.
+9. Open terminal window in VS code, and run below command. You should see the response from the Azure OpenAI service in the console.
 
 ```
-node app.js
+node 7a-openai-sdk.js
 ```
 
 Try the other examples in the next sections to see how you can interact with Azure OpenAI models from your code.
@@ -130,9 +124,9 @@ const chatResponse = client.getChatCompletions("gpt-4o", [
 
 You can call a function from the model to perform a specific task. The available functions are passed to the model. The model analyzes the conversation history and decides when and how to call the function. The model also extracts the required parameters for the function from the conversation history.
 
-In the following example, the model calls the `search_bike` function to retrieve bikes from the search index based on the location, company, and model of the bike. 
+Locate and open `7b-openai-sdk-func-call.js` to study how to make a function call.  The model calls the `search_bike` function to retrieve bikes from the search index based on the location, company, and model of the bike. 
 
-1. Add the function `searchBikeStore` in `app.js` file below `const client = new OpenAIClient` code block.
+1. Now let's study the code, you don't need to copy and paste code into above file. Firstly, it defines a funcion call definition.
 
 ```javascript
 const searchBikeStore = {
@@ -169,7 +163,7 @@ const options = {
 
 ```
 
-2. Call the chat completions API, by passing the `searchBikeStore` function. Replace the previous code block `Block Reference 1` in earlier step with new code block below.
+2. Then it calls the chat completions API, by passing the `searchBikeStore` function. 
 
 ```javascript
 // Block Reference 1
@@ -187,7 +181,7 @@ const chatResponse = client.getChatCompletions("gpt-4o", [
 ], options);
 ```
 
-3. The response message includes one or more `tool calls` that must be resolved via `tool messages`. Add the following function to handle the request from the model to invoke the function below `const chatResponse = client.getChatCompletions` code block.
+3. The response message includes one or more `tool calls` that must be resolved via `tool messages`. The following function to handle the request from the model to invoke the function below `const chatResponse = client.getChatCompletions` code block.
 
 ```javascript
 // Purely for convenience and clarity, this function handles tool call responses.
@@ -206,7 +200,7 @@ function applyToolCall({ function: call, id }) {
 }
 ```
 
-4. Print the final response from the tool call to the console. In some cases, you may need to send the response from the tool back to the model along with the original conversation history to get the final response. Replace the previous code block `Block Reference 2` in earlier step with new code block below.
+4. Print the final response from the tool call to the console. In some cases, you may need to send the response from the tool back to the model along with the original conversation history to get the final response. 
 
 ```javascript
 // Block Reference 2
@@ -247,8 +241,9 @@ chatResponse
 5. Run below command to execute the code.
 
 ```
-node app.js
+node 7b-openai-sdk-func-call.js
 ```
+
 
 :::tip
 Where do you think the actual `applyToolCall` execution is? on the server-side or client-side?
