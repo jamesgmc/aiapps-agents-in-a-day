@@ -1,34 +1,45 @@
 import os
+import asyncio
+from dotenv import load_dotenv
 from semantic_kernel import Kernel
-from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
-from semantic_kernel.planning.basic_planner import BasicPlanner
+from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
+
+# Load environment variables
+load_dotenv()
 
 class GameAgentSK:
     """Semantic Kernel Agent for RPS Tournament"""
 
-    def __init__(self, model_deployment_name=None, player_name=None, api_key=None):
-        self.model_deployment_name = model_deployment_name or os.getenv('MODEL_DEPLOYMENT_NAME', 'gpt-3.5-turbo')
+    def __init__(self, model_deployment_name=None, player_name=None, api_key=None, endpoint=None, api_version=None):
+        self.model_deployment_name = model_deployment_name or os.getenv('AZURE_OPENAI_MODEL_DEPLOYMENT_NAME') or os.getenv('MODEL_DEPLOYMENT_NAME', 'gpt-4o')
         self.player_name = player_name or os.getenv('PLAYER_NAME', 'default-player')
-        self.api_key = api_key or os.getenv('OPENAI_API_KEY')
+        self.api_key = api_key or os.getenv('AZURE_OPENAI_API_KEY')
+        self.endpoint = endpoint or os.getenv('AZURE_OPENAI_ENDPOINT')
+        self.api_version = api_version or os.getenv('AZURE_OPENAI_API_VERSION', '2024-02-15-preview')
         self.kernel = Kernel()
-        self.kernel.add_chat_service(
-            "chat_completion",
-            OpenAIChatCompletion(self.model_deployment_name, self.api_key)
+        
+        # Add Azure chat completion service to kernel
+        chat_service = AzureChatCompletion(
+            service_id="chat_completion",
+            deployment_name=self.model_deployment_name,
+            endpoint=self.endpoint,
+            api_key=self.api_key,
+            api_version=self.api_version
         )
-        self.planner = BasicPlanner(self.kernel)
+        self.kernel.add_service(chat_service)
 
     def answer_question(self, question):
         prompt = f"You are {self.player_name}, a helpful assistant. Answer the following question:\n{question}"
-        result = self.kernel.chat_service.complete(prompt)
-        return result
+        result = asyncio.run(self.kernel.invoke_prompt(prompt))
+        return str(result)
 
     def choose_rps_move(self):
         prompt = (
             "You are playing Rock-Paper-Scissors. "
             "Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
         )
-        result = self.kernel.chat_service.complete(prompt)
-        choice_lower = result.lower().strip()
+        result = asyncio.run(self.kernel.invoke_prompt(prompt))
+        choice_lower = str(result).lower().strip()
         if 'rock' in choice_lower:
             return 0
         elif 'paper' in choice_lower:
