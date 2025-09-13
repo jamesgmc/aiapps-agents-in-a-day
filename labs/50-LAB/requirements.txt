@@ -1,5 +1,7 @@
 langchain
 langchain_community
+langchain-openai
 openai
 dotenv
 autogen
+semantic-kernel

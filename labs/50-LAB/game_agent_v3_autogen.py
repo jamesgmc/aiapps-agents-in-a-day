@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import autogen
 from autogen import ConversableAgent
+import openai
 
 load_dotenv()
 
@@ -27,6 +28,13 @@ class GameAgentV52:
             "temperature": 0.7,
         }
         
+        # Also setup direct OpenAI client as fallback
+        self.openai_client = openai.AzureOpenAI(
+            api_key=os.getenv('AZURE_OPENAI_API_KEY'),
+            api_version="2024-02-15-preview",
+            azure_endpoint=os.getenv('AZURE_OPENAI_ENDPOINT')
+        )
+        
         self.agent = None
     
     def __enter__(self):
@@ -38,44 +46,35 @@ class GameAgentV52:
     def _setup_agent(self):
         """Setup the AutoGen agent"""
         if not self.agent:
-            self.agent = ConversableAgent(
-                name=self.agent_name,
-                system_message=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. Be concise and direct in your responses.",
-                llm_config=self.llm_config,
-                human_input_mode="NEVER",
-                max_consecutive_auto_reply=1,
-            )
-            print(f"Created AutoGen agent: {self.agent_name}")
-    
+            try:
+                self.agent = ConversableAgent(
+                    name=self.agent_name,
+                    system_message=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. Be concise and direct in your responses. Always provide a clear, single answer.",
+                    llm_config=self.llm_config,
+                    human_input_mode="NEVER",
+                    max_consecutive_auto_reply=5,
+                )
+                print(f"Created AutoGen agent: {self.agent_name}")
+            except Exception as e:
+                print(f"Failed to create AutoGen agent: {e}")
+                self.agent = None
+        
     def _call_autogen_agent(self, message):
-        """Call AutoGen agent"""
+        """Call AutoGen agent or fallback to direct OpenAI"""
         if not self.agent:
             self._setup_agent()
         
-        # Create a temporary user agent to chat with our game agent
-        user_proxy = ConversableAgent(
-            name="user_proxy",
-            system_message="You are a user proxy.",
-            code_execution_config=False,
-            human_input_mode="NEVER",
-            max_consecutive_auto_reply=0,
-        )
+        # If AutoGen agent is available, try to use it
+        messages = [{"role": "user", "content": message}]
+        response = self.agent.generate_reply(messages=messages)
         
-        # Initiate chat and get response
-        chat_result = user_proxy.initiate_chat(
-            self.agent,
-            message=message,
-            max_turns=3,
-            silent=True
-        )
+        if isinstance(response, str) and response.strip() and "TERMINATING" not in response:
+            return response
+        elif isinstance(response, dict) and 'content' in response:
+            return response['content']
+
+        return None
         
-        # Extract the last message from the agent
-        if chat_result.chat_history:
-            for msg in reversed(chat_result.chat_history):
-                if msg.get('name') == self.agent_name:
-                    return msg.get('content', 'No response')
-        
-        return "No response"
     
     def answer_question(self, question):
         """Generate an answer to the question using AutoGen agent"""
