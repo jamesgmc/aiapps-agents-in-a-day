@@ -1,7 +1,7 @@
 {
-  "position": 40,
-  "label": "Lab 4: AI Apps Tutorials",
+  "position": 30,
+  "label": "Lab 3: AI Apps",
   "collapsible": true,
-  "collapsed": false,
+  "collapsed": true,
   "className": "red"
 }

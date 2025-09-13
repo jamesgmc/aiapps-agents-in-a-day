@@ -1,6 +1,6 @@
 {
-    "position": 30,
-    "label": "Lab 3: RAG Chatbot",
+    "position": 20,
+    "label": "Lab 2: RAG Chatbot",
     "collapsible": true,
     "collapsed": true,
     "className": "red"
