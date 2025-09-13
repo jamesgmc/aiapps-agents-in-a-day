@@ -7,7 +7,7 @@ param appName string = 'aiapps-agents'
 
 // Variables
 var resourcePrefix = appName
-var logAnalyticsName = '${resourcePrefix}-la'
+var logAnalyticsName = '${resourcePrefix}-logs'
 var appInsightsName = '${resourcePrefix}-ai'
 var storageAccountName = replace('${resourcePrefix}st', '-', '')
 var keyVaultName = '${resourcePrefix}-kv'
@@ -270,6 +270,9 @@ resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
 resource aiFoundryWorkspace 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: aiFoundryWorkspaceName
   location: location
+  sku: {
+    name: 'S0'
+  }
   identity: {
     type: 'SystemAssigned'
   }
@@ -285,6 +288,9 @@ var aiFoundryProjectName = '${resourcePrefix}-ai-project'
 resource aiFoundryProject 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: aiFoundryProjectName
   location: location
+  sku: {
+    name: 'S0'
+  }
   properties: {
     customSubDomainName: aiFoundryProjectName
     publicNetworkAccess: 'Enabled'
