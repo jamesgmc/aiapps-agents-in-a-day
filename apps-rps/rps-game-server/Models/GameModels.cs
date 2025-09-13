@@ -78,6 +78,8 @@ public class Round
     public RoundStatus Status { get; set; }
     public string Question { get; set; } = string.Empty;
     public string CorrectAnswer { get; set; } = string.Empty;
+    public QuestionType QuestionType { get; set; } = QuestionType.Text;
+    public string? MediaUrl { get; set; }
     public Move ServerMove { get; set; }
     public List<PlayerRoundResult> PlayerResults { get; set; } = new();
     public DateTime? StartedAt { get; set; }
