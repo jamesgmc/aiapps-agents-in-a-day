@@ -6,7 +6,7 @@ param location string = 'eastus'
 param appName string = 'aiapps-agents'
 
 // Variables
-var resourcePrefix = appName
+var resourcePrefix = '${appName}-s2'
 var logAnalyticsName = '${resourcePrefix}-la'
 var appInsightsName = '${resourcePrefix}-ai'
 var storageAccountName = replace('${resourcePrefix}st', '-', '')
@@ -23,11 +23,11 @@ var staticWebAppName = '${resourcePrefix}-swa'
 
 // Web app service names
 var aspLinuxName = '${resourcePrefix}-asp'
-var appPlaygroundName = '${resourcePrefix}-web-playground'
-var appChatbotFrontendName = '${resourcePrefix}-web-chatbot-frontend'
-var appChatbotBackendName = '${resourcePrefix}-web-chatbot-backend'
-var appGameServerName = '${resourcePrefix}-web-game-server'
-var appGameClientName = '${resourcePrefix}-web-game-client'
+var appPlaygroundName = '${resourcePrefix}-playground'
+var appChatbotFrontendName = '${resourcePrefix}-chatbot'
+var appChatbotBackendName = '${resourcePrefix}-chatbot-api'
+var appGameServerName = '${resourcePrefix}-game-server'
+var appGameClientName = '${resourcePrefix}-game-client'
 
 var openAiName = '${resourcePrefix}-openai'
 var aiFoundryWorkspaceName = '${resourcePrefix}-ai-workspace'
@@ -619,29 +619,29 @@ resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
   }
 }
 
-// AI Foundry Workspace (Azure Machine Learning workspace)
-resource aiFoundryWorkspace 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
-  name: aiFoundryWorkspaceName
-  location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    customSubDomainName: aiFoundryWorkspaceName
-    publicNetworkAccess: 'Enabled'
-  }
-  kind: 'OpenAI'
-}
+// // AI Foundry Workspace (Azure Machine Learning workspace)
+// resource aiFoundryWorkspace 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+//   name: aiFoundryWorkspaceName
+//   location: location
+//   identity: {
+//     type: 'SystemAssigned'
+//   }
+//   properties: {
+//     customSubDomainName: aiFoundryWorkspaceName
+//     publicNetworkAccess: 'Enabled'
+//   }
+//   kind: 'OpenAI'
+// }
 
-// AI Foundry Project (Azure Machine Learning Project)
-var aiFoundryProjectName = '${resourcePrefix}-ai-project'
-resource aiFoundryProject 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
-  name: aiFoundryProjectName
-  location: location
-  properties: {
-    customSubDomainName: aiFoundryProjectName
-    publicNetworkAccess: 'Enabled'
-  }
-  kind: 'OpenAI'
-}
+// // AI Foundry Project (Azure Machine Learning Project)
+// var aiFoundryProjectName = '${resourcePrefix}-ai-project'
+// resource aiFoundryProject 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+//   name: aiFoundryProjectName
+//   location: location
+//   properties: {
+//     customSubDomainName: aiFoundryProjectName
+//     publicNetworkAccess: 'Enabled'
+//   }
+//   kind: 'OpenAI'
+// }
 

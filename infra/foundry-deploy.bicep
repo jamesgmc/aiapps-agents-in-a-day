@@ -6,15 +6,17 @@ param location string = 'eastus'
 param appName string = 'aiapps-agents'
 
 // Variables
+var resourceGroupName = resourceGroup().name
+// Create a suffix using the last part of the resource group name, safely handling short names
+var resourceGroupSuffix = take(replace(resourceGroupName, '-', ''), 6)
 var resourcePrefix = appName
-var logAnalyticsName = '${resourcePrefix}-logs'
-var appInsightsName = '${resourcePrefix}-ai'
-var storageAccountName = replace('${resourcePrefix}st', '-', '')
-var keyVaultName = '${resourcePrefix}-kv'
+var logAnalyticsName = '${resourcePrefix}-logs-${resourceGroupSuffix}'
+var appInsightsName = '${resourcePrefix}-ai-${resourceGroupSuffix}'
+var storageAccountName = replace('${resourcePrefix}st${resourceGroupSuffix}', '-', '')
+var keyVaultName = '${resourcePrefix}-kv-${resourceGroupSuffix}'
 
 // Web app service names
-var openAiName = '${resourcePrefix}-openai'
-var aiFoundryWorkspaceName = '${resourcePrefix}-ai-workspace'
+var openAiName = '${resourcePrefix}-openai-${resourceGroupSuffix}'
 
 
 // OpenAI model configurations
@@ -31,7 +33,7 @@ var openAiSettings = {
     }
     sku: {
       name: 'Standard'
-      capacity: 300
+      capacity: 50
     }
   }
   embeddingsModel: {
@@ -42,7 +44,7 @@ var openAiSettings = {
     }
     sku: {
       name: 'Standard'
-      capacity: 300
+      capacity: 50
     }
   }
   dalleModel: {
@@ -152,6 +154,29 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
 // AI Services
 // -----------------------
 
+// Azure AI Foundry Workspace (formerly ML Services)
+resource aiFoundryWorkspace 'Microsoft.MachineLearningServices/workspaces@2025-07-01-preview' = {
+  name: '${resourcePrefix}-foundry-${resourceGroupSuffix}'
+  location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    friendlyName: 'AI Foundry Workspace for ${appName}'
+    description: 'Azure AI Foundry workspace for building AI applications'
+    keyVault: keyVault.id
+    storageAccount: storageAccount.id
+    applicationInsights: appInsights.id
+    publicNetworkAccess: 'Enabled'
+    hbiWorkspace: false
+    v1LegacyMode: false
+    systemDatastoresAuthMode: 'Identity'
+    managedNetwork: {
+      isolationMode: 'Disabled'
+    }
+  }
+}
+
 // Azure OpenAI Service
 resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openAiSettings.name
@@ -182,53 +207,53 @@ resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/d
   }
 }
 
-resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
-  parent: openAiAccount
-  name: openAiSettings.gptModel.deployment.name
-  dependsOn: [
-    openAiEmbeddingsModelDeployment
-  ]
-  sku: {
-    name: openAiSettings.gptModel.sku.name
-    capacity: openAiSettings.gptModel.sku.capacity
-  }
-  properties: {
-    model: {
-      format: 'OpenAI'
-      name: openAiSettings.gptModel.name
-      version: openAiSettings.gptModel.version
-    }    
-  }
-}
+// resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+//   parent: openAiAccount
+//   name: openAiSettings.gptModel.deployment.name
+//   dependsOn: [
+//     openAiEmbeddingsModelDeployment
+//   ]
+//   sku: {
+//     name: openAiSettings.gptModel.sku.name
+//     capacity: openAiSettings.gptModel.sku.capacity
+//   }
+//   properties: {
+//     model: {
+//       format: 'OpenAI'
+//       name: openAiSettings.gptModel.name
+//       version: openAiSettings.gptModel.version
+//     }    
+//   }
+// }
 
 
-resource openAiDalleModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
-  parent: openAiAccount
-  name: openAiSettings.dalleModel.deployment.name
-  dependsOn: [
-    openAiEmbeddingsModelDeployment
-    openAiGpt4oModelDeployment
-  ]
-  sku: {
-    name: openAiSettings.dalleModel.sku.name
-    capacity: openAiSettings.dalleModel.sku.capacity
-  }
-  properties: {
-    model: {
-      format: 'OpenAI'
-      name: openAiSettings.dalleModel.name
-      version: openAiSettings.dalleModel.version
-    }    
-  }
-}
+// resource openAiDalleModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+//   parent: openAiAccount
+//   name: openAiSettings.dalleModel.deployment.name
+//   dependsOn: [
+//     openAiEmbeddingsModelDeployment
+//     // openAiGpt4oModelDeployment
+//   ]
+//   sku: {
+//     name: openAiSettings.dalleModel.sku.name
+//     capacity: openAiSettings.dalleModel.sku.capacity
+//   }
+//   properties: {
+//     model: {
+//       format: 'OpenAI'
+//       name: openAiSettings.dalleModel.name
+//       version: openAiSettings.dalleModel.version
+//     }    
+//   }
+// }
 
 // Computer Vision Service
 resource computerVision 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
-  name: '${resourcePrefix}-cv'
+  name: '${resourcePrefix}-cv-${resourceGroupSuffix}'
   location: location
   kind: 'ComputerVision'
   properties: {
-    customSubDomainName: '${resourcePrefix}-cv'
+    customSubDomainName: '${resourcePrefix}-cv-${resourceGroupSuffix}'
     publicNetworkAccess: 'Enabled'
   }
   sku: {
@@ -238,7 +263,7 @@ resource computerVision 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
 
 // Speech Service
 resource speechService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
-  name: '${resourcePrefix}-speech'
+  name: '${resourcePrefix}-speech-${resourceGroupSuffix}'
   location: location
   kind: 'SpeechServices'
   sku: {
@@ -246,14 +271,14 @@ resource speechService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
   }
   properties: {
     apiProperties: {
-      qnaRuntimeEndpoint: 'https://${resourcePrefix}-speech.api.cognitive.microsoft.com'
+      qnaRuntimeEndpoint: 'https://${resourcePrefix}-speech-${resourceGroupSuffix}.api.cognitive.microsoft.com'
     }
   }
 }
 
 // Translator Service
 resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
-  name: '${resourcePrefix}-translator'
+  name: '${resourcePrefix}-translator-${resourceGroupSuffix}'
   location: location
   kind: 'TextTranslation'
   sku: {
@@ -261,40 +286,40 @@ resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
   }
   properties: {
     apiProperties: {
-      qnaRuntimeEndpoint: 'https://${resourcePrefix}-translator.api.cognitive.microsoft.com'
+      qnaRuntimeEndpoint: 'https://${resourcePrefix}-translator-${resourceGroupSuffix}.api.cognitive.microsoft.com'
     }
   }
 }
 
-// AI Foundry Workspace (Azure Machine Learning workspace)
-resource aiFoundryWorkspace 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
-  name: aiFoundryWorkspaceName
-  location: location
-  sku: {
-    name: 'S0'
-  }
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    customSubDomainName: aiFoundryWorkspaceName
-    publicNetworkAccess: 'Enabled'
-  }
-  kind: 'OpenAI'
-}
+// -----------------------
+// Outputs
+// -----------------------
 
-// AI Foundry Project (Azure Machine Learning Project)
-var aiFoundryProjectName = '${resourcePrefix}-ai-project'
-resource aiFoundryProject 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
-  name: aiFoundryProjectName
-  location: location
-  sku: {
-    name: 'S0'
-  }
-  properties: {
-    customSubDomainName: aiFoundryProjectName
-    publicNetworkAccess: 'Enabled'
-  }
-  kind: 'OpenAI'
-}
+@description('The name of the Azure AI Foundry workspace')
+output aiFoundryWorkspaceName string = aiFoundryWorkspace.name
+
+@description('The resource ID of the Azure AI Foundry workspace')
+output aiFoundryWorkspaceId string = aiFoundryWorkspace.id
+
+@description('The discovery URL of the Azure AI Foundry workspace')
+output aiFoundryWorkspaceDiscoveryUrl string = aiFoundryWorkspace.properties.discoveryUrl
+
+@description('The workspace ID of the Azure AI Foundry workspace')
+output aiFoundryWorkspaceWorkspaceId string = aiFoundryWorkspace.properties.workspaceId
+
+@description('The name of the OpenAI account')
+output openAiAccountName string = openAiAccount.name
+
+@description('The endpoint of the OpenAI account')
+output openAiEndpoint string = openAiAccount.properties.endpoint
+
+@description('The name of the Key Vault')
+output keyVaultName string = keyVault.name
+
+@description('The name of the storage account')
+output storageAccountName string = storageAccount.name
+
+@description('The name of Application Insights')
+output applicationInsightsName string = appInsights.name
+
 
