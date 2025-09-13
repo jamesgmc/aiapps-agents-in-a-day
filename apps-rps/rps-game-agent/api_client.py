@@ -1,6 +1,7 @@
 import requests
 import json
 import logging
+import os
 from typing import Optional, Dict, Any
 
 # Configure logging
@@ -10,7 +11,9 @@ logger = logging.getLogger(__name__)
 class RPSGameClient:
     """Client for communicating with the RPS Game Server API"""
     
-    def __init__(self, base_url: str = "http://localhost:5289"):
+    def __init__(self, base_url: str = None):
+        if base_url is None:
+            base_url = os.getenv("RPS_SERVER_URL", "http://localhost:5289")
         self.base_url = base_url.rstrip('/')
         self.session = requests.Session()
     

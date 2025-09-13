@@ -4,7 +4,7 @@ import threading
 from typing import Optional, List, Dict, Any
 from api_client import RPSGameClient
 # from agent import GameAgent
-from game_agent_v1 import GameAgent
+from game_agent import GameAgent
 
 class GameProcessor:
     """Autonomous game agent for RPS Tournament"""

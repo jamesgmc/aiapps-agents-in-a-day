@@ -4,7 +4,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const SERVER_URL = process.env.SERVER_URL || 'http://localhost:5289';
+const SERVER_URL = process.env.SERVER_URL || 'https://aiaaa-s2-game-server.azurewebsites.net/';
 
 // Middleware
 app.use(express.json());

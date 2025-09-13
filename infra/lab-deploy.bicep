@@ -402,8 +402,8 @@ resource appGameServer 'Microsoft.Web/sites@2022-03-01' = {
     serverFarmId: appServicePlanLinux.id
     httpsOnly: true
     siteConfig: {
-      linuxFxVersion: 'NODE|20-lts'
-      appCommandLine: 'pm2 serve /home/site/wwwroot/dist --no-daemon --spa'
+      linuxFxVersion: 'DOTNETCORE|8.0'
+      appCommandLine: 'dotnet PsrGameServer.dll'
       alwaysOn: true
     }
   }
