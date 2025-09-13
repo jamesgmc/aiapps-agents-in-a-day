@@ -491,6 +491,23 @@ resource aiServices 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   }
 }
 
+
+resource aiServiceGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+  parent: aiServices
+  name: openAiSettings.gptModel.deployment.name
+  sku: {
+    name: openAiSettings.gptModel.sku.name
+    capacity: openAiSettings.gptModel.sku.capacity
+  }
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: openAiSettings.gptModel.name
+      version: openAiSettings.gptModel.version
+    }    
+  }
+}
+
 // Azure OpenAI Service
 resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openAiSettings.name
@@ -695,3 +712,4 @@ resource aiFoundryProject 'Microsoft.MachineLearningServices/workspaces@2024-04-
     publicNetworkAccess: 'Enabled'
   }
 }
+
