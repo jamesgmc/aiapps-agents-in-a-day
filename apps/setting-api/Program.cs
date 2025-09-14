@@ -4,13 +4,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { 
-        Title = "Configuration API", 
+        Title = "AI Apps and Agent in a Day (Settings)", 
         Version = "v1",
         Description = "API for retrieving configuration items from Azure Key Vault and configuration files"
     });
@@ -41,28 +42,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Configuration API v1");
-        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "AI Apps and Agent in a Day (Settings) v1");
     });
 }
 
 app.UseCors();
 
+app.UseRouting();
+
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Add a default health check endpoint
-app.MapGet("/", () => new { 
-    status = "running", 
-    api = "Configuration API",
-    version = "1.0.0",
-    endpoints = new {
-        health = "/api/configuration/health",
-        getConfig = "/api/configuration?key={key}",
-        getAllConfigs = "/api/configuration/all",
-        swagger = "/swagger"
-    }
-});
+app.MapControllers();
 
 app.Run();

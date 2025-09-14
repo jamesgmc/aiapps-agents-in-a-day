@@ -46,9 +46,9 @@ tracer = trace.get_tracer(__name__)
 class GameAgentV52:
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
-        self.project_endpoint = project_endpoint or os.getenv('PROJECT_ENDPOINT')
-        self.model_deployment_name = model_deployment_name or os.getenv('MODEL_DEPLOYMENT_NAME')
-        self.player_name = player_name or os.getenv('PLAYER_NAME', 'default-player')
+        self.project_endpoint = project_endpoint or os.getenv('AZURE_FOUNDRY_PROJECT_ENDPOINT')
+        self.model_deployment_name = model_deployment_name or os.getenv('AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME')
+        self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
         
         self.project_client = AIProjectClient(
             endpoint=self.project_endpoint,

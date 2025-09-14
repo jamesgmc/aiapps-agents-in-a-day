@@ -11,10 +11,10 @@ load_dotenv()
 class GameAgentV52:
     """LangChain LLM Agent for RPS Tournament"""
     def __init__(self, player_name=None, openai_api_key=None, model_name=None):
-        self.player_name = player_name or os.getenv('PLAYER_NAME', 'default-player')
+        self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
         self.openai_api_key = openai_api_key or os.getenv('AZURE_OPENAI_API_KEY')
-        self.azure_endpoint = os.getenv('AZURE_OPENAI_ENDPOINT')
-        self.model_name = model_name or os.getenv('AZURE_OPENAI_MODEL_DEPLOYMENT_NAME', 'gpt-4o')
+        self.azure_endpoint = os.getenv('AZURE_OPENAI_API_ENDPOINT')
+        self.model_name = model_name or os.getenv('AZURE_OPENAI_API_DEPLOYMENT_NAME', 'gpt-4o')
         self.api_version = os.getenv('AZURE_OPENAI_API_VERSION', '2024-02-15-preview')
         self.agent_name = f"rps-game-agent-{self.player_name}"
         self.llm = AzureChatOpenAI(

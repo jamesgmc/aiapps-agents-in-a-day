@@ -101,7 +101,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     cd labs/00-Setup/
     ```
 
-3.  Open `setup.sh`, let's update `<MONGODB_Name>` setting with your own database name. Replace `add_value` with `aiaaa_xxxxx_xx` (for example: aiaaa_daniel_66).
+3.  Open `setup.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with `aiaaa_xxxxx_xx` (for example: aiaaa_daniel_66).
 
     :::info
     if you are deploying your own Azure resources (optional), please update keys and connection string with your own.
@@ -112,9 +112,9 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
 
 4.  Update `<MONGODB_CONNECTION_STRING>` with `mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000`
 
-5.  Update `<AZURE_OPENAI_API_INSTANCE_NAME>` with `arg-syd-aiaaa-openai`
+5.  Update `<AZURE_OPENAI_API_INSTANCE_NAME>` with `aiaaa-s2-openai`
 
-6.  Update `<AZURE_OPENAI_API_KEY>` with `a30df7e6e63f424884fde2f86b2624b5`
+6.  Update `<AZURE_OPENAI_API_KEY>` with `ee8b7517ac664a608953cad44faa22bd`
 
 7.  Update `<GRAPH_RAG_API>` with `https://arg-syd-aiaaa-ca.ashycoast-2c2322dd.eastus.azurecontainerapps.io`
 
@@ -127,8 +127,8 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
 
     :::info
     If you have issue running above script, you can also carry out variable replacement manually. 
-    - Switch to VS Code `Search` tab, replace `<MONGODB_Name>` placeholder with your own database name. 
-    - Search for `<MONGODB_Name>` and replace with `aiaaa_xxxxx_xx` (for example: aiaaa_daniel_66). 
+    - Switch to VS Code `Search` tab, replace `<DEV_Name>` placeholder with your own database name. 
+    - Search for `<DEV_Name>` and replace with `aiaaa_xxxxx_xx` (for example: aiaaa_daniel_66). 
     - Then click `Replace All` icon, there will be multiple items to be replaced. The placeholder string will be replaced in the whole repo so that you have a dedicated database on the shared Cosmos DB instance.
 
     ![alt text](images/setup.png)
@@ -169,19 +169,18 @@ You can also create a free Azure account with $200 credit to use on Azure servic
 | Description          | Value                                                  |
 | -------------------- | ------------------------------------------------------ |
 | AI Proxy Playground  | https://aiaaa-s2-playground.azurewebsites.net |
-| Azure OpenAI API Key | a30df7e6e63f424884fde2f86b2624b5                       |
+| Azure OpenAI API Key | Retrieve from https://aiaaa-s2-setting.azurewebsites.net                       |
 
 ### Azure OpenAI Resource Configuration
 
 | Variable Name                               | Value                                             |
 | ------------------------------------------- | ------------------------------------------------- |
-| AZURE_OPENAI_API_INSTANCE_NAME              | arg-syd-aiaaa-openai                          |
+| AZURE_OPENAI_API_INSTANCE_NAME              | aiaaa-s2-openai                          |
 | AZURE_OPENAI_API_ENDPOINT                   | https://aiaaa-s2-openai.openai.azure.com// |
-| AZURE_OPENAI_API_KEY                        | a30df7e6e63f424884fde2f86b2624b5                  |
+| AZURE_OPENAI_API_KEY                        | Retrieve from https://aiaaa-s2-setting.azurewebsites.net                  |
 | AZURE_OPENAI_API_DEPLOYMENT_NAME            | completions                                       |
 | AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME | embeddings                                        |
 | AZURE_OPENAI_API_VERSION                    | 2023-09-01-preview                                |
-| GRAPH_RAG_API                               | https://arg-syd-aiaaa-ca.ashycoast-2c2322dd.eastus.azurecontainerapps.io |
 
 ### Azure Cosmos DB for MongoDB
 
@@ -192,7 +191,7 @@ You should remove the curly brackets `{}` and replace the placeholders with your
 
 | Variable Name              | Value                                                                                                                                                                                                 |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| MONGODB_CONNECTION_STRING  | mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000 |
+| MONGODB_CONNECTION_STRING  | Retrieve from https://aiaaa-s2-setting.azurewebsites.net |
 | MONGODB_Name               | aiaaa_\{your_name\}_\{your_lucky_number\}                                                                                                                                                         |
 | MONGODB_Name (for example) | aiaaa_daniel_55                                                                                                                                                                                   |
 
@@ -202,11 +201,13 @@ API keys and connection details will be reset after the lab session.
 
 ### Azure AI Resource Configuration
 
+Retrieve below keys from https://aiaaa-s2-setting.azurewebsites.net
+
 | Resource Name              | Endpoint | Key |
 | ------------- | ------------- | ------------- |
-| GPT-4o | https://aiaaa-s2-openai.openai.azure.com//openai/deployments/gpt4o/chat/completions?api-version=2024-08-01-preview | a30df7e6e63f424884fde2f86b2624b5 (deploymentName: gpt4o) |
-| Dall-e 3 | https://aiaaa-s2-openai.openai.azure.com//openai/deployments/dalle3/images/generations?api-version=2024-02-01 | a30df7e6e63f424884fde2f86b2624b5 (deploymentName: dalle3) |
-| Computer Vision | https://arg-syd-aiaaa-cv.cognitiveservices.azure.com/ | 786639364fd04642b86ae805c72c43f6 |
-| Translator Service | https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=xx&from=xx | 8a2c06f38dc2447da606bfe49bd78db1 |
-| Speech Service | https://eastus.api.cognitive.microsoft.com/ | 274f545088c54f689ef7c04496488864 (region: eastus) |
+| GPT-4o | https://aiaaa-s2-openai.openai.azure.com//openai/deployments/gpt4o/chat/completions?api-version=2024-08-01-preview |  (deploymentName: gpt-4o) |
+| Dall-e 3 | https://aiaaa-s2-openai.openai.azure.com//openai/deployments/dalle3/images/generations?api-version=2024-02-01 |  (deploymentName: dalle3) |
+| Computer Vision | https://aiaaa-s2-cv.cognitiveservices.azure.com/ |  |
+| Translator Service | https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=xx&from=xx |  |
+| Speech Service | https://eastus.api.cognitive.microsoft.com/ |  (region: eastus) |
 

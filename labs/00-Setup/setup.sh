@@ -4,17 +4,16 @@
 
 # Define the search and replace pairs
 declare -A replacements=(
-    ["<MONGODB_Name>"]="add_value"
+    ["<DEV_Name>"]="add_value"
     ["<MONGODB_CONNECTION_STRING>"]="add_value"
-    ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="arg-syd-aiaaa-openai"
+    ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="aiaaa-s2-openai"
     ["<AZURE_OPENAI_API_KEY>"]="add_value"
-    ["<GRAPH_RAG_API>"]="https://arg-syd-aiaaa-ca.ashycoast-2c2322dd.eastus.azurecontainerapps.io"
+    ["<APPLICATIONINSIGHTS_CONNECTION_STRING>"]="add_value"
     # see examples below
-    # ["<MONGODB_Name>"]="aiaaa_daniel_66"
+    # ["<DEV_Name>"]="dev_daniel_66"
     # ["<MONGODB_CONNECTION_STRING>"]="mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
-    # ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="arg-syd-aiaaa-openai"
-    # ["<AZURE_OPENAI_API_KEY>"]="a30df7e6e63f424884fde2f86b2624b5"
-    # ["<GRAPH_RAG_API>"]="https://arg-syd-aiaaa-ca.ashycoast-2c2322dd.eastus.azurecontainerapps.io"
+    # ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="aiaaa-s2-openai"
+    # ["<AZURE_OPENAI_API_KEY>"]=""
 )
 
 # Check if parent directory exists
@@ -26,7 +25,7 @@ fi
 echo "Searching for .env and .js files..."
 
 # Find .env and .js files in parent directory
-find /workspaces/aiaaa/ -type f \( -name "*.env" -o -name "*.js" \) -not -path "*/node_modules/*" | while read -r file; do
+find /workspaces/aiapps-agents-in-a-day -type f \( -name "*.env" -o -name "*.js" \) -not -path "*/node_modules/*" | while read -r file; do
     echo "Processing: $file"
     for search in "${!replacements[@]}"; do
         # replace="${replacements[$search]}"

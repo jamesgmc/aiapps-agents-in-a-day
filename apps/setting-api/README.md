@@ -1,4 +1,4 @@
-# Configuration API
+# AI Apps and Agent in a Day (Settings)
 
 A C# .NET API application that retrieves configuration items from Azure Key Vault and configuration files.
 
@@ -87,8 +87,6 @@ curl "http://localhost:5200/api/configuration?key=version"
   "key": "version",
   "description": "API Version",
   "value": "1.0.0",
-  "isFromKeyVault": false,
-  "source": "Configuration File"
 }
 ```
 

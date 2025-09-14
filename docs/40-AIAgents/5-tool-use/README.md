@@ -56,7 +56,7 @@ Let's use the example of getting the current time in a city to illustrate:
     ```python
     # Initialize the Azure OpenAI client
     client = AzureOpenAI(
-        azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"), 
+        azure_endpoint = os.getenv("AZURE_OPENAI_API_ENDPOINT"), 
         api_key=os.getenv("AZURE_OPENAI_API_KEY"),  
         api_version="2024-05-01-preview"
     )

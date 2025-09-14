@@ -11,10 +11,10 @@ class GameAgentSK:
     """Semantic Kernel Agent for RPS Tournament"""
 
     def __init__(self, model_deployment_name=None, player_name=None, api_key=None, endpoint=None, api_version=None):
-        self.model_deployment_name = model_deployment_name or os.getenv('AZURE_OPENAI_MODEL_DEPLOYMENT_NAME') or os.getenv('MODEL_DEPLOYMENT_NAME', 'gpt-4o')
-        self.player_name = player_name or os.getenv('PLAYER_NAME', 'default-player')
+        self.model_deployment_name = model_deployment_name or os.getenv('AZURE_OPENAI_API_DEPLOYMENT_NAME') or os.getenv('AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME', 'gpt-4o')
+        self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
         self.api_key = api_key or os.getenv('AZURE_OPENAI_API_KEY')
-        self.endpoint = endpoint or os.getenv('AZURE_OPENAI_ENDPOINT')
+        self.endpoint = endpoint or os.getenv('AZURE_OPENAI_API_ENDPOINT')
         self.api_version = api_version or os.getenv('AZURE_OPENAI_API_VERSION', '2024-02-15-preview')
         self.kernel = Kernel()
         

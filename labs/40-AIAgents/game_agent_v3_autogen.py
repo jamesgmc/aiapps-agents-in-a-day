@@ -11,16 +11,16 @@ class GameAgentV52:
     """AutoGen Agent service for RPS Tournament"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
-        self.player_name = player_name or os.getenv('PLAYER_NAME', 'default-player')
+        self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
         self.agent_name = f"rps-game-agent-{self.player_name}"
         
         # Configure LLM for AutoGen
         self.llm_config = {
             "config_list": [
                 {
-                    "model": os.getenv('AZURE_OPENAI_MODEL_DEPLOYMENT_NAME'),
+                    "model": os.getenv('AZURE_OPENAI_API_DEPLOYMENT_NAME'),
                     "api_key": os.getenv('AZURE_OPENAI_API_KEY'),
-                    "base_url": os.getenv('AZURE_OPENAI_ENDPOINT'),
+                    "base_url": os.getenv('AZURE_OPENAI_API_ENDPOINT'),
                     "api_type": "azure",
                     "api_version": "2024-02-15-preview"
                 }
@@ -32,7 +32,7 @@ class GameAgentV52:
         self.openai_client = openai.AzureOpenAI(
             api_key=os.getenv('AZURE_OPENAI_API_KEY'),
             api_version="2024-02-15-preview",
-            azure_endpoint=os.getenv('AZURE_OPENAI_ENDPOINT')
+            azure_endpoint=os.getenv('AZURE_OPENAI_API_ENDPOINT')
         )
         
         self.agent = None

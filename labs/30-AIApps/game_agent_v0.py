@@ -14,8 +14,8 @@ class GameAgentV1:
     
     def __init__(self, azure_ai_endpoint=None, azure_ai_key=None):
         # Get Azure AI credentials from environment or parameters
-        self.endpoint = azure_ai_endpoint or os.getenv('AZURE_AI_ENDPOINT')
-        self.key = azure_ai_key or os.getenv('AZURE_AI_KEY')
+        self.endpoint = azure_ai_endpoint or os.getenv('AZURE_OPENAI_API_ENDPOINT')
+        self.key = azure_ai_key or os.getenv('AZURE_OPENAI_API_KEY')
         
         # Setup HTTP headers for API calls
         self.headers = {

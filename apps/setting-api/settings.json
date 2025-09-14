@@ -1,0 +1,177 @@
+[
+  {
+    "Id": 1,
+    "Name": "AI Proxy Playground URL",
+    "Value": "https://aiaaa-s2-playground.azurewebsites.net",
+    "Description": "URL endpoint for the Azure AI Proxy Playground web interface",
+    "Category": "Azure AI Proxy Playground"
+  },
+  {
+    "Id": 2,
+    "Name": "Azure OpenAI API Key",
+    "Value": "ee8b7517ac664a608953cad44faa22bd",
+    "Description": "API key for authenticating with Azure OpenAI services through the proxy",
+    "Category": "Azure AI Proxy Playground"
+  },
+  {
+    "Id": 3,
+    "Name": "AZURE_OPENAI_API_INSTANCE_NAME",
+    "Value": "aiaaa-s2-openai",
+    "Description": "Name of the Azure OpenAI service instance",
+    "Category": "Azure OpenAI Resource Configuration"
+  },
+  {
+    "Id": 4,
+    "Name": "AZURE_OPENAI_API_ENDPOINT",
+    "Value": "https://aiaaa-s2-openai.openai.azure.com//",
+    "Description": "Base endpoint URL for Azure OpenAI API calls",
+    "Category": "Azure OpenAI Resource Configuration"
+  },
+  {
+    "Id": 5,
+    "Name": "AZURE_OPENAI_API_KEY",
+    "Value": "ee8b7517ac664a608953cad44faa22bd",
+    "Description": "Authentication key for Azure OpenAI API access",
+    "Category": "Azure OpenAI Resource Configuration"
+  },
+  {
+    "Id": 6,
+    "Name": "AZURE_OPENAI_API_DEPLOYMENT_NAME",
+    "Value": "gpt-4o",
+    "Description": "Deployment name for text completion models",
+    "Category": "Azure OpenAI Resource Configuration"
+  },
+  {
+    "Id": 7,
+    "Name": "AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME",
+    "Value": "embeddings",
+    "Description": "Deployment name for text embedding models",
+    "Category": "Azure OpenAI Resource Configuration"
+  },
+  {
+    "Id": 8,
+    "Name": "AZURE_OPENAI_API_VERSION",
+    "Value": "2023-09-01-preview",
+    "Description": "API version for Azure OpenAI service calls",
+    "Category": "Azure OpenAI Resource Configuration"
+  },
+  {
+    "Id": 9,
+    "Name": "MONGODB_CONNECTION_STRING",
+    "Value": "mongodb+srv://aiaaaadmin:aiaaaP%40ssword123@aiaaa-s2-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000",
+    "Description": "Connection string for Azure Cosmos DB MongoDB API",
+    "Category": "Azure Cosmos DB for MongoDB"
+  },
+  {
+    "Id": 10,
+    "Name": "MONGODB_Name",
+    "Value": "aiaaa_{your_name}_{your_lucky_number}",
+    "Description": "Database name pattern for MongoDB (replace with actual name and number)",
+    "Category": "Azure Cosmos DB for MongoDB"
+  },
+  {
+    "Id": 11,
+    "Name": "MONGODB_Name (for example)",
+    "Value": "aiaaa_daniel_55",
+    "Description": "Example database name for MongoDB",
+    "Category": "Azure Cosmos DB for MongoDB"
+  },
+  {
+    "Id": 12,
+    "Name": "GPT-4o Endpoint",
+    "Value": "https://aiaaa-s2-openai.openai.azure.com//openai/deployments/gpt4o/chat/completions?api-version=2024-08-01-preview",
+    "Description": "Direct endpoint for GPT-4o chat completions (deploymentName: gpt4o)",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 13,
+    "Name": "GPT-4o API Key",
+    "Value": "ee8b7517ac664a608953cad44faa22bd",
+    "Description": "API key for GPT-4o service access",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 14,
+    "Name": "Dall-e 3 Endpoint",
+    "Value": "https://aiaaa-s2-openai.openai.azure.com//openai/deployments/dalle3/images/generations?api-version=2024-02-01",
+    "Description": "Direct endpoint for DALL-E 3 image generation (deploymentName: dalle3)",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 15,
+    "Name": "Dall-e 3 API Key",
+    "Value": "ee8b7517ac664a608953cad44faa22bd",
+    "Description": "API key for DALL-E 3 service access",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 16,
+    "Name": "Computer Vision Endpoint",
+    "Value": "https://aiaaa-s2-cv.cognitiveservices.azure.com/",
+    "Description": "Endpoint for Azure Computer Vision service",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 17,
+    "Name": "Computer Vision API Key",
+    "Value": "78f3ff4de3a94d8cb02fdda3159b4377",
+    "Description": "API key for Computer Vision service access",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 18,
+    "Name": "Translator Service Endpoint",
+    "Value": "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=xx&from=xx",
+    "Description": "Endpoint for Azure Translator service (replace xx with language codes)",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 19,
+    "Name": "Translator Service API Key",
+    "Value": "13d41db1739b4575bd9ffd64c0a0372c",
+    "Description": "API key for Translator service access",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 20,
+    "Name": "Speech Service Endpoint",
+    "Value": "https://eastus.api.cognitive.microsoft.com/",
+    "Description": "Endpoint for Azure Speech service (region: eastus)",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 21,
+    "Name": "Speech Service API Key",
+    "Value": "9c328bd75c4a446099e90d639fa8b9a4",
+    "Description": "API key for Speech service access",
+    "Category": "Azure AI Resource Configuration"
+  },
+  {
+    "Id": 22,
+    "Name": "AZURE_FOUNDRY_PROJECT_ENDPOINT",
+    "Value": "https://foundry-df.services.ai.azure.com/api/projects/project-df",
+    "Description": "",
+    "Category": "Azure Foundry"
+  },
+  {
+    "Id": 23,
+    "Name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+    "Value": "InstrumentationKey=36277017-e820-4f37-973d-c5d9fc07231b;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=76d6c9fb-2c30-4c9d-886c-d93b51eaf9b5",
+    "Description": "",
+    "Category": "Azure Foundry"
+  },
+  {
+    "Id": 24,
+    "Name": "DEV_Name",
+    "Value": "player_{your_name}_{your_lucky_number}",
+    "Description": "",
+    "Category": "Azure Foundry"
+  },
+  {
+    "Id": 25,
+    "Name": "DEV_Name (for example)",
+    "Value": "player_dan_55",
+    "Description": "",
+    "Category": "Azure Foundry"
+  }
+]
