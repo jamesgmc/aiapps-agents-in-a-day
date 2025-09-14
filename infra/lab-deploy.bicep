@@ -23,6 +23,7 @@ var staticWebAppName = '${resourcePrefix}-swa'
 
 // Web app service names
 var aspLinuxName = '${resourcePrefix}-asp'
+var appSettingName = '${resourcePrefix}-setting'
 var appPlaygroundName = '${resourcePrefix}-playground'
 var appChatbotFrontendName = '${resourcePrefix}-chatbot'
 var appChatbotBackendName = '${resourcePrefix}-chatbot-api'
@@ -324,6 +325,31 @@ resource appServicePlanLinux 'Microsoft.Web/serverfarms@2022-03-01' = {
     reserved: true
   }
 }
+
+
+resource appSetting 'Microsoft.Web/sites@2022-03-01' = {
+  name: appSettingName
+  location: location
+  properties: {
+    serverFarmId: appServicePlanLinux.id
+    httpsOnly: true
+    siteConfig: {
+      linuxFxVersion: 'NODE|20-lts'
+      appCommandLine: 'pm2 serve /home/site/wwwroot/dist --no-daemon --spa'
+      alwaysOn: true
+    }
+  }
+}
+
+resource appSettingSettings 'Microsoft.Web/sites/config@2022-03-01' = {
+  parent: appSetting
+  name: 'appsettings'
+  kind: 'string'
+  properties: {
+    APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
+  }
+}
+
 
 resource appPlayground 'Microsoft.Web/sites@2022-03-01' = {
   name: appPlaygroundName
