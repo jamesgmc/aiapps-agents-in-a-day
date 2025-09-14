@@ -1,8 +1,6 @@
 
 # Multi-agent Orchestration
 
-//todo: for game agent, add second agent locally, call it agent_v58.py in apps-rps/rps-game-agent. follow agent_v1.py
-
 As soon as you start working on a project that involves multiple agents, you will need to consider the multi-agent design pattern. However, it might not be immediately clear when to switch to multi-agents and what the advantages are.
 
 ## Scenarios Where Multi-Agents Are Applicable
@@ -121,7 +119,7 @@ These agents can be used by other parts of your gaming system.
 
 There's quite a few agents listed previously both for the specific tournament process but also for the general agents that can be used in other parts of your gaming system. Hopefully this gives you an idea on how you can decide on which agents to use in your multi-agent tournament system.
 
-## Assignment
+## Add second agent to AI Agent Service Agent
 
 Design a multi-agent system for a RPS tournament coordination process. Identify the agents involved in the tournament, their roles and responsibilities, and how they interact with each other. Consider both agents specific to the tournament process and general agents that can be used in other parts of your gaming system.
 
@@ -130,10 +128,17 @@ Design a multi-agent system for a RPS tournament coordination process. Identify 
 > TIP: Think about the different stages of the RPS tournament process and also consider agents needed for any gaming system.
 
 
+- navigate to `labs/40-AIAgents` folder, open `game_agent_v6_multiagent.py` file.
+
 ```python
-connect agents in ai agent service example here
+cd labs/40-AIAgents
 ```
 
-## Solution
+- run the agent and see the console output.
 
-[Solution](./solution/solution.md)
+```python
+python game_agent_v6_multiagent.py
+```
+// add screenshot of console output
+
+- our second agent is able do more work! Break down of work for each agent is much easier to define requirements and instructions for the agent.

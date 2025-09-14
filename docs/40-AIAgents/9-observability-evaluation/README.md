@@ -1,7 +1,5 @@
 # Observability & Evaluation
 
-//todo: for game agent, add tracing in vs code locally and evulation, call it agent_v68.py in apps-rps/rps-game-agent. follow agent_v1.py
-
 As AI agents move from experimental prototypes to real-world applications, the ability to understand their behavior, monitor their performance, and systematically evaluate their outputs becomes important.
 
 ## Learning Goals
@@ -73,21 +71,26 @@ import openlit
 openlit.init(tracer = langfuse._otel_tracer, disable_batch = True)
 ```
 
-The [example notebook](./code_samples/10_autogen_evaluation.ipynb) in this chapter will demonstrate how to instrument your AutoGen agent.
+### Add Application Insights to Game Agent
 
-**Manual Span Creation:** While instrumentation libraries provides a good baseline, there are often cases where more detailed or custom information is needed. You can manually create spans to add custom application logic. More importantly, they can enrich automatically or manually created spans with custom attributes (also known as tags or metadata). These attributes can include business-specific data, intermediate computations, or any context that might be useful for debugging or analysis, such as `user_id`, `session_id`, or `model_version`.
-
-Example on creating traces and spans manually with the [Langfuse Python SDK](https://langfuse.com/docs/sdk/python/sdk-v3): 
+- navigate to `labs/40-AIAgents` folder, open `game_agent_v9_ob.py` file.
 
 ```python
-from langfuse import get_client
- 
-langfuse = get_client()
- 
-span = langfuse.start_span(name="my-span")
- 
-span.end()
+cd labs/40-AIAgents
 ```
+
+- run the agent and see the console output.
+
+```python
+python game_agent_v9_ob.py
+```
+// add screenshot of console output
+
+- the agent wiill ingest the logs and events into application insights.
+
+- go to Azure Foundry Portal and check out the traces and metrics.
+
+
 
 ## Agent Evaluation
 

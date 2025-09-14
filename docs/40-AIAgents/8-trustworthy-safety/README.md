@@ -1,7 +1,6 @@
 
 # Trustworthy & Safety
 
-//todo: for game agent, add a human in the loop action, call it agent_v67.py in apps-rps/rps-game-agent. follow agent_v1.py
 
 ## Safety
 
@@ -144,25 +143,24 @@ Another effective way to build trustworthy AI Agent systems is using a Human-in-
 
 Here is a code snippet using AutoGen to show how this concept is implemented:
 
+
+### Improve AI Agent Service Agent to have human in the loop
+
+- navigate to `labs/40-AIAgents` folder, open `game_agent_v8_human.py` file.
+
 ```python
-
-# Create the agents.
-model_client = OpenAIChatCompletionClient(model="gpt-4o-mini")
-assistant = AssistantAgent("assistant", model_client=model_client)
-user_proxy = UserProxyAgent("user_proxy", input_func=input)  # Use input() to get user input from console.
-
-# Create the termination condition which will end the conversation when the user says "APPROVE".
-termination = TextMentionTermination("APPROVE")
-
-# Create the team.
-team = RoundRobinGroupChat([assistant, user_proxy], termination_condition=termination)
-
-# Run the conversation and stream to the console.
-stream = team.run_stream(task="Write a 4-line poem about the ocean.")
-# Use asyncio.run(...) when running in a script.
-await Console(stream)
-
+cd labs/40-AIAgents
 ```
+
+- run the agent and see the console output.
+
+```python
+python game_agent_v8_human.py
+```
+// add screenshot of console output
+
+- the agent will ask for your approval before using a function tool call.
+
 
 ## Conclusion
 

@@ -1,8 +1,5 @@
 # Agentic Protocols
 
-//todo: for game agent, add mcp capability, call it agent_v61a.py in apps-rps/rps-game-agent. follow agent_v1.py
-//todo: for game agent, add A2A, call it agent_v61b.py in apps-rps/rps-game-agent. follow agent_v1.py
-
 As the use of AI agents grows, so does the need for protocols that ensure standardization, security, and support open innovation. In this lesson, we will cover 3 protocols looking to meet this need - Model Context Protocol (MCP), Agent to Agent (A2A) and Natural Language Web (NLWeb).
 
 ## Model Context Protocol
@@ -54,6 +51,56 @@ Imagine a player wants to get tournament assistance using an AI agent powered by
 4. **Execution and Response**: The MCP server, acting as a wrapper, makes the actual call to the knowledge service's internal database API. It then receives the answer information (e.g., JSON data with answer and confidence) and sends it back to the RPS Agent.
 
 5. **Further Interaction**: The RPS Agent receives the answer "Paris" with high confidence. For the same round, it might also invoke the "analyze_strategy" tool on the same MCP server to determine the optimal Rock/Paper/Scissors move, completing the tournament round submission.
+
+### Create Game MCP server
+
+- open a new teminial windows and navigate to `apps-rps/rps-game-mcp` folder.
+
+```python
+cd apps-rps/rps-game-mcp
+```
+
+- install python packages. all required packages are listed in `requirements.txt` file. they are for all the labs in this module.
+
+```python
+pip install -r requirements.txt
+```
+
+- run the MCP server and see the console output.
+
+```python
+python mcp-server.py
+```
+
+- open a new terminial windows and also navigate to `apps-rps/rps-game-mcp` folder.
+
+```python
+cd apps-rps/rps-game-mcp
+```
+
+- run the MCP client and see the console output. the client will connect to the server and get the list of tools exposed by the server.
+
+```python
+python mcp-client.py
+```
+
+
+### Connect AI Agent to MCP server
+
+- navigate to `labs/40-AIAgents` folder, open `game_agent_v7_mcp.py` file.
+
+```python
+cd labs/40-AIAgents
+```
+
+- run the agent and see the console output.
+
+```python
+python game_agent_v7_mcp.py
+```
+// add screenshot of console output
+
+- the agent can now connect to the MCP server and use the tools exposed by the server.
 
 ## Agent-to-Agent Protocol (A2A)
 
