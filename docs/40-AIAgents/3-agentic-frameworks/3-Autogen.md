@@ -9,9 +9,29 @@ AutoGen is built around the core concept of agents, which are autonomous entitie
 
 **Use Cases**: Automating code generation, data analysis tasks, and building custom agents for planning and research functions.
 
-Here are some important core concepts of AutoGen:
+Here are some important core concepts of AutoGen we will cover in this lab.
 
-- **Agents**. An agent is a software entity that:
+
+
+## Create Autogen Agent
+
+- navigate to `labs/40-AIAgents` folder, open `game_agent_v3_autogen.py` file.
+
+```python
+cd labs/40-AIAgents
+```
+
+- run the agent and see the console output.
+
+```python
+python game_agent_v3_autogen.py
+```
+// add screenshot of console output
+
+
+## Agents
+
+An agent is a software entity that:
   - **Communicates via messages**, these messages can be synchronous or asynchronous.
   - **Maintains its own state**, which can be modified by incoming messages.
   - **Performs actions** in response to received messages or changes in its state. These actions may modify the agent’s state and produce external effects, such as updating message logs, sending new messages, executing code, or making API calls.
@@ -63,7 +83,9 @@ Here are some important core concepts of AutoGen:
     my_assistant responded: Hello! How can I assist you today?
     ```
 
-- **Multi agents**. AutoGen supports the creation of multiple agents that can work together to achieve complex tasks. Agents can communicate, share information, and coordinate their actions to solve problems more efficiently. To create a multi-agent system, you can define different types of agents with specialized functions and roles, such as data retrieval, analysis, decision-making, and user interaction. Let's see how such a creation looks like so we get a sense of it:
+## Multi agents
+
+AutoGen supports the creation of multiple agents that can work together to achieve complex tasks. Agents can communicate, share information, and coordinate their actions to solve problems more efficiently. To create a multi-agent system, you can define different types of agents with specialized functions and roles, such as data retrieval, analysis, decision-making, and user interaction. Let's see how such a creation looks like so we get a sense of it:
 
     ```python
     editor_description = "Editor for planning and reviewing the content."
@@ -106,7 +128,10 @@ Here are some important core concepts of AutoGen:
 
     In the previous code we have a `GroupChatManager` that is registered with the runtime. This manager is responsible for coordinating the interactions between different types of agents, such as writers, illustrators, editors, and users.
 
-- **Agent Runtime**. The framework provides a runtime environment, enabling communication between agents, manages their identities and lifecycles, and enforce security and privacy boundaries. This means that you can run your agents in a secure and controlled environment, ensuring that they can interact safely and efficiently. There are two runtimes of interest:
+## Agent Runtime
+
+The framework provides a runtime environment, enabling communication between agents, manages their identities and lifecycles, and enforce security and privacy boundaries. This means that you can run your agents in a secure and controlled environment, ensuring that they can interact safely and efficiently. There are two runtimes of interest:
+
   - **Stand-alone runtime**. This is a good choice for single-process applications where all agents are implemented in the same programming language and run in the same process. Here's an illustration of how it works:
   
     <a href="https://microsoft.github.io/autogen/stable/_images/architecture-standalone.svg" target="_blank">Stand-alone runtime</a>   

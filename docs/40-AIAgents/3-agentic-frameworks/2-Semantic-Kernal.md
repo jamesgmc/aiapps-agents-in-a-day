@@ -5,7 +5,27 @@ Semantic Kernel is an enterprise-ready AI Orchestration SDK. It consists of AI a
 
 Let's first cover some core components:
 
-- **AI Connectors**: This is an interface with external AI services and data sources for use in both Python and C#.
+
+## Create Semantic Kernal Agent
+
+- navigate to `labs/40-AIAgents` folder, open `game_agent_v3_sk.py` file.
+
+```python
+cd labs/40-AIAgents
+```
+- run the agent and see the console output.
+
+```python
+python game_agent_v3_sk.py
+```
+// add screenshot of console output
+
+- because the semantic kernal agent does not use a managed service, so you can't see it in the Azure AI Foundry portal.
+
+
+## AI Connectors
+
+This is an interface with external AI services and data sources for use in both Python and C#.
 
   ```python
   # Semantic Kernel Python
@@ -24,7 +44,9 @@ Let's first cover some core components:
 
     Here you have a simple example of how you can create a kernel and add a chat completion service. Semantic Kernel creates a connection to an external AI service, in this case, Azure OpenAI Chat Completion.
 
-- **Plugins**: These encapsulate functions that an application can use. There are both ready-made plugins and custom ones you can create. A related concept is "prompt functions." Instead of providing natural language cues for function invocation, you broadcast certain functions to the model. Based on the current chat context, the model may choose to call one of these functions to complete a request or query. Here's an example:
+## Plugins
+
+These encapsulate functions that an application can use. There are both ready-made plugins and custom ones you can create. A related concept is "prompt functions." Instead of providing natural language cues for function invocation, you broadcast certain functions to the model. Based on the current chat context, the model may choose to call one of these functions to complete a request or query. Here's an example:
 
   ```python
   from semantic_kernel.connectors.ai.open_ai.services.azure_chat_completion import AzureChatCompletion
@@ -83,7 +105,9 @@ Let's first cover some core components:
 
     Here, you first have a template prompt `skPrompt` that leaves room for the user to input text, `$userInput`. Then you create the kernel function `SummarizeText` and then import it into the kernel with the plugin name `SemanticFunctions`. Note the name of the function that helps Semantic Kernel understand what the function does and when it should be called.
 
-- **Native function**: There's also native functions that the framework can call directly to carry out the task. Here's an example of such a function retrieving the content from a file:
+## Native function
+
+There's also native functions that the framework can call directly to carry out the task. Here's an example of such a function retrieving the content from a file:
 
     ```csharp
     public class NativeFunctions {
@@ -106,7 +130,9 @@ Let's first cover some core components:
 
     ```
 
-- **Memory**:  Abstracts and simplifies context management for AI apps. The idea with memory is that this is something the LLM should know about. You can store this information in a vector store which ends up being an in-memory database or a vector database or similar. Here's an example of a very simplified scenario where *facts* are added to the memory:
+## Memory
+
+Abstracts and simplifies context management for AI apps. The idea with memory is that this is something the LLM should know about. You can store this information in a vector store which ends up being an in-memory database or a vector database or similar. Here's an example of a very simplified scenario where *facts* are added to the memory:
 
     ```csharp
     var facts = new Dictionary<string,string>();
@@ -137,5 +163,7 @@ Let's first cover some core components:
     ```
 
     These facts are then stored in the memory collection `SummarizedAzureDocs`. This is a very simplified example, but you can see how you can store information in the memory for the LLM to use.
+
+## Agent Framework
 
 So that's the basics of the Semantic Kernel framework, what about the Agent Framework? //todo

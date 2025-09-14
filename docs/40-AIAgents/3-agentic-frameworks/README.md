@@ -1,8 +1,6 @@
 
 # AI Agent Frameworks
 
-//todo: for game agent, simple agent for all 3 framework, call it agent_v53.py in apps-rps/rps-game-agent. follow agent_v1.py
-
 AI agent frameworks are software platforms designed to simplify the creation, deployment, and management of AI agents. These frameworks provide developers with pre-built components, abstractions, and tools that streamline the development of complex AI systems.
 
 These frameworks help developers focus on the unique aspects of their applications by providing standardized approaches to common challenges in AI agent development. They enhance scalability, accessibility, and efficiency in building AI systems.
