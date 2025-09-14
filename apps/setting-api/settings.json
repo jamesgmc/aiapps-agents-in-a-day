@@ -9,7 +9,7 @@
   {
     "Id": 2,
     "Name": "Azure OpenAI API Key",
-    "Value": "ee8b7517ac664a608953cad44faa22bd",
+    "Value": "",
     "Description": "API key for authenticating with Azure OpenAI services through the proxy",
     "Category": "Azure AI Proxy Playground"
   },
@@ -30,7 +30,7 @@
   {
     "Id": 5,
     "Name": "AZURE_OPENAI_API_KEY",
-    "Value": "ee8b7517ac664a608953cad44faa22bd",
+    "Value": "",
     "Description": "Authentication key for Azure OpenAI API access",
     "Category": "Azure OpenAI Resource Configuration"
   },
@@ -58,7 +58,7 @@
   {
     "Id": 9,
     "Name": "MONGODB_CONNECTION_STRING",
-    "Value": "mongodb+srv://aiaaaadmin:aiaaaP%40ssword123@aiaaa-s2-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000",
+    "Value": "",
     "Description": "Connection string for Azure Cosmos DB MongoDB API",
     "Category": "Azure Cosmos DB for MongoDB"
   },
@@ -86,7 +86,7 @@
   {
     "Id": 13,
     "Name": "GPT-4o API Key",
-    "Value": "ee8b7517ac664a608953cad44faa22bd",
+    "Value": "",
     "Description": "API key for GPT-4o service access",
     "Category": "Azure AI Resource Configuration"
   },
@@ -100,7 +100,7 @@
   {
     "Id": 15,
     "Name": "Dall-e 3 API Key",
-    "Value": "ee8b7517ac664a608953cad44faa22bd",
+    "Value": "",
     "Description": "API key for DALL-E 3 service access",
     "Category": "Azure AI Resource Configuration"
   },
@@ -114,7 +114,7 @@
   {
     "Id": 17,
     "Name": "Computer Vision API Key",
-    "Value": "78f3ff4de3a94d8cb02fdda3159b4377",
+    "Value": "",
     "Description": "API key for Computer Vision service access",
     "Category": "Azure AI Resource Configuration"
   },
@@ -128,7 +128,7 @@
   {
     "Id": 19,
     "Name": "Translator Service API Key",
-    "Value": "13d41db1739b4575bd9ffd64c0a0372c",
+    "Value": "",
     "Description": "API key for Translator service access",
     "Category": "Azure AI Resource Configuration"
   },
@@ -142,7 +142,7 @@
   {
     "Id": 21,
     "Name": "Speech Service API Key",
-    "Value": "9c328bd75c4a446099e90d639fa8b9a4",
+    "Value": "",
     "Description": "API key for Speech service access",
     "Category": "Azure AI Resource Configuration"
   },
@@ -156,7 +156,7 @@
   {
     "Id": 23,
     "Name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-    "Value": "InstrumentationKey=36277017-e820-4f37-973d-c5d9fc07231b;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=76d6c9fb-2c30-4c9d-886c-d93b51eaf9b5",
+    "Value": "",
     "Description": "",
     "Category": "Azure Foundry"
   },
