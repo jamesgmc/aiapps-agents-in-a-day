@@ -1,8 +1,6 @@
 
 # Agentic RAG
 
-//todo: for game agent, add RAG process, call it agent_v55.py in apps-rps/rps-game-agent. follow agent_v1.py
-
 This lesson provides a comprehensive overview of Agentic Retrieval-Augmented Generation (Agentic RAG), an emerging AI paradigm where large language models (LLMs) autonomously plan their next steps while pulling information from external sources. Unlike static retrieval-then-read patterns, Agentic RAG involves iterative calls to the LLM, interspersed with tool or function calls and structured outputs. The system evaluates results, refines queries, invokes additional tools if needed, and continues this cycle until a satisfactory solution is achieved.
 
 ## What is Agentic RAG?
@@ -124,9 +122,23 @@ This demonstrates the key Agentic RAG principles:
 - **Tool orchestration:** Combined knowledge retrieval, data analysis, and validation
 - **Self-correction:** Would retry with different sources if confidence was low
 
+
+### Improve AI Agent Service Agent to have knowledge and tools
+
+- navigate to `labs/40-AIAgents` folder, open `game_agent_v4_rag.py` file.
+
 ```python
-add knowledge base retrieval tool to game agent
+cd labs/40-AIAgents
 ```
+
+- run the agent and see the console output.
+
+```python
+python game_agent_v4_rag.py
+```
+// add screenshot of console output
+
+- the agent will ingest a local document and use it as knowledge base to answer questions.
 
 ## Conclusion
 

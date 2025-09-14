@@ -1,8 +1,6 @@
 
 # Tool Use Design Pattern
 
-//todo: for game agent, add tool use, call it agent_v54.py in apps-rps/rps-game-agent. follow agent_v1.py
-
 Tools are interesting because they allow AI agents to have a broader range of capabilities. Instead of the agent having a limited set of actions it can perform, by adding a tool, the agent can now perform a wide range of actions. In this chapter, we will look at the Tool Use Design Pattern, which describes how AI agents can use specific tools to achieve their goals.
 
 ## What is the Tool Use Design Pattern?
@@ -91,21 +89,6 @@ As we learned earlier in agentic frameworks provide us with pre-built building b
 
 Here are some examples of how you can implement the Tool Use Design Pattern using different agentic frameworks:
 
-### Semantic Kernel
-
-<a href="https://learn.microsoft.com/azure/ai-services/agents/overview" target="_blank">Semantic Kernel</a> is an open-source AI framework for .NET, Python, and Java developers working with Large Language Models (LLMs). It simplifies the process of using function calling by automatically describing your functions and their parameters to the model through a process called <a href="https://learn.microsoft.com/semantic-kernel/concepts/ai-services/chat-completion/function-calling/?pivots=programming-language-python#1-serializing-the-functions" target="_blank">serializing</a>. It also handles the back-and-forth communication between the model and your code. Another advantage of using an agentic framework like Semantic Kernel, is that it allows you to access pre-built tools like <a href="https://github.com/microsoft/semantic-kernel/blob/main/python/samples/getting_started_with_agents/openai_assistant/step4_assistant_tool_file_search.py" target="_blank">File Search</a> and <a href="https://github.com/microsoft/semantic-kernel/blob/main/python/samples/getting_started_with_agents/openai_assistant/step3_assistant_tool_code_interpreter.py" target="_blank">Code Interpreter</a>.
-
-The following diagram illustrates the process of function calling with Semantic Kernel:
-
-![function calling](./images/functioncalling-diagram.png)
-
-In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the RPS tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the RPSTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
-
-```python
-add math calc example lab here for SK here
-```
-
-  
 ### Azure AI Agent Service
 
 <a href="https://learn.microsoft.com/azure/ai-services/agents/overview" target="_blank">Azure AI Agent Service</a> is a newer agentic framework that is designed to empower developers to securely build, deploy, and scale high-quality, and extensible AI agents without needing to manage the underlying compute and storage resources. It is particularly useful for enterprise applications since it is a fully managed service with enterprise grade security.
@@ -143,6 +126,38 @@ To use any of these tools with the service we can create a client and define a t
 add math calc example lab here for agent service
 ```
 
+#### Improve AI Agent Service Agent to have math calculation tools
+
+- navigate to `labs/40-AIAgents` folder, open `game_agent_v5_tool.py` file.
+
+```python
+cd labs/40-AIAgents
+```
+
+- run the agent and see the console output.
+
+```python
+python game_agent_v5_tool.py
+```
+// add screenshot of console output
+
+- the agent can know use a proper math calculation tool to answer the question rather than asking LLM to do so! spoiler alert: LLM is not always good at complex math calculation.
+
+
+### Semantic Kernel
+
+<a href="https://learn.microsoft.com/azure/ai-services/agents/overview" target="_blank">Semantic Kernel</a> is an open-source AI framework for .NET, Python, and Java developers working with Large Language Models (LLMs). It simplifies the process of using function calling by automatically describing your functions and their parameters to the model through a process called <a href="https://learn.microsoft.com/semantic-kernel/concepts/ai-services/chat-completion/function-calling/?pivots=programming-language-python#1-serializing-the-functions" target="_blank">serializing</a>. It also handles the back-and-forth communication between the model and your code. Another advantage of using an agentic framework like Semantic Kernel, is that it allows you to access pre-built tools like <a href="https://github.com/microsoft/semantic-kernel/blob/main/python/samples/getting_started_with_agents/openai_assistant/step4_assistant_tool_file_search.py" target="_blank">File Search</a> and <a href="https://github.com/microsoft/semantic-kernel/blob/main/python/samples/getting_started_with_agents/openai_assistant/step3_assistant_tool_code_interpreter.py" target="_blank">Code Interpreter</a>.
+
+The following diagram illustrates the process of function calling with Semantic Kernel:
+
+![function calling](./images/functioncalling-diagram.png)
+
+In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the RPS tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the RPSTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
+
+```python
+add math calc example lab here for SK here
+```
+  
 ## What are the special considerations for using the Tool Use Design Pattern to build trustworthy AI agents?
 
 A common concern with SQL dynamically generated by LLMs is security, particularly the risk of SQL injection or malicious actions, such as dropping or tampering with the database. While these concerns are valid, they can be effectively mitigated by properly configuring database access permissions. For most databases this involves configuring the database as read-only. For database services like PostgreSQL or Azure SQL, the app should be assigned a read-only (SELECT) role.
