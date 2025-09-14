@@ -17,6 +17,7 @@ In this exercise, you use the Azure AI Agent service tools in the [Azure AI Foun
 3. Azure AI Foundry portal should look like below:
 
     ![Azure AI Foundry Project](./images/azure-ai-foundry.png)
+    //todo update the screenshot
 
 ## Deploy a model
 
@@ -27,6 +28,7 @@ In this exercise, you use the Azure AI Agent service tools in the [Azure AI Foun
     > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using.
 
     ![Model Deployed](./images/model-deployment.png)
+    //todo update the screenshot
 
 ## Create an agent
 
@@ -71,7 +73,7 @@ Now that you have deployed a model, you can create an agent. An agent is a conve
 > Furthermore, you can add **Knowledge Base** and **Actions** to enhance the agent's capabilities to provide more information and perform automated tasks based on user requests. For this exercise, you can skip these steps.
     
 ![Agent Setup](./images/agent-setup.png)
-
+//todo update the screenshot
 
 ## Test the agent
 
@@ -83,6 +85,7 @@ After creating the agent, you can test it to see how it responds to user queries
     > **Note**: The agent may not provide accurate responses yet, as no real-time data is being used in this exercise. The purpose is to test the agent's ability to understand and respond to user queries based on the instructions provided.
 
     ![Agent Playground](./images/agent-playground.png)
+    //todo update the screenshot
 
 3. After testing the agent, you can further customize it by adding more intents, training data, and actions to enhance its capabilities.
 

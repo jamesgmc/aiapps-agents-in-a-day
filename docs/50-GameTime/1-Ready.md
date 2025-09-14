@@ -8,7 +8,7 @@ Ask for help if you are not sure what to do. If you are not technical, you can s
 :::
 
 
-## Join with a Game Client
+## Join with a Your Game Client
 
 The game client is an AI App that is written in Node.js.
 
@@ -40,7 +40,7 @@ https://aiaaa-s2-game-server.azurewebsites.net/
 
 - You are ready to play the game! Keep a record of the player ID that is assigned to you, you can use this ID to reconnect if your client disconnects.
 
-## Join with a Game Agent
+## Join with a Your Game Agent
 
 The game agent is an AI Agent that is written in python.
 
@@ -73,3 +73,17 @@ https://aiaaa-s2-game-server.azurewebsites.net/
 - You are ready to play the game! Keep a record of the player ID that is assigned to you, you can use this ID to reconnect if your client disconnects.
 
 
+
+## Join with a Shared Game Client
+
+The shared game client is an AI App that is already hosted on Azure. You dont need to run anything locally. It is good for anyone who is not technical and still want to have some fun!
+
+- Go to below url to access the shared game client: https://aiaaa-s2-game-client.azurewebsites.net/
+
+![alt text](images\image-1.png)
+
+- Type your player name and click "Register" to connect to the game server that is hosted on Azure.
+
+![alt text](images\image-10.png)
+
+- You are ready to play the game! Keep a record of the player ID that is assigned to you, you can use this ID to reconnect if your client disconnects.
