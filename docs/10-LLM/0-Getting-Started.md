@@ -11,7 +11,7 @@ slug: /10-LLM-Setup
 
 :::
 
-For this lab you are using a custom playground build on-top of the Azure OpenAI Service. In this playground you will have the opportunity to play with the prompts and Learn how to build AI Apps and Agents.
+For this lab you are using a custom playground build on top of the Azure OpenAI Service. In this playground you will have the opportunity to play with the prompts and learn how to build AI apps and agents.
 
 AI Proxy Playground: https://aiaaa-s2-playground.azurewebsites.net
 
@@ -29,7 +29,7 @@ You will be using your AI Proxy API Key that you registered for.
 
 ## Explore
 
-On **API Key** is entered, the playground application should update to show a `Logout` button at top-right, as shown below. To validate your setup, enter a query in the user prompt input box (region 2) and click `Send`. You should get a conversational response in the chat session are (region 3) as shown below.
+Once the **API Key** is entered, the playground application should update to show a `Logout` button at top-right, as shown below. To validate your setup, enter a query in the user prompt input box (region 2) and click `Send`. You should get a conversational response in the chat session area (region 3) as shown below.
 
 Let's take a minute to familiarize ourselves with the different regions of this app.
 

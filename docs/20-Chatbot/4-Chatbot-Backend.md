@@ -1,16 +1,16 @@
 # Build Chatbot Backend
 
-The backend api is a Node.js web application, using Express and Swagger, that will expose endpoints for the frontend application to interact with. The backend api could be deployed as web app on Azure App service.
+The backend API is a Node.js web application, using Express and Swagger, that will expose endpoints for the frontend application to interact with. The backend API could be deployed as a web app on Azure App Service.
 
-## Run the backend api locally
+## Run the backend API locally
 
-When developing a backend api, it is often useful to run the application locally to test and debug. This section outlines how to run the backend api locally while watching the file system for code changes. Any detected changes will automatically restart the backend api.
+When developing a backend API, it is often useful to run the application locally to test and debug. This section outlines how to run the backend API locally while watching the file system for code changes. Any detected changes will automatically restart the backend API.
 
-1. Open the backend api folder location in VS Code: `apps-chat/chatbot-backend`
+1. Open the backend API folder location in VS Code: `apps-chat/chatbot-backend`
 
 2. Open a **Terminal** window in VS Code (<kbd>CTRL</kbd>+<kbd>`</kbd>).
 
-3. Check `.env` file has correct configurations. Placeholder string should be all replaced in earlier `Lab Setup` step.
+3. Check that the `.env` file has correct configurations.  All placeholder strings should have been replaced in the earlier `Lab Setup` step.
 
 ## Add LangChain Agent to Backend API
 
@@ -49,7 +49,7 @@ When developing a backend api, it is often useful to run the application locally
    :::info
    If you are running the `codespaces` in web browser, please use the codespaces generated url. You shall see `Open in browser` button asking if you want to open the site in browser. If you missed the button, go to `PORTS` tab to find it. In the newly opened browser, add `/docs` to the url in the address bar to open swagger interface.
 
-   The url would look similiar to: https://ominous-space-goldfish-v6vv749557wjfxj99-5000.app.github.dev/docs/
+   The URL would look similar to: https://ominous-space-goldfish-v6vv749557wjfxj99-5000.app.github.dev/docs/
 
    Additionally, please also make the `Visibility` of the site to `Public` as shown in below screenshot. This is to allow frontend to access the API backend later.
 
@@ -59,7 +59,7 @@ When developing a backend api, it is often useful to run the application locally
 
 4. Expand the **GET / Root** endpoint and select **Try it out**. Select **Execute** to send the request. The response should display a status of `ready`.
 
-   ![The Swagger UI displays the GET / Root endpoint reponse that has a status of ready.](images/local_backend_swagger_ui_root_response.png "Local backend api Swagger UI Root response")
+   ![The Swagger UI displays the GET / Root endpoint response that has a status of ready.](images/local_backend_swagger_ui_root_response.png "Local backend api Swagger UI Root response")
 
 5. Expand the **POST /ai** endpoint and select **Try it out**. In the **Request body** field, enter the following JSON.
 
@@ -72,6 +72,6 @@ When developing a backend api, it is often useful to run the application locally
 
 6. Select **Execute** to send the request. Observe that the response indicates the price as being `$1431.50`.
 
-   ![The Swagger UI displays the POST /ai endpoint reponse that has a status of ready.](images/local_backend_swagger_ui_ai_response.png "Local backend api Swagger UI AI response")
+   ![The Swagger UI displays the POST /ai endpoint response that has a status of ready.](images/local_backend_swagger_ui_ai_response.png "Local backend api Swagger UI AI response")
 
 7. Please keep the backend running.

@@ -4,10 +4,10 @@
 Prompt engineering is a concept in Natural Language Processing (NLP) that involves **embedding descriptions of tasks** in input to **prompt the model** to output the **desired results**.
 :::
 
-Lets start with a few prompts and observe the response using the chat interface.
+Let's start with a few prompts and observe the response using the chat interface.
 
 :::info
-To start, select `completions` in the `Model` dropdown list on the right top corner under `Configuration`.
+To start, select `completions` in the `Model` dropdown list in the right top corner under `Configuration`.
 :::
 
 Here are some examples to try, but get creative with your own prompts and see what happens!
@@ -38,7 +38,7 @@ Write a limerick about a bike.
 
 How was the limerick? If you didn't like it, you can always ask the chat session to generate a new one.
 
-Next lets check out the parameters we have available: Use the Temperature field on the right column of the chat interface, and set Temperature to zero. What do you observe when you retry the prompt?
+Next, let's check out the parameters we have available: Use the Temperature field on the right column of the chat interface, and set Temperature to zero. What do you observe when you retry the prompt?
 
 The Temperature parameter controls how "creative" the model is allowed to be. At low values of "Temperature", the model is very likely to respond with the completion with the highest weight, limiting the variability in the responses. At higher values of Temperature, low-weighted completions become more likely to be generated, allowing for more creative (but less precise) responses.
 
@@ -49,7 +49,7 @@ What is a unique and long name for a new bike brand?
 ```
 
 :::info
-When dealing with LLMs, the results can be unpredictable. Changing the temperature here might or might not work as expected. Also, we are using a relatively old version of GPT3.5. The temperature effect is more visible in more recent LLMs such as GPT4.
+When dealing with LLMs, the results can be unpredictable. Changing the temperature here might or might not work as expected. Also, we are using a relatively old version of GPT-3.5. The temperature effect is more visible in more recent LLMs such as GPT-4.
 :::
 
 **Make sure the Temperature parameter is reset to 0.7 before you continue.**

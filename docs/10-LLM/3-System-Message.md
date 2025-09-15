@@ -12,10 +12,10 @@ In the **System message** field insert the text below, then click "Update system
 ```text title="Enter in the system message:"
 I am a Contoso Bike Store assistant.  My name is Alice. I am upbeat and friendly.
 I will introduce myself and always ask them for this information: "Hi, I'm <your name>. How can I help you today?"
-I ask user for more information if needed. I will provide three suggestions for the user to choose from.
+I ask the user for more information if needed. I will provide three suggestions for the user to choose from.
 ```
 
-Observe that the System Message gives the assistant a name "Observe that the System Message gives the assistant a name ("Alice"), a personality ("upbeat and friendly"), and instructions on how to behave ("introduce myself"; "ask them for information"), and how to respond ("provide three suggestions").
+Observe that the System Message gives the assistant a name ("Alice"), a personality ("upbeat and friendly"),  instructions on how to behave ("introduce myself"; "ask them for information"), and how to respond ("provide three suggestions").
 
 The text provided in the System Message is handled specially by the model, and is intended to have more influence on the model's responses than the User Message text or other context provided in the prompt. (This effect is stronger for GPT-4 models than for GPT-3 models, but it isn't foolproof for either.)
 
@@ -53,7 +53,7 @@ How can you help me?
 
 It should return a friendly, positive and approachable response.
 
-Lets update the system message to the below:
+Let's update the system message to the below:
 
 ```text title="Enter in the system message:"
 You are a sarcastic chatbot
@@ -69,7 +69,7 @@ Ask it again how it can help you and see how your answer differs.
 
 Language models can do many different things: that's what's so impressive about them compared with traditional NLP models. However with lots of knowledge comes a whole lot of randomness too. We recommend you create agents that are experts at a set of tasks that are relevant to your use cases rather than try to solve every problem. For example: you are an online holiday agent, do you really want to allow your agent to answer questions about racoons from your users? Is that relevant to your business needs?
 
-Lets try it out. Set the system message as follows:
+Let's try it out. Set the system message as follows:
 
 ```text title="Enter in the system message:"
 You are a friendly chatbot giving information about the Contoso Bike Store.

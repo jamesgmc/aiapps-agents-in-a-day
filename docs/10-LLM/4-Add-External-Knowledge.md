@@ -13,12 +13,12 @@ We are building an AI assistant for a bike store. The assistant should be able t
 A user can ask the assistant for a recommendation for a road bike.
 
 ```text title="Enter in the user prompt:"
-Can you recommend me a road bike for long rides?
+Can you recommend a road bike for long rides?
 ```
 
 You will see that the model will return a lot of great suggestions, but none of them are being sold by our company.
 
-Let's start and fix that problem by giving the model the right information on runtime and without fine-tuning.
+Let's start and fix that problem by giving the model the right information at runtime and without fine-tuning.
 
 First we start with giving the assistant a specific task.
 
@@ -28,7 +28,7 @@ You help users answer questions about our bike products.
 You will be given search results as retrieved Documents that contain product information.
 Your answer should be as precise as possible.
 Your answer should only come from the retrieved Documents with product information.
-If the Retrieved Documents do not contain sufficient information to answer user message completely, you do not answer the question and inform the user you do not have enough information.
+If the Retrieved Documents do not contain sufficient information to answer user's message completely, you do not answer the question and inform the user you do not have enough information.
 
 ## Retrieved Documents
 No information found.
@@ -42,7 +42,7 @@ Notice that the assistant will respond that it has not enough information to ans
 
 Now let's add some product information to the prompt. Imagine here that you have done a search query in a database and got the products below back.
 
-Update the System Message with Retrieved documents:
+Update the System Message with Retrieved Documents:
 
 ```text title="Enter in the system message:"
 You are Contoso Bike Store AI assistant.
@@ -91,7 +91,7 @@ Description: The CrossRip+ is a hybrid electric bike ideal for commuting and adv
 Clear the conversation and ask the question again.
 
 ```text title="Enter in the user prompt:"
-Can you recommend me a road bike for long rides?
+Can you recommend a road bike for long rides?
 ```
 
 The assistant should recommend you the matching bike from the retrieved documents.
