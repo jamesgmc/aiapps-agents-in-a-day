@@ -16,8 +16,7 @@ var storageAccountName = replace('${resourcePrefix}st${resourceGroupSuffix}', '-
 var keyVaultName = '${resourcePrefix}-kv-${resourceGroupSuffix}'
 
 // AI Foundry and Web app service names
-var openAiName = '${resourcePrefix}-openai-${resourceGroupSuffix}'
-var aiFoundryWorkspaceName = '${resourcePrefix}-ai-hub-${resourceGroupSuffix}'
+var openAiName = '${resourcePrefix}-ai-foundry-${resourceGroupSuffix}'
 var aiFoundryProjectName = '${resourcePrefix}-ai-project-${resourceGroupSuffix}'
 var aiServicesName = '${resourcePrefix}-aiservices-${resourceGroupSuffix}'
 
@@ -48,17 +47,6 @@ var openAiSettings = {
     sku: {
       name: 'Standard'
       capacity: 50
-    }
-  }
-  dalleModel: {
-    name: 'dall-e-3'
-    version: '3.0'
-    deployment: {
-      name: 'dalle3'
-    }
-    sku: {
-      name: 'Standard'
-      capacity: 1
     }
   }
 }
@@ -153,8 +141,9 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
 }
 
 
+
 // -----------------------
-// AI Services
+// Azure AI Foundry Hub
 // -----------------------
 
 // AI Services (Multi-service account)
@@ -171,6 +160,18 @@ resource aiServices 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
     apiProperties: {}
   }
 }
+
+// AI Services Project
+resource aiServicesProject 'Microsoft.CognitiveServices/accounts/projects@2025-06-01' = {
+  parent: aiServices
+  name: aiFoundryProjectName
+  location: location
+  properties: {
+    displayName: 'AI Foundry Project'
+    description: 'Default project for AI Foundry workspace'
+  }
+}
+
 
 // Azure OpenAI Service
 resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
@@ -202,176 +203,70 @@ resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/d
   }
 }
 
-// resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
-//   parent: openAiAccount
-//   name: openAiSettings.gptModel.deployment.name
-//   dependsOn: [
-//     openAiEmbeddingsModelDeployment
-//   ]
-//   sku: {
-//     name: openAiSettings.gptModel.sku.name
-//     capacity: openAiSettings.gptModel.sku.capacity
-//   }
-//   properties: {
-//     model: {
-//       format: 'OpenAI'
-//       name: openAiSettings.gptModel.name
-//       version: openAiSettings.gptModel.version
-//     }    
-//   }
-// }
-
-
-// resource openAiDalleModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
-//   parent: openAiAccount
-//   name: openAiSettings.dalleModel.deployment.name
-//   dependsOn: [
-//     openAiEmbeddingsModelDeployment
-//     // openAiGpt4oModelDeployment
-//   ]
-//   sku: {
-//     name: openAiSettings.dalleModel.sku.name
-//     capacity: openAiSettings.dalleModel.sku.capacity
-//   }
-//   properties: {
-//     model: {
-//       format: 'OpenAI'
-//       name: openAiSettings.dalleModel.name
-//       version: openAiSettings.dalleModel.version
-//     }    
-//   }
-// }
-
-// Computer Vision Service
-resource computerVision 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
-  name: '${resourcePrefix}-cv-${resourceGroupSuffix}'
-  location: location
-  kind: 'ComputerVision'
-  properties: {
-    customSubDomainName: '${resourcePrefix}-cv-${resourceGroupSuffix}'
-    publicNetworkAccess: 'Enabled'
-  }
-  sku: {
-    name: 'S1'
-  }
-}
-
-// Speech Service
-resource speechService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
-  name: '${resourcePrefix}-speech-${resourceGroupSuffix}'
-  location: location
-  kind: 'SpeechServices'
-  sku: {
-    name: 'S0'
-  }
-  properties: {
-    apiProperties: {
-      qnaRuntimeEndpoint: 'https://${resourcePrefix}-speech-${resourceGroupSuffix}.api.cognitive.microsoft.com'
-    }
-  }
-}
-
-// Translator Service
-resource translatorService 'Microsoft.CognitiveServices/accounts@2021-04-30' = {
-  name: '${resourcePrefix}-translator-${resourceGroupSuffix}'
-  location: location
-  kind: 'TextTranslation'
-  sku: {
-    name: 'S1'
-  }
-  properties: {
-    apiProperties: {
-      qnaRuntimeEndpoint: 'https://${resourcePrefix}-translator-${resourceGroupSuffix}.api.cognitive.microsoft.com'
-    }
-  }
-}
-
-// -----------------------
-// Azure AI Foundry Hub
-// -----------------------
-
-// Azure AI Foundry Hub Workspace
-resource aiFoundryHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview' = {
-  name: aiFoundryWorkspaceName
-  location: location
-  kind: 'Hub'
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    friendlyName: aiFoundryWorkspaceName
-    storageAccount: storageAccount.id
-    keyVault: keyVault.id
-    publicNetworkAccess: 'Enabled'
-    managedNetwork: {
-      isolationMode: 'Disabled'
-    }
-    workspaceHubConfig: {
-      defaultWorkspaceResourceGroup: resourceGroup().id
-    }
-  }
+resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
+  parent: openAiAccount
+  name: openAiSettings.gptModel.deployment.name
   dependsOn: [
-    aiServices
+    openAiEmbeddingsModelDeployment
   ]
-}
-
-// AI Services Connection to the Hub
-resource aiServicesConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-07-01-preview' = {
-  parent: aiFoundryHub
-  name: aiServicesName
+  sku: {
+    name: openAiSettings.gptModel.sku.name
+    capacity: openAiSettings.gptModel.sku.capacity
+  }
   properties: {
-    authType: 'ApiKey'
-    category: 'AIServices'
-    target: 'https://${aiServicesName}.cognitiveservices.azure.com/'
-    useWorkspaceManagedIdentity: true
-    isSharedToAll: true
-    sharedUserList: []
-    peRequirement: 'NotRequired'
-    peStatus: 'NotApplicable'
-    credentials: {
-      key: aiServices.listKeys().key1
-    }
-    metadata: {
-      ApiType: 'Azure'
-      ResourceId: aiServices.id
-    }
+    model: {
+      format: 'OpenAI'
+      name: openAiSettings.gptModel.name
+      version: openAiSettings.gptModel.version
+    }    
   }
 }
 
-// Azure OpenAI Connection to the Hub
-resource aoaiConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-07-01-preview' = {
-  parent: aiFoundryHub
-  name: '${openAiSettings.name}_aoai'
-  properties: {
-    authType: 'ApiKey'
-    category: 'AzureOpenAI'
-    target: 'https://${openAiSettings.name}.openai.azure.com/'
-    useWorkspaceManagedIdentity: true
-    isSharedToAll: true
-    sharedUserList: []
-    peRequirement: 'NotRequired'
-    peStatus: 'NotApplicable'
-    credentials: {
-      key: openAiAccount.listKeys().key1
-    }
-    metadata: {
-      ApiType: 'Azure'
-      ResourceId: openAiAccount.id
-    }
-  }
-}
 
-// Azure AI Foundry Project Workspace
-resource aiFoundryProject 'Microsoft.MachineLearningServices/workspaces@2024-04-01-preview' = {
-  name: aiFoundryProjectName
-  location: location
-  kind: 'Project'
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    friendlyName: aiFoundryProjectName
-    hubResourceId: aiFoundryHub.id
-    publicNetworkAccess: 'Enabled'
-  }
-}
+
+
+// // AI Services Connection to the Hub
+// resource aiServicesConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-07-01-preview' = {
+//   parent: aiFoundryHub
+//   name: aiServicesName
+//   properties: {
+//     authType: 'ApiKey'
+//     category: 'AIServices'
+//     target: 'https://${aiServicesName}.cognitiveservices.azure.com/'
+//     useWorkspaceManagedIdentity: true
+//     isSharedToAll: true
+//     sharedUserList: []
+//     peRequirement: 'NotRequired'
+//     peStatus: 'NotApplicable'
+//     credentials: {
+//       key: aiServices.listKeys().key1
+//     }
+//     metadata: {
+//       ApiType: 'Azure'
+//       ResourceId: aiServices.id
+//     }
+//   }
+// }
+
+// // Azure OpenAI Connection to the Hub
+// resource aoaiConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-07-01-preview' = {
+//   parent: aiFoundryHub
+//   name: '${openAiSettings.name}_aoai'
+//   properties: {
+//     authType: 'ApiKey'
+//     category: 'AzureOpenAI'
+//     target: 'https://${openAiSettings.name}.openai.azure.com/'
+//     useWorkspaceManagedIdentity: true
+//     isSharedToAll: true
+//     sharedUserList: []
+//     peRequirement: 'NotRequired'
+//     peStatus: 'NotApplicable'
+//     credentials: {
+//       key: openAiAccount.listKeys().key1
+//     }
+//     metadata: {
+//       ApiType: 'Azure'
+//       ResourceId: openAiAccount.id
+//     }
+//   }
+// }
