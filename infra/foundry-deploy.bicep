@@ -17,9 +17,8 @@ var keyVaultName = '${resourcePrefix}-kv-${resourceGroupSuffix}'
 
 // AI Foundry and Web app service names
 var openAiName = '${resourcePrefix}-ai-foundry-${resourceGroupSuffix}'
-var aiFoundryProjectName = '${resourcePrefix}-ai-project-${resourceGroupSuffix}'
 var aiServicesName = '${resourcePrefix}-aiservices-${resourceGroupSuffix}'
-
+var aiFoundryProjectName = 'foundryProject'
 
 // OpenAI model configurations
 var openAiSettings = {
@@ -147,17 +146,30 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
 // -----------------------
 
 // AI Services (Multi-service account)
-resource aiServices 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+resource aiServices 'Microsoft.CognitiveServices/accounts@2025-04-01-preview' = {
   name: aiServicesName
   location: location
   sku: {
     name: 'S0'
   }
   kind: 'AIServices'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
+    apiProperties: {}
+    networkAcls: {
+      defaultAction: 'Allow'
+      virtualNetworkRules: []
+      ipRules: []
+    }
+    allowProjectManagement: true
+    defaultProject: 'foundryProject'
+    associatedProjects: [
+      'foundryProject'
+    ]
     publicNetworkAccess: 'Enabled'
     customSubDomainName: toLower(aiServicesName)
-    apiProperties: {}
   }
 }
 
@@ -165,30 +177,20 @@ resource aiServices 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
 resource aiServicesProject 'Microsoft.CognitiveServices/accounts/projects@2025-06-01' = {
   parent: aiServices
   name: aiFoundryProjectName
-  location: location
+  location: 'eastus'
+  kind: 'AIServices'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
+    description: 'AI Foundry Project'
     displayName: 'AI Foundry Project'
-    description: 'Default project for AI Foundry workspace'
   }
 }
 
-
-// Azure OpenAI Service
-resource openAiAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
-  name: openAiSettings.name
-  location: location
-  sku: {
-    name: openAiSettings.sku    
-  }
-  kind: 'OpenAI'
-  properties: {
-    customSubDomainName: openAiSettings.name
-    publicNetworkAccess: 'Enabled'
-  }
-}
 
 resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
-  parent: openAiAccount
+  parent: aiServices
   name: openAiSettings.embeddingsModel.deployment.name  
   sku: {
     name: openAiSettings.embeddingsModel.sku.name
@@ -204,7 +206,7 @@ resource openAiEmbeddingsModelDeployment 'Microsoft.CognitiveServices/accounts/d
 }
 
 resource openAiGpt4oModelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
-  parent: openAiAccount
+  parent: aiServices
   name: openAiSettings.gptModel.deployment.name
   dependsOn: [
     openAiEmbeddingsModelDeployment
