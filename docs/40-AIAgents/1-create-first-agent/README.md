@@ -31,7 +31,7 @@ az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
 
 - Above command will display a login url and code to sign in. 
 
-![alt text](images\image6.png)
+![alt text](images\image.png)
 
 - Open the url `https://microsoft.com/devicelogin` in your browser, enter the code to sign in.
 
@@ -77,7 +77,7 @@ az deployment group create --resource-group rg-lab1user100 --template-file ./fou
 }
 ```
 
-![alt text](image.png)
+![alt text](images\image-6.png)
 
 - once the deployment is completed, navigate to Azure Portal, you should see Azure AI Foundry resource created inside.
 
