@@ -7,8 +7,8 @@ param appName string = 'aiapps-agents'
 
 // Variables
 var resourceGroupName = resourceGroup().name
-// Create a suffix using the last part of the resource group name, safely handling short names
-var resourceGroupSuffix = take(replace(guid(resourceGroupName), '-', ''), 6)
+// Create a suffix using the resource group name and subscription ID, safely handling short names
+var resourceGroupSuffix = take(replace(guid('${resourceGroupName}-${subscription().subscriptionId}'), '-', ''), 6)
 var resourcePrefix = appName
 var logAnalyticsName = '${resourcePrefix}-logs-${resourceGroupSuffix}'
 var appInsightsName = '${resourcePrefix}-ai-${resourceGroupSuffix}'
