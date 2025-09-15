@@ -15,12 +15,6 @@ It works out-of-the-box with multi-agent orchestration frameworks like AutoGen a
 cd labs/40-AIAgents
 ```
 
-- install python packages. all required packages are listed in `requirements.txt` file. they are for all the labs in this module.
-
-```python
-pip install -r requirements.txt
-```
-
 - run the agent and see the console output.
 
 ```python

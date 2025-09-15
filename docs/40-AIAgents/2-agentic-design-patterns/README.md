@@ -70,3 +70,36 @@ Imagine you are designing a Rock Paper Scissors Agent, here is how you could thi
 2. **Control** – Enable players to customize their gameplay strategy preferences and view their complete match history. Allow players to opt out of tournaments, delete their participation data, and control notifications about game status. Provide clear options for players to modify their registration information and game preferences.
 
 3. **Consistency** – Use recognizable gaming icons for rock, paper, and scissors moves. Implement familiar tournament bracket visualizations and leaderboard displays. Use standard gaming UI elements like "Start Tournament", "Submit Move", and progress indicators. Maintain consistent visual feedback for wins, losses, and ties across all game interfaces.
+
+
+## Create AI Agent Service Agent via Code
+
+- navigate to `labs/40-AIAgents` folder, open `game_agent_v2_llm.py` file.
+
+```python
+cd labs/40-AIAgents
+```
+
+- install python packages. all required packages are listed in `requirements.txt` file. they are for all the labs in this module.
+
+```python
+pip install -r requirements.txt
+```
+
+- the SDK talks to Azure AI Agent Service via managed identity to ensure the security of the service. You will need to sign in to Azure in the terminial windows first. Sign in with the same identity that has access to the Azure AI Agent Service resource, it should be a DEV1XX@aiapps.top account.
+
+```powershell
+az login --tenant <your-tenant-id>
+```
+
+- run the agent and see the console output.
+
+```python
+python game_agent_v2_llm.py
+```
+// add screenshot of console output
+
+- navigate to Azure AI Foundry portal, you should see the agent created in the portal.
+
+- you can also interact with the agent in the portal playground.
+
