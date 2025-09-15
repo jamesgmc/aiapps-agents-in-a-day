@@ -22,10 +22,10 @@ Write-Host "Shared resource group $rgSharedName"
 for ($i = 1; $i -le $labUserCount; $i++) {
     Write-Host "---------User--------------"
 
-    $userSeq = $i + 99
-    $userName = "$($labName)User$($userSeq)"
+    $userSeq = $i + 199
+    $userName = "$($labName)user$($userSeq)"
     $userEmail = "$($userName)@$($domain)"
-    $rgName = "rg-$($labName)-$($userName)"
+    $rgName = "rg-$($userName)"
     
     az ad user create --display-name $userName --password Password123456 --user-principal-name $userEmail --force-change-password-next-sign-in false > $null
     Write-Host "Created user $userName"
@@ -40,5 +40,6 @@ for ($i = 1; $i -le $labUserCount; $i++) {
     # Assign Contributor role to the user for the resource group
     $rgId = $(az group show --name $rgName --query id -o tsv)
     az role assignment create --assignee $userId --role 'Azure AI Developer' --scope $rgId > $null
+    az role assignment create --assignee $userId --role 'Contributor' --scope $rgId > $null
     Write-Host "Assigned Contributor role to user $userName for resource group $rgName"
 }
