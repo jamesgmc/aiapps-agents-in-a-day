@@ -74,6 +74,8 @@ Imagine you are designing a Rock Paper Scissors Agent, here is how you could thi
 
 ## Create AI Agent Service Agent via Code
 
+The SDK talks to Azure AI Agent Service via managed identity to ensure the security of the service. You should have already sign in to Azure in the terminial windows in earlier lab. 
+
 - navigate to `labs/40-AIAgents` folder, open `game_agent_v2_llm.py` file.
 
 ```python
@@ -86,20 +88,26 @@ cd labs/40-AIAgents
 pip install -r requirements.txt
 ```
 
-- the SDK talks to Azure AI Agent Service via managed identity to ensure the security of the service. You will need to sign in to Azure in the terminial windows first. Sign in with the same identity that has access to the Azure AI Agent Service resource, it should be a DEV1XX@aiapps.top account.
+- open `.env` file, update the `AZURE_FOUNDRY_PROJECT_ENDPOINT` value to your Azure AI Foundry project endpoint. You can find it in the Azure AI Foundry portal, under `Overview` page.
 
-```powershell
-az login --tenant <your-tenant-id>
 ```
+AZURE_FOUNDRY_PROJECT_ENDPOINT=https://aiapps-agents-aiservices-793ad4.services.ai.azure.com/models
+AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME=gpt-4o
+```
+
+![alt text](images\image-6.png)
 
 - run the agent and see the console output.
 
 ```python
 python game_agent_v2_llm.py
 ```
-// add screenshot of console output
+![alt text](images\image-7.png)
 
 - navigate to Azure AI Foundry portal, you should see the agent created in the portal.
 
+![alt text](images\image-9.png)
+
 - you can also interact with the agent in the portal playground.
 
+![alt text](images\image-8.png)

@@ -6,36 +6,104 @@ Let's start to create our first agent in Foundry
 
 :::
 
-In this exercise, you use the Azure AI Agent service tools in the [Azure AI Foundry portal](https://ai.azure.com/) to create a agent for Flight Booking. The agent will be able to interact with users and provide information about flights.
+## Access Azure Portal
 
-## Access Azure AI Foundry
+Let's start creating Azure AI Foundry resource in Azure Portal.
 
-> **Note:** Azure AI Foundry was formerly known as Azure AI Studio.
+- Go to https://portal.azure.com/
 
-1. We have provisioned an shared Foundry environment for you to use. Open the following link in your browser: [https://ai.azure.com/](https://ai.azure.com/) and sign in with your provided Azure lab account.
-2. At home, you can follow these guidelines from the [Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-studio/) blog post for creating an Azure AI Foundry hub yourself.
-3. Azure AI Foundry portal should look like below:
+- Sign in with your lab account, e.g. `lab1user200@aiapps.top`. Refer to the sheet provided to you during the `Tech Check`.
 
-    ![Azure AI Foundry Project](./images/azure-ai-foundry.png)
-    //todo update the screenshot
+- Setup 2FA using Authenticator app if required. You can remove the account from Authenticator app after the lab.
 
-## Deploy a model
+- Once you have signed in, you should have access to a resource group named `rg-lab1user200` in the subscription `sub-aiaaa-lab`. 
 
-1. In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
-2. In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, select **Deploy base model**.
-3. Search for the `gpt-4o` model in the list, and then select and confirm it. **We have deployed the gpt-4o model already, you can skip the actual creation step.***
 
-    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using.
+## Sign in to Azure CLI
 
-    ![Model Deployed](./images/model-deployment.png)
-    //todo update the screenshot
+We will use bicep template to deploy the Azure AI Foundry and its related resources via Azure Cli. 
 
-## Create an agent
+- Use your lab login to sign into Azure Cli. `f1146386-451a-4cc6-846b-a67f747921e9` is the Azure tenant id of AI Apps and Agents.
+
+```
+az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
+```
+
+- Above command will display a login url and code to sign in. 
+
+![alt text](images\image.png)
+
+- Open the url `https://microsoft.com/devicelogin` in your browser, enter the code to sign in.
+
+![alt text](images\image-1.png)
+
+- Use your lab account to sign in. Your lab account should be the form of `lab1user100@aiapps.top`, e.g. `lab1user100@aiapps.top`. use `Work or school account`.
+
+![alt text](images\image-2.png)
+
+- You might be asked to setup or verify via MFA. Please do so and allow Azure CLI to access by clicking `Continue`.
+
+![alt text](images\image-3.png)
+
+![alt text](images\image-4.png)
+
+- Once you signed in, you should see a list of available subscriptions. Choose `sub-aiaaa-lab` by typing its number to continue.
+
+![alt text](images\image-5.png)
+
+
+## Deploy Azure AI Foundry Resource
+
+- navigate to `infra` folder, open `lab-deploy.bicep` file.
+
+- open `foundry-deploy.parameters.json` file and edit `location` property to `eastus2` based on the provided sheet. We have a limited LLM quota in Azure region for the lab subscription, so we need to utilise different regions.
+
+- create bicep deployment using the following command. make sure to replace `{xxxxx}` with your lab user name, e.g. `lab1user100`.
+
+```
+az deployment group create --resource-group rg-{xxxxx} --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.parameters.json 
+```
+
+- for example, if your lab account is `lab1user100`
+
+```
+az deployment group create --resource-group rg-lab1user100 --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.parameters.json 
+```
+
+- the deployment will take 5-10 minutes to complete. 
+
+```
+{
+  "properties": {
+    "provisioningState": "Succeeded",
+    ...
+  }
+}
+```
+
+![alt text](images\image-6.png)
+
+- once the deployment is completed, navigate to Azure Portal, you should see Azure AI Foundry resource created inside.
+
+### Explore Azure AI Foundry
+
+- We have provisioned an Foundry resource in earlier step. Open the following link in your browser: [https://ai.azure.com/](https://ai.azure.com/).
+
+- Azure AI Foundry portal should look like below:
+
+![Azure AI Foundry Project](./images/azure-ai-foundry.png)
+
+- In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
+
+- In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, see a list of models that we have deployed.
+
+## Azure AI Foundry Agent Service
 
 Now that you have deployed a model, you can create an agent. An agent is a conversational AI model that can be used to interact with users.
 
-1. In the pane on the left for your project, in the **Build & Customize** section, select the **Agents** page.
-2. Click **+ Create agent** to create a new agent. Under the **Agent Setup** dialog box:
+- In the pane on the left for your project, in the **Build & Customize** section, select the **Agents** page.
+
+- Click **+ Create agent** to create a new agent. Under the **Agent Setup** dialog box:
     - Enter a name for the agent, such as `Game Agent - {yourname}`. Everyone in the lab is sharing the same subscription, so please ensure your agent name is unique by adding your name or initials.
     - Ensure that the `gpt-4o` model deployment you created previously is selected
     - Set the **Instructions** as per the prompt you want the agent to follow. Here is an example:
@@ -79,13 +147,14 @@ Now that you have deployed a model, you can create an agent. An agent is a conve
 
 After creating the agent, you can test it to see how it responds to user queries in Azure AI Foundry portal playground.
 
-1. At the top of the **Setup** pane for your agent, select **Try in playground**.
-2. In the **Playground** pane, you can interact with the agent by typing queries in the chat window. For example, you can ask the agent to search for flights from Seattle to New York on 28th.
+- At the top of the **Setup** pane for your agent, select **Try in playground**.
+
+- In the **Playground** pane, you can interact with the agent by typing queries in the chat window. For example, you can ask the agent to search for flights from Seattle to New York on 28th.
 
     > **Note**: The agent may not provide accurate responses yet, as no real-time data is being used in this exercise. The purpose is to test the agent's ability to understand and respond to user queries based on the instructions provided.
 
     ![Agent Playground](./images/agent-playground.png)
     //todo update the screenshot
 
-3. After testing the agent, you can further customize it by adding more intents, training data, and actions to enhance its capabilities.
+- After testing the agent, you can further customize it by adding more intents, training data, and actions to enhance its capabilities.
 

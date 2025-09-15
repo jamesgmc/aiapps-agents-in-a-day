@@ -6,7 +6,7 @@ from azure.identity import DefaultAzureCredential
 load_dotenv()
 
 
-class GameAgentV52:
+class GameAgent:
     """Azure AI Foundry Agent service for RPS Tournament"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
@@ -116,33 +116,19 @@ class GameAgentV52:
         return 0
     
 
-class GameAgent(GameAgentV52):
-    """Alias for backward compatibility with existing code"""
-    pass
-
-
 if __name__ == "__main__":
+    
+    print("Game Agent: Test starting...")
     test_questions = [
         "What is 15 + 27?"
     ]
-    
-    print("Testing Azure AI Foundry Agent V52:")
-    print("=" * 50)
-    
-    with GameAgentV52() as agent:
-        print(f"Player Name: {agent.player_name}")
-        print(f"Agent Name: {agent.agent_name}")
-        print()
-        
+
+    with GameAgent() as agent:
+
         for question in test_questions:
             answer = agent.answer_question(question)
             print(f"Q: {question}")
             print(f"A: {answer}")
             print()
-        
-        print("RPS Move Selection Test:")
-        move_names = ["Rock", "Paper", "Scissors"]
-        move = agent.choose_rps_move()
-        print(f"Move: {move_names[move]} ({move})")
     
-    print("\nAgent V52 testing complete!")
+    print("Game Agent: Test complete")

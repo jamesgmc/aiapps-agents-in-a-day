@@ -5,7 +5,7 @@ from azure.identity import DefaultAzureCredential
 
 load_dotenv()
 
-class GameAgentV52:
+class GameAgent:
     """Azure AI Foundry Agent service for RPS Tournament"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
@@ -94,20 +94,15 @@ class GameAgentV52:
         if not self.agent:
             self._setup_agent()
         return self._call_azure_ai_agent(question)
-        
-
-class GameAgent(GameAgentV52):
-    """Alias for backward compatibility with existing code"""
-    pass
 
 
 if __name__ == "__main__":
  
-    print("Testing Azure AI Foundry Agent")
+    print("Game Agent: Test starting...")
     
-    with GameAgentV52() as agent:
-        answer = agent.answer_question('hello, who are you?')
+    with GameAgent() as agent:
+        answer = agent.answer_question('hello, how are you?')
         print(f"Agent: {answer}")
         print()
     
-    print("\nAgent testing complete!")
+    print("Game Agent: Test complete")

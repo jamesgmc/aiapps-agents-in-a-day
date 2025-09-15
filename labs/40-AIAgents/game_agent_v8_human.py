@@ -17,7 +17,7 @@ import time
 load_dotenv()
 
 
-class GameAgentV67:
+class GameAgent:
     """Azure AI Foundry Agent service for RPS Tournament with Human-in-the-Loop"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
@@ -154,7 +154,7 @@ class GameAgentV67:
                         if tool_call.function.name == "math_tool_function":
                             import json
                             args = json.loads(tool_call.function.arguments)
-                            output = GameAgentV67.math_tool_function(args.get("expression", ""))
+                            output = GameAgent.math_tool_function(args.get("expression", ""))
                             tool_outputs.append({"tool_call_id": tool_call.id, "output": output})
                             print(f"✅ Executed tool: {tool_call.function.name}")
                     
@@ -219,50 +219,25 @@ class GameAgentV67:
         
     def _setup_tools(self):
         """Setup tool functions for the agent"""
-        user_functions = {GameAgentV67.math_tool_function}
+        user_functions = {GameAgent.math_tool_function}
         functions = FunctionTool(functions=user_functions)
         return functions.definitions
 
 
-class GameAgent(GameAgentV67):
-    """Alias for backward compatibility with existing code"""
-    pass
-
-
-def demonstrate_human_in_loop():
-    """Demonstrate human-in-the-loop functionality"""
-    print("🚀 HUMAN-IN-THE-LOOP AGENT DEMONSTRATION")
-    print("="*60)
-    print("This agent will ask for your approval before executing tools.")
-    print("You can approve or reject each tool call.")
-    print("="*60)
-    
-    test_questions = [
-        "What is 15 + 27?",
-        "Calculate 100 * 7",
-        "What is the square root of 144? Use 144**0.5"
-    ]
-    
-    with GameAgentV67() as agent:
-        print(f"Player Name: {agent.player_name}")
-        print(f"Agent Name: {agent.agent_name}")
-        print()
-        
-        for i, question in enumerate(test_questions, 1):
-            print(f"\n🔹 Question {i}: {question}")
-            print("⏳ Processing...")
-            answer = agent.answer_question(question)
-            print(f"🤖 Final Answer: {answer}")
-            print("="*60)
-        
-        print("\n🎮 RPS Move Selection Test:")
-        print("⏳ Choosing move...")
-        move_names = ["Rock", "Paper", "Scissors"]
-        move = agent.choose_rps_move()
-        print(f"🤖 Move: {move_names[move]} ({move})")
-    
-    print("\n✅ Human-in-the-loop agent demonstration complete!")
-
 
 if __name__ == "__main__":
-    demonstrate_human_in_loop()
+
+    print("Game Agent: Test starting...")
+    test_questions = [
+        "What is 15 + 27?"
+    ]
+    
+    with GameAgent() as agent:
+        for question in test_questions:
+            answer = agent.answer_question(question)
+            print(f"Q: {question}")
+            print(f"A: {answer}")
+            print()
+    
+    print("Game Agent: Test complete")
+
