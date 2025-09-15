@@ -8,6 +8,8 @@ az login --tenant f1146386-451a-4cc6-846b-a67f747921e9
 
 # Set the subscription context
 az account set --subscription 22f484c3-b754-45aa-8cec-e40bb48bcb34
+# az
+az account set --subscription ba15181f-9a45-4eff-9043-4ddf263b6dc2
 
 # Create a new resource group
 az group create --name rg-lab --location eastus2
