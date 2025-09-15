@@ -63,6 +63,9 @@ az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
 ```
 az deployment group create --resource-group rg-{xxxxx} --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.parameters.json 
 ```
+
+- for example, if your lab account is `lab1user100`
+
 ```
 az deployment group create --resource-group rg-lab1user100 --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.parameters.json 
 ```
