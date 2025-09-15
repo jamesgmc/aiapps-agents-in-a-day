@@ -58,6 +58,3 @@ class GameAgent:
         fallback_answers = ["42", "yes", "no", "blue", "red", "green", "1", "10", "100"]
         return random.choice(fallback_answers)
     
-    def choose_rps_move(self) -> int:
-        """Randomly choose Rock (0), Paper (1), or Scissors (2)"""
-        return random.randint(0, 2)
