@@ -106,7 +106,7 @@ if __name__ == "__main__":
     print("Testing Azure AI Foundry Agent")
     
     with GameAgentV52() as agent:
-        answer = agent.answer_question('hello, who are you?')
+        answer = agent.answer_question('hello, how are you?')
         print(f"Agent: {answer}")
         print()
     

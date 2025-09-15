@@ -74,6 +74,36 @@ Imagine you are designing a Rock Paper Scissors Agent, here is how you could thi
 
 ## Create AI Agent Service Agent via Code
 
+the SDK talks to Azure AI Agent Service via managed identity to ensure the security of the service. You will need to sign in to Azure in the terminial windows first. Sign in with the same identity that has access to the Azure AI Agent Service resource.
+
+- Use your lab login to sign into Azure Cli. `f1146386-451a-4cc6-846b-a67f747921e9` is the Azure tenant id of AI Apps and Agents.
+
+```
+az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
+```
+
+- Above command will display a login url and code to sign in. 
+
+![alt text](images\image.png)
+
+- Open the url `https://microsoft.com/devicelogin` in your browser, enter the code to sign in.
+
+![alt text](images\image-1.png)
+
+- Use your lab account to sign in. Your lab account should be the form of `labUserXXX@aiapps.top`, e.g. `labUser100@aiapps.top`. use `Work or school account`.
+
+![alt text](images\image-2.png)
+
+- You might be asked to setup or verify via MFA. Please do so and allow Azure CLI to access by clicking `Continue`.
+
+![alt text](images\image-3.png)
+
+![alt text](images\image-4.png)
+
+- Once you signed in, you should see a list of available subscriptions. Choose `sub-aiaaa-lab` by typing its number to continue.
+
+![alt text](images\image-5.png)
+
 - navigate to `labs/40-AIAgents` folder, open `game_agent_v2_llm.py` file.
 
 ```python
@@ -86,20 +116,26 @@ cd labs/40-AIAgents
 pip install -r requirements.txt
 ```
 
-- the SDK talks to Azure AI Agent Service via managed identity to ensure the security of the service. You will need to sign in to Azure in the terminial windows first. Sign in with the same identity that has access to the Azure AI Agent Service resource, it should be a DEV1XX@aiapps.top account.
+- open `.env` file, update the `AZURE_FOUNDRY_PROJECT_ENDPOINT` value to your Azure AI Foundry project endpoint. You can find it in the Azure AI Foundry portal, under `Overview` page.
 
-```powershell
-az login --tenant <your-tenant-id>
 ```
+AZURE_FOUNDRY_PROJECT_ENDPOINT=https://aiapps-agents-aiservices-793ad4.services.ai.azure.com/models
+AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME=gpt-4o
+```
+
+![alt text](images\image-6.png)
 
 - run the agent and see the console output.
 
 ```python
 python game_agent_v2_llm.py
 ```
-// add screenshot of console output
+![alt text](images\image-7.png)
 
 - navigate to Azure AI Foundry portal, you should see the agent created in the portal.
 
+![alt text](images\image-9.png)
+
 - you can also interact with the agent in the portal playground.
 
+![alt text](images\image-8.png)
