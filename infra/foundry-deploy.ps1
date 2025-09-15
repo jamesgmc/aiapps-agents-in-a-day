@@ -15,9 +15,9 @@ az account set --subscription ba15181f-9a45-4eff-9043-4ddf263b6dc2
 az group create --name rg-lab --location eastus2
 
 #  What-If using the Bicep template and parameters file
-az deployment group create --resource-group rg-lab --template-file ./foundry-deploy.bicep --what-if
+az deployment group create --resource-group rg-lab --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.bicep.json --what-if
 
 # Deploy resources using the Bicep template and parameters file
-az deployment group create --resource-group rg-lab --template-file ./foundry-deploy.bicep 
+az deployment group create --resource-group rg-lab --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.bicep.json 
 
 

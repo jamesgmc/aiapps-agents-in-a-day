@@ -12,7 +12,7 @@ Let's start creating Azure AI Foundry resource in Azure Portal.
 
 - Go to https://portal.azure.com/
 
-- Sign in with your lab account, e.g. `lab1user200@aiapps.top`
+- Sign in with your lab account, e.g. `lab1user200@aiapps.top`. Refer to the sheet provided to you during the `Tech Check`.
 
 - Setup 2FA using Authenticator app if required. You can remove the account from Authenticator app after the lab.
 
@@ -56,14 +56,15 @@ az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
 
 - navigate to `infra` folder, open `lab-deploy.bicep` file.
 
+- open `foundry-deploy.parameters.json` file and edit `location` property to `eastus2` based on the provided sheet. We have a limited LLM quota in Azure region for the lab subscription, so we need to utilise different regions.
+
 - create bicep deployment using the following command. make sure to replace `{xxxxx}` with your lab user name, e.g. `lab1user100`.
 
 ```
-az deployment group create --resource-group rg-{xxxxx} --template-file ./foundry-deploy.bicep 
+az deployment group create --resource-group rg-{xxxxx} --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.parameters.json 
 ```
-
 ```
-az deployment group create --resource-group rg-lab1user100 --template-file ./foundry-deploy.bicep 
+az deployment group create --resource-group rg-lab1user100 --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.parameters.json 
 ```
 
 - the deployment will take 5-10 minutes to complete. 
