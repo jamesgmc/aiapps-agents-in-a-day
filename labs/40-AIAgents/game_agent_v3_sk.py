@@ -7,7 +7,7 @@ from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
 # Load environment variables
 load_dotenv()
 
-class GameAgentSK:
+class GameAgent:
     """Semantic Kernel Agent for RPS Tournament"""
 
     def __init__(self, model_deployment_name=None, player_name=None, api_key=None, endpoint=None, api_version=None):
@@ -49,21 +49,17 @@ class GameAgentSK:
         return 0
 
 if __name__ == "__main__":
+
+    print("Game Agent: Test starting...")
     test_questions = [
         "What is 15 + 27?"
     ]
-    print("Testing Semantic Kernel Agent:")
-    print("=" * 50)
-    agent = GameAgentSK()
-    print(f"Player Name: {agent.player_name}")
-    print()
-    for question in test_questions:
-        answer = agent.answer_question(question)
-        print(f"Q: {question}")
-        print(f"A: {answer}")
-        print()
-    print("RPS Move Selection Test:")
-    move_names = ["Rock", "Paper", "Scissors"]
-    move = agent.choose_rps_move()
-    print(f"Move: {move_names[move]} ({move})")
-    print("\nAgent SK testing complete!")
+
+    with GameAgent() as agent:
+        for question in test_questions:
+            answer = agent.answer_question(question)
+            print(f"Q: {question}")
+            print(f"A: {answer}")
+            print()
+            
+    print("Game Agent: Test complete")

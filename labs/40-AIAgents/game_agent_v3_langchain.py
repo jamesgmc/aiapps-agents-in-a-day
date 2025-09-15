@@ -8,7 +8,7 @@ load_dotenv()
 
 
 
-class GameAgentV52:
+class GameAgent:
     """LangChain LLM Agent for RPS Tournament"""
     def __init__(self, player_name=None, openai_api_key=None, model_name=None):
         self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
@@ -52,19 +52,15 @@ class GameAgentV52:
         return 0
 
 
-class GameAgent(GameAgentV52):
-    pass
-
 
 if __name__ == "__main__":
+
+    print("Game Agent: Test starting...")
     test_questions = [
         "What is 15 + 27?"
     ]
 
-    print("Testing LangChain Agent V52:")
-    print("=" * 50)
-
-    with GameAgentV52() as agent:
+    with GameAgent() as agent:
         print(f"Player Name: {agent.player_name}")
         print(f"Agent Name: {agent.agent_name}")
         print()
@@ -75,9 +71,4 @@ if __name__ == "__main__":
             print(f"A: {answer}")
             print()
 
-        print("RPS Move Selection Test:")
-        move_names = ["Rock", "Paper", "Scissors"]
-        move = agent.choose_rps_move()
-        print(f"Move: {move_names[move]} ({move})")
-
-    print("\nAgent V52 testing complete!")
+    print("Game Agent: Test complete")

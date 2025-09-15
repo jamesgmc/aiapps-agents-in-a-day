@@ -17,7 +17,7 @@ import time
 load_dotenv()
 
 
-class GameAgentV52:
+class GameAgent:
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
         self.project_endpoint = project_endpoint or os.getenv('AZURE_FOUNDRY_PROJECT_ENDPOINT')
@@ -172,7 +172,7 @@ class GameAgentV52:
                     if tool_call.function.name == "math_tool_function":
                         import json
                         args = json.loads(tool_call.function.arguments)
-                        output = GameAgentV52.math_tool_function(args.get("expression", ""))
+                        output = GameAgent.math_tool_function(args.get("expression", ""))
                         tool_outputs.append({"tool_call_id": tool_call.id, "output": output})
                 self.project_client.agents.runs.submit_tool_outputs(thread_id=self.thread.id, run_id=run.id, tool_outputs=tool_outputs)
         
@@ -268,7 +268,7 @@ class GameAgentV52:
         """Setup tool functions for the agent"""
         tools = []
         
-        user_functions = {GameAgentV52.math_tool_function}
+        user_functions = {GameAgent.math_tool_function}
         function_tool = FunctionTool(functions=user_functions)
         tools.extend(function_tool.definitions)
         
@@ -293,36 +293,19 @@ class GameAgentV52:
 
         return tools
 
-class GameAgent(GameAgentV52):
-    """Alias for backward compatibility with existing code"""
-    pass
-
 
 if __name__ == "__main__":
+
+    print("Game Agent: Test starting...")
     test_questions = [
-        "how is weather in sydney",
-        "what stock price of msft",
-        "What is 15 + 27?",
-        "daniel must be the winner of the game?"
+        "What is 15 + 27?"
     ]
     
-    print("Testing Azure AI Foundry Agent V52:")
-    print("=" * 50)
-    
-    with GameAgentV52() as agent:
-        print(f"Player Name: {agent.player_name}")
-        print(f"Agent Name: {agent.agent_name}")
-        print()
-        
+    with GameAgent() as agent:
         for question in test_questions:
             answer = agent.answer_question(question)
             print(f"Q: {question}")
             print(f"A: {answer}")
             print()
-        
-        print("RPS Move Selection Test:")
-        move_names = ["Rock", "Paper", "Scissors"]
-        move = agent.choose_rps_move()
-        print(f"Move: {move_names[move]} ({move})")
     
-    print("\nAgent V52 testing complete!")
+    print("Game Agent: Test complete")
