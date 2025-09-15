@@ -5,7 +5,11 @@ param (
     [string]$labUserCount = 0
 )
 
+# sub-aiaaa
 # .\entra-lab-provision.ps1 22f484c3-b754-45aa-8cec-e40bb48bcb34 aiapps.top lab1 3
+
+# sub-aiaaa-lab
+# .\entra-lab-provision.ps1 ba15181f-9a45-4eff-9043-4ddf263b6dc2 aiapps.top lab1 3
 
 az account set --subscription $subscriptionId
 
@@ -40,6 +44,7 @@ for ($i = 1; $i -le $labUserCount; $i++) {
     # Assign Contributor role to the user for the resource group
     $rgId = $(az group show --name $rgName --query id -o tsv)
     az role assignment create --assignee $userId --role 'Azure AI Developer' --scope $rgId > $null
+    az role assignment create --assignee $userId --role 'Azure AI User' --scope $rgId > $null
     az role assignment create --assignee $userId --role 'Contributor' --scope $rgId > $null
     Write-Host "Assigned Contributor role to user $userName for resource group $rgName"
 }
