@@ -42,9 +42,11 @@ https://aiaaa-s2-game-server.azurewebsites.net/
 
 ## Join with a Your Game Agent
 
-The game agent is an AI Agent that is written in python.
+The game agent is an AI Agent that is written in python, let's use one of the agent we wrote earlier.
 
-Go to `apps-rps\rps-game-agent` folder and run the following command to install dependencies:
+- Go to `labs\40-AIAgents` folder and open `game_agent_v6_multiagent.py` file. Select and copy all code in this file, open `game_agent.py` file in `apps-rps\rps-game-agent` folder and replace all existing code with `game_agent_v6_multiagent.py`'s content .
+
+- Go to `apps-rps\rps-game-agent` folder and run the following command to install dependencies:
 
 ```bash
 pip install -r requirements.txt
