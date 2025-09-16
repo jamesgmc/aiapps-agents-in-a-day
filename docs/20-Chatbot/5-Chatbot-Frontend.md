@@ -4,10 +4,10 @@ In the previous lab, we configured and hosted the backend API code locally. The 
 
 ## Connect Chatbot FrontEnd with BackEnd API
 
-1. The frontend chatbot app is located in `apps-chat/chatbot-frontend`. update backend url in `.env` file. While the code for the SPA web application is outside the scope of this dev guide. It's worth noting that the Web App is configured with the URL for the Backend API in `.env`.
+1. The frontend chatbot app is located in `apps-chat/chatbot-frontend`. update the backend URL in `.env` file. While the code for the SPA web application is outside the scope of this dev guide, it's worth noting that the Web App is configured with the URL for the Backend API in `.env`.
 
    :::info
-   If you are running the `codespaces` in web browser, please replace the `BACKEND_URI` with the actual `codespaces` url of backend, similar to below. Make sure no trailing slash in URL.
+   If you are running the `codespaces` in web browser, please replace the `BACKEND_URI` with the actual `codespaces` URL of backend, similar to below. Make sure no trailing slash in URL.
 
    ```
    BACKEND_URI=https://ominous-space-goldfish-v6vv749557wjfxj99-5000.app.github.dev
@@ -31,13 +31,13 @@ In the previous lab, we configured and hosted the backend API code locally. The 
    - `apps-chat\chatbot-frontend\scr\pages\chat\Chat.tsx` manages chat conversations
    - `apps-chat\chatbot-frontend\scr\components\Answer\Answer.tsx` manages chat response
 
-4. Navigating to local URL in the browser accesses the front-end application. Through this front-end application User Interface, questions can be submitted to the Azure OpenAI model about the Bike Store company data, then it will generate responses accordingly.
+4. Navigating to local URL in the browser accesses the front-end application. Through this front-end application user interface, questions can be submitted to the Azure OpenAI model about the Bike Store company data, then it will generate responses accordingly.
 
    ![Front-end Web Application User Interface](images/2024-01-17-12-42-59.png)
 
 ## Ask questions about data and observe the responses
 
-1. To ask the AI questions about the Bike Store company data, type the questions in to the front-end application chat user interface. The web application includes tiles with a couple example questions to get started. To use these, simply click on the question tile and it will generate an answer.
+1. To ask the AI questions about the Bike Store company data, type the questions into the front-end application chat user interface. The web application includes tiles with a couple example questions to get started. To use these, simply click on the question tile and it will generate an answer.
 
    ![Front-end Web Application User Interface](images/2024-01-17-12-42-59.png)
 
@@ -51,7 +51,7 @@ In the previous lab, we configured and hosted the backend API code locally. The 
 
    ![Chat user interface screenshot with question and generated answer displayed](images/chatbot-frontend-image-2.png)
 
-4. Go ahead, ask the service a few questions about Bike Store and observe the responses.
+4. Go ahead and ask the service a few questions about Bike Store, and observe the responses.
 
    :::info
    What do the HTTP and RESTful request & responses look like? Use the browser's developer tools to inspect the actual request and response payloads.
@@ -75,7 +75,7 @@ While it may be simple to ask the model questions, there are times when Prompt E
 
 ### What happens when I start exceeding my token limits?
 
-A Token in Azure OpenAI is a basic unit of input and output that the service processes. Generally, the models understand and process text by breaking it down into tokens.
+A token in Azure OpenAI is a basic unit of input and output that the service processes. Generally, the models understand and process text by breaking it down into tokens.
 
 For example, the word `hamburger` gets broken up into the tokens `ham`, `bur` and `ger`, while a short and common word like `pear` is a single token. Many tokens start with a whitespace, for example ` hello` and ` bye`.
 

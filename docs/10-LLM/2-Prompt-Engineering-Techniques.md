@@ -8,7 +8,7 @@ This section discusses prompt engineering techniques that can help LLMs solve ce
 
 ## Zero-shot learning
 
-LLMs are trained on such large amounts of data they may be be able to perform some tasks with very little prompting. Try the example below and change the sentence to see what outcomes you find.
+LLMs are trained on such large amounts of data they may be able to perform some tasks with very little prompting. Try the example below and change the sentence to see what outcomes you find.
 
 ```text title="Enter in the user prompt:"
 Classify the text into neutral, negative or positive.
@@ -18,7 +18,7 @@ Sentiment:
 
 ## Few-shot learning
 
-If zero-shot learning is failing for your examples and more complex tasks, few shot prompting can provide examples that can better steer the model to the desired outcomes. Examples show the model cleanly how we want it to operate. Try the example below to see the outcome. Can you think of other examples that could leverage few-shot learning?
+If zero-shot learning is failing for your examples and more complex tasks, few-shot prompting can provide examples that can better steer the model to the desired outcomes. Examples show the model cleanly how we want it to operate. Try the example below to see the outcome. Can you think of other examples that could leverage few-shot learning?
 
 ```text title="Enter in the user prompt:"
 Headline: "Contoso Bike Store opens new location in Seattle"
@@ -31,7 +31,7 @@ Headline: "Contoso Bike Store wins award for best customer service"
 Sentiment:
 ```
 
-The next two sections are very well described in the ['Meet Mr Prompty'](https://www.linkedin.com/pulse/meet-mr-prompty-break-tasks-down-chain-thought-dynamic-mario-fontana/?trackingId=%2FzJrYZ06TxWwVVLkU7rxug%3D%3D) articles on LinkedIn, thank you author, Mario Fontana, for sharing your insights.
+The next two sections are very well described in the ['Meet Mr Prompty'](https://www.linkedin.com/pulse/meet-mr-prompty-break-tasks-down-chain-thought-dynamic-mario-fontana/?trackingId=%2FzJrYZ06TxWwVVLkU7rxug%3D%3D) articles on LinkedIn. Thank you author, Mario Fontana, for sharing your insights.
 
 ## Chain of thought prompting
 

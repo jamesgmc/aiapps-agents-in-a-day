@@ -1,7 +1,7 @@
 # Vector search using text embeddings
 
 :::tip Text Embeddings
-The text embeddings are a type of vector representation of data over a continuous vector space where similar items are close together and dissimilar items are far apart. This allows us to perform operations on the vectors to find similar items, perform clustering, and more.
+The text embeddings are a type of vector representation of data in a continuous vector space where similar items are close together and dissimilar items are far apart. This allows us to perform operations on the vectors to find similar items, perform clustering, and more.
 :::
 
 In the previous lab, you loaded the `product` catalog into Azure Cosmos DB. The Chatbot will use the product catalog to fetch the relevant products based on the user's query.
@@ -42,7 +42,7 @@ You will also learn how to use the vector index to retrieve the relevant documen
 
 3. Open the `2a-embedding.js` file in the Visual Studio Code editor.
 
-4. Add the following code to import the Azure OpenAI client and Azure Key Credential classes at the top of the file below `const { MongoClient } = require('mongodb');` line. The code block alse creates an instance of the Azure OpenAI client afer the imports.
+4. Add the following code to import the Azure OpenAI client and Azure Key Credential classes at the top of the file below `const { MongoClient } = require('mongodb');` line. The code block also creates an instance of the Azure OpenAI client after the imports.
 
    ```javascript
    const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");

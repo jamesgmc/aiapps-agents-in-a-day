@@ -8,13 +8,13 @@ Azure Cosmos DB is a globally distributed, multi-model database service for any 
 
 In this lab, you will load the product catalog data into Azure Cosmos DB. The product catalog will be used by the chatbot to answer questions related to the products in the catalog.
 
-The product catalog data is shared in a CSV file. You will be writing a custom script to convert the CSV file to JSON format and then load the JSON data into the Cosmos DB.
+The product catalog data is provided in a CSV file. You will be writing a custom script to convert the CSV file to JSON format and then load the JSON data into the Cosmos DB.
 
 ![RAG](images/rag_design_data_ingestion.png)
 
 ## Setup the lab environment
 
-1. Open repo in `VS Code` and then open `Terminial` -> `New Terminal`. Navigate to the lab folder `~/labs/20-Chatbot/` within the repository.
+1. Open repo in `VS Code` and then open `Terminal` -> `New Terminal`. Navigate to the lab folder `~/labs/20-Chatbot/` within the repository.
 
    ```bash
    cd labs/20-Chatbot
@@ -36,7 +36,7 @@ The `~/labs/20-Chatbot/completed` folder contains the completed solution for thi
 
 The quality of the dataset feeding into the LLM model makes a big difference. While it is typically the responsibility of the data team, there may be various conversions and integrations required to format the dataset. Let's take a look at the product dataset and see if any modifications are needed before loading it into Cosmos DB.
 
-The `product` data set is located in the `data\product.csv` file. It has the following fields: `id`,`categoryId`,`categoryName`,`sku`,`name`,`description`,`price`,`tags`. The `tags` field is a JSON array of strings.
+The `product` data set is located in the `data/product.csv` file. It has the following fields: `id`,`categoryId`,`categoryName`,`sku`,`name`,`description`,`price`,`tags`. The `tags` field is a JSON array of strings.
 
 1. Here is a snapshot of the `product.csv` file:
 

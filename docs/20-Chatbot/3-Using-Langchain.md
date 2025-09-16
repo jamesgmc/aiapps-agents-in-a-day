@@ -2,7 +2,7 @@
 
 In the previous lab, the `mongodb` package was used to perform a vector search through a db command to find product documents that were most similar to the user's input. In this lab, you will use the LangChain package to perform the same search. LangChain has a vector store class named `AzureCosmosDBVectorStore`, a community contribution, that supports vector search in Azure Cosmos DB.
 
-The `AzureCosmosDBVectorStore` class represents a single vector index in the database, therefore for the instructions for this lab will focus on the `products` collection, however the same steps can be used with the `customers` and `sales` collections as well.
+The `AzureCosmosDBVectorStore` class represents a single vector index in the database, therefore, the instructions for this lab will focus on the `products` collection, however the same steps can be used with the `customers` and `sales` collections as well.
 
 Throughout this lab, notice how much more concise the code is compared to the previous lab with the addition of LangChain.
 
@@ -18,13 +18,13 @@ Throughout this lab, notice how much more concise the code is compared to the pr
     The `~/labs/20-Chatbot/completed` folder contains the completed solution for this lab. You can compare your code with the files in `completed` folder if your code does not run correctly.
     :::
 
-2. Check `.env` file has correct configurations. Placeholder string should be all replaced in earlier `Lab Setup` step.
+2. Check that the `.env` file has correct configurations. All placeholder strings should have been replaced in the earlier `Lab Setup` step.
 
    :::info
    The Azure OpenAI service name is not the full endpoint. Only the service name is required. For example, if the endpoint is `https://myservicename.openai.azure.com/`, then the service name is `myservicename`.
    :::
 
-3. Install the langchain packages by running the following command in the terminal window.
+3. Install the LangChain packages by running the following command in the terminal window.
 
    ```bash
    npm install langchain@0.1.21 --save
@@ -48,7 +48,7 @@ When establishing the connection to the vector store, recall that in the previou
 
 The return value of a vector search in LangChain is a list of `Document` objects. The LangChain `Document` class contains two properties: `pageContent`, that represents the textual content that is typically used to augment the prompt, and `metadata` that contains all other attributes of the document. In the cell below, we'll use the `_id` field as the `pageContent`, and the rest of the fields are returned as metadata.
 
-1. Open the `3a-vector-search.js` file in the Visual Studio Code editor. Notice it has the basic MongoDB connection setup.
+1. Open the `3a-vector-search.js` file in the Visual Studio Code editor. Notice that it has the basic MongoDB connection setup.
 
 2. Add the following complete code block where the `TODO: Set up Azure Cosmos DB vector store and perform vector search` comment appears:
 
