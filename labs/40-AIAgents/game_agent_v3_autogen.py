@@ -12,7 +12,7 @@ class GameAgent:
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
         self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
-        self.agent_name = f"rps-game-agent-{self.player_name}"
+        self.agent_name = f"agent-{self.player_name}"
         
         # Configure LLM for AutoGen
         self.llm_config = {
