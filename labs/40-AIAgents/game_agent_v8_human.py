@@ -24,6 +24,7 @@ class GameAgent:
         self.project_endpoint = project_endpoint or os.getenv('AZURE_FOUNDRY_PROJECT_ENDPOINT')
         self.model_deployment_name = model_deployment_name or os.getenv('AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME')
         self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
+        self.player_name = self.player_name + "_v8"
         
         self.project_client = AIProjectClient(
             endpoint=self.project_endpoint,
