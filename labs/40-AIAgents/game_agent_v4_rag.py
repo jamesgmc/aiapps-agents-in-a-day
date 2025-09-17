@@ -61,7 +61,7 @@ class GameAgent:
         """Create vector store and upload files for file search"""
             
         vector_store_name = f"game-rulebook-store"
-        file_paths = ['C:\\RepoInsight\\aiapps-agents-in-a-day\\apps-rps\\rps-game-agent\\game_rulebook.txt']
+        file_paths = ['./game_rulebook.txt']
         uploaded_files = []
         for file_path in file_paths:
             if os.path.exists(file_path):
@@ -164,23 +164,6 @@ class GameAgent:
             self._setup_agent()
         return self._call_azure_ai_agent(question)
         
-    def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using Azure AI Foundry Agent service"""
-        prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
-        
-        if not self.agent:
-            self._setup_agent()
-        azure_choice = self._call_azure_ai_agent(prompt)
-        choice_lower = azure_choice.lower().strip()
-        
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        
-        return 0
     
     @staticmethod
     def math_tool_function(expression: str) -> str:
@@ -216,7 +199,7 @@ if __name__ == "__main__":
 
     print("Game Agent: Test starting...")
     test_questions = [
-        "What is 15 + 27?"
+        "According to the game rulebook, what is the name of the person had the idea to create Rock-Paper-Scissors Agent ?"
     ]
     
     with GameAgent() as agent:

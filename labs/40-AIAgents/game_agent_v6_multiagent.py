@@ -119,7 +119,8 @@ class GameAgent:
         self.agent_logo = self.project_client.agents.create_agent(
             model=self.model_deployment_name,
             name=self.agent_logo_name,
-            instructions="Your job is to detect the name of the logo by using at an image. If you don't know the logo, say I dont know.",
+            instructions="You are a logo recognition expert. When given an image, analyze it and respond ONLY with the name of the logo or brand you see. If you do not recognize the logo, respond with 'I don't know'. Accept image input as a URL or file.",
+            input_types=["image", "text"]
         )
 
         connected_agent = ConnectedAgentTool(
@@ -181,23 +182,6 @@ class GameAgent:
             self._setup_agent()
         return self._call_azure_ai_agent(question)
         
-    def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using Azure AI Foundry Agent service"""
-        prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
-        
-        if not self.agent:
-            self._setup_agent()
-        azure_choice = self._call_azure_ai_agent(prompt)
-        choice_lower = azure_choice.lower().strip()
-        
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        
-        return 0
     
     @staticmethod
     def math_tool_function(expression: str) -> str:

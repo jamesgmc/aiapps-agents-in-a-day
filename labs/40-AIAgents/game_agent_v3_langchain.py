@@ -37,21 +37,6 @@ class GameAgent:
         response = self.llm.invoke(formatted_prompt)
         return response.content
 
-    def choose_rps_move(self):
-        prompt = PromptTemplate.from_template("You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors.")
-        formatted_prompt = prompt.format()
-        response = self.llm.invoke(formatted_prompt)
-        azure_choice = response.content
-        choice_lower = azure_choice.lower().strip()
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        return 0
-
-
 
 if __name__ == "__main__":
 

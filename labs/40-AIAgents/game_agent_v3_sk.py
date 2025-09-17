@@ -33,20 +33,6 @@ class GameAgent:
         result = asyncio.run(self.kernel.invoke_prompt(prompt))
         return str(result)
 
-    def choose_rps_move(self):
-        prompt = (
-            "You are playing Rock-Paper-Scissors. "
-            "Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
-        )
-        result = asyncio.run(self.kernel.invoke_prompt(prompt))
-        choice_lower = str(result).lower().strip()
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        return 0
 
 if __name__ == "__main__":
 

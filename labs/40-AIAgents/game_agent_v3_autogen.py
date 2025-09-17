@@ -81,24 +81,7 @@ class GameAgent:
         if not self.agent:
             self._setup_agent()
         return self._call_autogen_agent(question)
-        
-    def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using AutoGen agent"""
-        prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
-        
-        if not self.agent:
-            self._setup_agent()
-        autogen_choice = self._call_autogen_agent(prompt)
-        choice_lower = autogen_choice.lower().strip()
-        
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        
-        return 0
+
     
 
 
