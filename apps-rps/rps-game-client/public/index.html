@@ -38,9 +38,9 @@
             font-weight: bold;
             margin: 10px 0;
         }
-        .status.pending { color: #orange; }
-        .status.inprogress { color: #green; }
-        .status.completed { color: #blue; }
+        .status.pending { color: orange; }
+        .status.inprogress { color: green; }
+        .status.completed { color: blue; }
         input[type="text"] {
             width: 300px;
             padding: 10px;
@@ -925,7 +925,7 @@
                     // wait a bit longer to ensure session is established
                     setTimeout(() => {
                         loadResults();
-                    }, 3000);
+                    }, 5000);
                     autoRefreshStarted = true;
                 } else {
                     loadResults();
