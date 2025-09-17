@@ -123,7 +123,7 @@ class GameAgent:
         )
 
         connected_agent = ConnectedAgentTool(
-            id=self.agent_logo.id, name=self.agent_logo.name, description="Detect the name of the logo by using at an image"
+            id=self.agent_logo.id, name='agent_logo', description="Detect the name of the logo by using at an image"
         )
         tools.extend(connected_agent.definitions)
         
@@ -216,7 +216,7 @@ if __name__ == "__main__":
 
     print("Game Agent: Test starting...")
     test_questions = [
-        "What is this logo ? https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg"
+        "What is this logo ? https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.png"
     ]
     
     with GameAgent() as agent:
