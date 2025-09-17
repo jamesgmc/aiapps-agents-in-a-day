@@ -25,12 +25,11 @@ class GameAgent:
         self.agent_name = f"agent-{self.player_name}"
         self.agent = None
 
-        self.agent_stock_name = f"stock_price_bot"
-        self.agent_stock = None
+        self.agent_logo_name = f"agent-{self.player_name}-logo"
+        self.agent_logo = None
 
         self.thread = None
         self._client_context = None
-
 
         self.vector_store = None
         self.file_search_tool = None
@@ -116,14 +115,15 @@ class GameAgent:
         tools = self._setup_tools()
         tool_resources = self.file_search_tool.resources
             
-        self.agent_stock = self.project_client.agents.create_agent(
+            
+        self.agent_logo = self.project_client.agents.create_agent(
             model=self.model_deployment_name,
-            name=self.agent_stock_name,
-            instructions="Your job is to get the stock price of a company. If you don't know the realtime stock price, return the last known stock price.",
+            name=self.agent_logo_name,
+            instructions="Your job is to detect the name of the logo by using at an image. If you don't know the logo, say I dont know.",
         )
 
         connected_agent = ConnectedAgentTool(
-            id=self.agent_stock.id, name=self.agent_stock.name, description="Gets the stock price of a company"
+            id=self.agent_logo.id, name=self.agent_logo.name, description="Detect the name of the logo by using at an image"
         )
         tools.extend(connected_agent.definitions)
         
@@ -228,11 +228,12 @@ class GameAgent:
         return tools
 
 
+
 if __name__ == "__main__":
 
     print("Game Agent: Test starting...")
     test_questions = [
-        "What is 15 + 27?"
+        "What is this logo ? https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg"
     ]
     
     with GameAgent() as agent:
