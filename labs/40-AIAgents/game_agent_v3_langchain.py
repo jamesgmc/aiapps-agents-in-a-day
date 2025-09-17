@@ -16,7 +16,7 @@ class GameAgent:
         self.azure_endpoint = os.getenv('AZURE_OPENAI_API_ENDPOINT')
         self.model_name = model_name or os.getenv('AZURE_OPENAI_API_DEPLOYMENT_NAME', 'gpt-4o')
         self.api_version = os.getenv('AZURE_OPENAI_API_VERSION', '2024-02-15-preview')
-        self.agent_name = f"agent-{self.player_name}"
+        self.agent_name = f"agent_{self.player_name}"
         self.llm = AzureChatOpenAI(
             azure_endpoint=self.azure_endpoint,
             api_key=self.openai_api_key,

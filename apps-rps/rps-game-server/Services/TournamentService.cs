@@ -182,6 +182,7 @@ public class TournamentService : ITournamentService
             round.Status = RoundStatus.InProgress;
             round.Question = qa.Question;
             round.CorrectAnswer = qa.Answer;
+            round.AnswerRule = qa.AnswerRule;
             round.QuestionType = qa.Type;
             round.MediaUrl = qa.MediaUrl;
             round.ServerMove = GenerateRandomMove();
@@ -330,7 +331,7 @@ public class TournamentService : ITournamentService
             playerResult.Answer = request.Answer;
             playerResult.Move = request.Move;
             playerResult.SubmittedAt = DateTime.UtcNow;
-            playerResult.AnswerCorrect = string.Equals(request.Answer.Trim(), round.CorrectAnswer.Trim(), StringComparison.OrdinalIgnoreCase);
+            playerResult.AnswerCorrect = ValidateAnswer(request.Answer.Trim(), round.CorrectAnswer.Trim(), round.AnswerRule);
 
             return new SubmitAnswerResponse
             {
@@ -451,6 +452,24 @@ public class TournamentService : ITournamentService
                 player.TotalScore += score;
             }
         }
+    }
+
+    private bool ValidateAnswer(string playerAnswer, string correctAnswer, string? answerRule)
+    {
+        if (string.IsNullOrWhiteSpace(answerRule) || answerRule.Equals("Exact", StringComparison.OrdinalIgnoreCase))
+        {
+            // Default exact matching (case-insensitive)
+            return string.Equals(playerAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase);
+        }
+        
+        if (answerRule.Equals("FuzzyMatch", StringComparison.OrdinalIgnoreCase))
+        {
+            // Fuzzy matching - check if player answer contains the correct answer (case-insensitive)
+            return playerAnswer.Contains(correctAnswer, StringComparison.OrdinalIgnoreCase);
+        }
+        
+        // Default to exact matching for unknown rules
+        return string.Equals(playerAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase);
     }
 
     private bool DetermineWinner(Move playerMove, Move serverMove)

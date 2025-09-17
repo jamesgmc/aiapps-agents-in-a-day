@@ -25,7 +25,7 @@ class GameAgent:
         self.agent = None
         self.thread = None
         self._client_context = None
-        self.agent_name = f"agent-{self.player_name}"
+        self.agent_name = f"agent_{self.player_name}"
     
     def __enter__(self):
         self._client_context = self.project_client.__enter__()

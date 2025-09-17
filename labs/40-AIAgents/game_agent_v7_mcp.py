@@ -30,7 +30,7 @@ class GameAgent:
             credential=DefaultAzureCredential()
         )
         
-        self.agent_name = f"agent-{self.player_name}"
+        self.agent_name = f"agent_{self.player_name}"
         self.agent = None
 
         self.agent_stock_name = f"stock_price_bot"
@@ -138,7 +138,7 @@ class GameAgent:
         self.agent = self.project_client.agents.create_agent(
             model=self.model_deployment_name,
             name=self.agent_name,
-            instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents.",
+            instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents. Keep answer short and precise, dont need to explain.",
             tools=tools,
             tool_resources=tool_resources
         )
