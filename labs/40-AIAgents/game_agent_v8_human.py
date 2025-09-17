@@ -122,43 +122,43 @@ class GameAgent:
         while run.status in ["queued", "in_progress", "requires_action"]:
             time.sleep(1)
             run = self.project_client.agents.runs.get(thread_id=self.thread.id, run_id=run.id)
-            print(f"Run status: {run.status}")
+            print(f"🔍 DEBUG: Run status: {run.status}")
             
+            # Debug: Show all available attributes on run
             if run.status == "requires_action":
-                # Check if this is a tool approval request (human-in-the-loop)
-                if hasattr(run.required_action, 'submit_tool_approval'):
-                    print("🔄 Processing tool approval request...")
-                    tool_calls = run.required_action.submit_tool_approval.tool_calls
-                    tool_approvals = []
-                    
-                    for tool_call in tool_calls:
-                        approved = self._request_human_approval(tool_call)
-                        tool_approvals.append(
-                            ToolApproval(tool_call_id=tool_call.id, approved=approved)
-                        )
-                    
-                    # Submit approvals
-                    self.project_client.agents.runs.submit_tool_approvals(
-                        thread_id=self.thread.id, 
-                        run_id=run.id, 
-                        tool_approvals=tool_approvals
-                    )
-                    print("📝 Tool approvals submitted")
+                print(f"🔍 DEBUG: run.required_action type: {type(run.required_action)}")
+                print(f"🔍 DEBUG: run.required_action attributes: {dir(run.required_action)}")
+                if hasattr(run.required_action, '__dict__'):
+                    print(f"🔍 DEBUG: run.required_action dict: {vars(run.required_action)}")
                 
-                # Handle regular tool output requests
-                elif hasattr(run.required_action, 'submit_tool_outputs'):
-                    print("🔄 Processing tool output request...")
+                # Azure AI Foundry currently uses submit_tool_outputs for tool execution
+                # We'll implement human approval by intercepting the tool calls before execution
+                if hasattr(run.required_action, 'submit_tool_outputs'):
+                    print("🔄 Processing tool calls with human approval...")
                     tool_calls = run.required_action.submit_tool_outputs.tool_calls
                     tool_outputs = []
                     
                     for tool_call in tool_calls:
-                        if tool_call.function.name == "math_tool_function":
-                            import json
-                            args = json.loads(tool_call.function.arguments)
-                            output = GameAgent.math_tool_function(args.get("expression", ""))
-                            tool_outputs.append({"tool_call_id": tool_call.id, "output": output})
-                            print(f"✅ Executed tool: {tool_call.function.name}")
+                        # Request human approval before executing each tool
+                        approved = self._request_human_approval(tool_call)
+                        
+                        if approved:
+                            # Execute the tool if approved
+                            if tool_call.function.name == "math_tool_function":
+                                import json
+                                args = json.loads(tool_call.function.arguments)
+                                output = GameAgent.math_tool_function(args.get("expression", ""))
+                                tool_outputs.append({"tool_call_id": tool_call.id, "output": output})
+                                print(f"✅ Executed tool: {tool_call.function.name}")
+                            else:
+                                # Handle other tools if any
+                                tool_outputs.append({"tool_call_id": tool_call.id, "output": "Tool execution not implemented"})
+                        else:
+                            # If not approved, send a rejection message
+                            tool_outputs.append({"tool_call_id": tool_call.id, "output": "Tool execution rejected by human"})
+                            print(f"❌ Rejected tool: {tool_call.function.name}")
                     
+                    # Submit all tool outputs (approved executions and rejections)
                     self.project_client.agents.runs.submit_tool_outputs(
                         thread_id=self.thread.id, 
                         run_id=run.id, 
