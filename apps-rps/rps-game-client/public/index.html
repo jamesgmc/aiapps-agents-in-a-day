@@ -156,10 +156,96 @@
             border-radius: 15px;
             text-align: center;
             margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            animation: slideIn 0.8s ease-out;
         }
         .rank-display {
-            font-size: 1.5em;
+            font-size: 1.8em;
             margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+        }
+        .final-results h3 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .top-three {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .podium-player {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px;
+            min-width: 200px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .podium-player.gold {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            border-color: #ffd700;
+            font-weight: bold;
+        }
+        .podium-player.silver {
+            background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
+            color: #333;
+            border-color: #c0c0c0;
+            font-weight: bold;
+        }
+        .podium-player.bronze {
+            background: linear-gradient(135deg, #cd7f32, #daa520);
+            color: #333;
+            border-color: #cd7f32;
+            font-weight: bold;
+        }
+        .all-players {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .player-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        .player-entry.current-player {
+            background: rgba(255,255,0,0.3);
+            border: 2px solid #ffeb3b;
+            font-weight: bold;
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            animation: confetti-fall 3s linear infinite;
+        }
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .move-selection {
             display: flex;
@@ -277,13 +363,13 @@
                 <li><strong>Choose Move:</strong> Select Rock, Paper, or Scissors for your move</li>
                 <li><strong>Submit:</strong> Confirm your submission or cancel to wait</li>
                 <li><strong>Results:</strong> View your results after each round</li>
-                <li><strong>Final Results:</strong> See your final ranking with medals for top 3!</li>
+                <li><strong>Final Results:</strong> See your final ranking with medals, podium, and complete leaderboard when tournament ends!</li>
             </ol>
             <p><strong>Note:</strong> Make sure the game server is running on <code>http://localhost:5289</code></p>
             <p><strong>Multi-Window:</strong> You can open multiple browser windows to play as different players</p>
             
             <!-- Demo button for testing popup -->
-            <button onclick="showTestPopup()" style="background-color: #2196F3; margin-top: 10px;">🧪 Demo Confirmation Popup</button>
+            <button onclick="showTestPopup()" style="background-color: #2196F3; margin-top: 10px;">🧪 Show Answer Submission Popup</button>
         </div>
     </div>
 
@@ -293,7 +379,9 @@
             isRegistered: false,
             playerId: null,
             playerName: '',
-            sessionId: Date.now() // Unique session ID for multi-window support
+            sessionId: Date.now(), // Unique session ID for multi-window support
+            submittedRounds: new Set(), // Track which rounds have been submitted
+            lastTournamentStatus: null // Track tournament status changes
         };
         
         let pendingSubmission = {
@@ -386,6 +474,9 @@
             gameState.playerId = playerId;
             gameState.playerName = playerName;
             
+            // Reset submitted rounds tracking on new registration or reconnection
+            gameState.submittedRounds.clear();
+            
             showMessage(messageDiv, message, 'success');
             
             // Hide registration, show game sections
@@ -444,6 +535,15 @@
                 currentQuestion: status.currentQuestion
             });
             
+            // Check for tournament status change and clear submitted rounds if tournament restarted
+            if (gameState.lastTournamentStatus !== null && 
+                gameState.lastTournamentStatus !== status.tournamentStatus &&
+                status.tournamentStatus === 0) { // Tournament back to Pending
+                gameState.submittedRounds.clear();
+                console.log('Tournament restarted, cleared submitted rounds tracking');
+            }
+            gameState.lastTournamentStatus = status.tournamentStatus;
+            
             // Tournament status
             const tournamentStatusText = TournamentStatus[status.tournamentStatus] || 'Unknown';
             document.getElementById('tournament-status').innerHTML = 
@@ -469,20 +569,28 @@
             // Game activity and check for manual submission
             let activity = '';
             if (status.gameActive && status.currentRoundStatus === 1 && status.canSubmit && status.currentQuestion) {
-                // Show popup for manual submission if not already shown
-                if (!document.getElementById('confirmation-popup').style.display || 
-                    document.getElementById('confirmation-popup').style.display === 'none') {
-                    showConfirmationPopup(status.currentQuestion, status.currentRound);
+                // Check if this round has already been submitted
+                const currentRound = status.currentRound || 0;
+                if (!gameState.submittedRounds.has(currentRound)) {
+                    // Show popup for manual submission if not already shown
+                    if (!document.getElementById('confirmation-popup').style.display || 
+                        document.getElementById('confirmation-popup').style.display === 'none') {
+                        showConfirmationPopup(status.currentQuestion, currentRound);
+                    }
+                    activity = '<div class="loading">🎮 Round in progress - waiting for your submission...</div>';
+                } else {
+                    activity = '<div class="success">✅ Your answer has been submitted for this round - waiting for round to complete...</div>';
                 }
-                activity = '<div class="loading">🎮 Round in progress - waiting for your submission...</div>';
             } else if (status.gameActive) {
                 activity = '<div class="loading">🎮 Game is active - waiting for round to start...</div>';
             } else if (status.tournamentStatus === 0) {
                 activity = '<div class="loading">⏳ Waiting for tournament to start...</div>';
             } else if (status.tournamentStatus === 2) {
-                activity = '<div class="success">🏁 Tournament completed! Check your results below.</div>';
-                // Show final results
-                loadFinalResults();
+                activity = '<div class="success">🏁 Tournament completed! Check your final results below.</div>';
+                // Show final results with a slight delay for better UX
+                setTimeout(() => {
+                    loadFinalResults();
+                }, 1000);
             }
             document.getElementById('game-activity').innerHTML = activity;
         }
@@ -551,6 +659,9 @@
                 const result = await response.json();
                 
                 if (result.success) {
+                    // Mark this round as submitted
+                    gameState.submittedRounds.add(pendingSubmission.roundNumber);
+                    
                     closeConfirmationPopup();
                     showMessage(document.getElementById('game-activity'), 
                               `✅ Answer submitted for Round ${pendingSubmission.roundNumber}!`, 'success');
@@ -618,36 +729,133 @@
                     const playerRank = result.playerRank;
                     const totalPlayers = result.totalPlayers;
                     const playerScore = result.playerScore;
+                    const allResults = result.finalResults;
+                    
+                    // Create confetti effect for top 3 players
+                    if (playerRank <= 3) {
+                        createConfetti();
+                    }
                     
                     let medal = '';
                     let rankClass = '';
+                    let congratsMessage = '';
                     
                     if (playerRank === 1) {
                         medal = '<span class="medal">🥇</span>';
                         rankClass = 'gold';
+                        congratsMessage = '🎉 CHAMPION! You are the tournament winner! 🎉';
                     } else if (playerRank === 2) {
                         medal = '<span class="medal">🥈</span>';
                         rankClass = 'silver';
+                        congratsMessage = '🎉 SILVER MEDALIST! Outstanding performance! 🎉';
                     } else if (playerRank === 3) {
                         medal = '<span class="medal">🥉</span>';
                         rankClass = 'bronze';
+                        congratsMessage = '🎉 BRONZE MEDALIST! Great job! 🎉';
+                    } else if (playerRank <= Math.ceil(totalPlayers * 0.5)) {
+                        congratsMessage = '👏 Great performance! You finished in the top half!';
+                    } else {
+                        congratsMessage = '👍 Thanks for playing! Better luck next time!';
                     }
 
+                    // Create top 3 podium
+                    const topThree = allResults.slice(0, 3);
+                    let podiumHtml = '<div class="top-three">';
+                    
+                    topThree.forEach((player, index) => {
+                        const podiumClass = index === 0 ? 'gold' : (index === 1 ? 'silver' : 'bronze');
+                        const podiumMedal = index === 0 ? '🥇' : (index === 1 ? '🥈' : '🥉');
+                        const position = index === 0 ? '1st' : (index === 1 ? '2nd' : '3rd');
+                        
+                        podiumHtml += `
+                            <div class="podium-player ${podiumClass}">
+                                <div style="font-size: 2em;">${podiumMedal}</div>
+                                <div style="font-size: 1.2em; margin: 10px 0;"><strong>${position} Place</strong></div>
+                                <div>${player.playerName}</div>
+                                <div style="font-size: 1.1em; margin-top: 10px;"><strong>${player.totalScore} points</strong></div>
+                            </div>
+                        `;
+                    });
+                    podiumHtml += '</div>';
+
+                    // Create all players leaderboard
+                    let leaderboardHtml = '<div class="all-players"><h4>Final Leaderboard</h4>';
+                    allResults.forEach((player, index) => {
+                        const isCurrentPlayer = player.playerId === gameState.playerId;
+                        const currentPlayerClass = isCurrentPlayer ? 'current-player' : '';
+                        const rankText = `#${index + 1}`;
+                        const medalIcon = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : ''));
+                        
+                        leaderboardHtml += `
+                            <div class="player-entry ${currentPlayerClass}">
+                                <div>
+                                    <span style="font-weight: bold; margin-right: 10px;">${rankText}</span>
+                                    ${medalIcon ? `<span style="margin-right: 10px;">${medalIcon}</span>` : ''}
+                                    <span>${player.playerName}</span>
+                                    ${isCurrentPlayer ? ' <span style="color: #ffeb3b;">(YOU)</span>' : ''}
+                                </div>
+                                <div style="font-weight: bold;">${player.totalScore} pts</div>
+                            </div>
+                        `;
+                    });
+                    leaderboardHtml += '</div>';
+
                     const finalResultsHtml = `
-                        <h3>🏆 Final Tournament Results</h3>
+                        <h3>🏆 Tournament Complete!</h3>
+                        
                         <div class="rank-display ${rankClass}">
                             ${medal}
                             <div>You finished <strong>#${playerRank}</strong> out of ${totalPlayers} players!</div>
                             <div>Final Score: <strong>${playerScore} points</strong></div>
                         </div>
-                        ${playerRank <= 3 ? '<div style="font-size: 1.2em; margin-top: 15px;">🎉 Congratulations! You\'re in the top 3! 🎉</div>' : ''}
+                        
+                        <div style="font-size: 1.3em; margin: 20px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                            ${congratsMessage}
+                        </div>
+                        
+                        ${podiumHtml}
+                        
+                        ${leaderboardHtml}
+                        
+                        <div style="margin-top: 30px; font-size: 1.1em;">
+                            🎯 Total Rounds Played: 5<br>
+                            🎮 Tournament Duration: Complete<br>
+                            📊 Your Performance: ${Math.round((playerScore / Math.max(...allResults.map(p => p.totalScore))) * 100)}% of top score
+                        </div>
                     `;
                     
                     document.getElementById('final-results-content').innerHTML = finalResultsHtml;
                     document.getElementById('final-results-section').classList.remove('hidden');
+                    
+                    // Scroll to final results
+                    document.getElementById('final-results-section').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
                 }
             } catch (error) {
                 console.error('Error loading final results:', error);
+            }
+        }
+
+        // Create confetti effect for celebration
+        function createConfetti() {
+            const colors = ['#f43f5e', '#8b5cf6', '#06d6a0', '#ffd60a', '#003566'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }, i * 50);
             }
         }
 
@@ -669,6 +877,13 @@
                     resultsDiv.innerHTML = '<div>No results available yet.</div>';
                     return;
                 }
+
+                // Update submitted rounds tracking based on existing results
+                results.forEach(result => {
+                    if (result.answer && result.answer.trim() !== '' && result.move !== null) {
+                        gameState.submittedRounds.add(result.roundNumber);
+                    }
+                });
 
                 let html = '';
                 let totalScore = 0;

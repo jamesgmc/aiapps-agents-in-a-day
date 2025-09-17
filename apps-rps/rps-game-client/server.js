@@ -3,7 +3,7 @@ const axios = require('axios');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3151;
 // const SERVER_URL = process.env.SERVER_URL || 'https://aiaaa-s2-game-server.azurewebsites.net/';
 const SERVER_URL = process.env.SERVER_URL || 'http://localhost:5289';
 
@@ -422,7 +422,7 @@ function startGameMonitoring(sessionId) {
         } catch (error) {
             console.error(`Monitoring error for session ${sessionIdStr}:`, error.message);
         }
-    }, 2000); // Check every 2 seconds
+    }, 5000); // Check every 5 seconds
     
     monitoringIntervals.set(sessionIdStr, interval);
 }

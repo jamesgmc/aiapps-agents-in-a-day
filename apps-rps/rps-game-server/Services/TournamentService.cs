@@ -440,7 +440,7 @@ public class TournamentService : ITournamentService
             // Score for correct answer
             if (result.AnswerCorrect)
             {
-                score += 10;
+                score += 30;
             }
 
             // Score for winning rock-paper-scissors

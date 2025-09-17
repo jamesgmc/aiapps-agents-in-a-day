@@ -79,7 +79,7 @@ A complete ASP.NET Core 8 web application for managing Paper-Scissors-Rock tourn
 ### Question Phase
 - Each round includes a question that players must answer correctly
 - Questions are set by the referee before starting each round
-- Correct answers earn 10 points
+- Correct answers earn 30 points
 
 ### RPS Phase
 - Players submit their RPS move (Rock=0, Paper=1, Scissors=2) along with their answer
