@@ -260,8 +260,8 @@ class GameAgent:
         tools.extend(file_search_tool.definitions)
 
         # Initialize agent MCP tool
-        # mcp_server_url = os.environ.get("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
-        mcp_server_url = os.environ.get("MCP_SERVER_URL", "https://gitmcp.io/Azure/azure-rest-api-specs")
+        # mcp_server_url = os.environ.get("MCP_SERVER_URL", "https://gitmcp.io/Azure/azure-rest-api-specs")
+        mcp_server_url = os.environ.get("MCP_SERVER_URL", "http://127.0.0.1:8000/mcp")
         mcp_server_label = os.environ.get("MCP_SERVER_LABEL", "weather")
 
         self.mcp_tool = McpTool(
@@ -282,7 +282,7 @@ if __name__ == "__main__":
 
     print("Game Agent: Test starting...")
     test_questions = [
-        "What is 15 + 27?"
+        "Listen to this audio clip and identify the animal sound? https://cdn.pixabay.com/download/audio/2025/09/15/audio_a3a77f6c7e.mp3?filename=dog-running-amp-barking-404938.mp3"
     ]
     
     with GameAgent() as agent:
@@ -293,3 +293,4 @@ if __name__ == "__main__":
             print()
     
     print("Game Agent: Test complete")
+
