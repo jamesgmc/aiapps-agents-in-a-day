@@ -7,14 +7,36 @@
 
 @if (Model.Players.Any() && Model.Rounds.Any())
 {
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Player</th>
+    <div class="mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Round Questions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
                     @foreach (var round in Model.Rounds.OrderBy(r => r.RoundNumber))
                     {
-                        <th class="text-center">Round @round.RoundNumber</th>
+                        <div class="col-md-6 mb-2">
+                            <strong>Round @round.RoundNumber:</strong> @round.Question
+                            <br><small class="text-muted">Correct Answer: @round.CorrectAnswer | Server Move: @round.ServerMove</small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped grid-table">
+            <thead class="table-dark">
+                <tr>
+                    <th class="player-name">Player</th>
+                    @foreach (var round in Model.Rounds.OrderBy(r => r.RoundNumber))
+                    {
+                        <th class="text-center" title="@round.Question">
+                            Round @round.RoundNumber
+                            <br><small class="text-white-50">@(round.Question.Length > 30 ? round.Question.Substring(0, 30) + "..." : round.Question)</small>
+                        </th>
                     }
                     <th class="text-center bg-warning">Total</th>
                 </tr>
@@ -23,15 +45,16 @@
                 @foreach (var player in Model.Players.OrderByDescending(p => p.TotalScore).ThenBy(p => p.Name))
                 {
                     <tr>
-                        <td class="fw-bold">@player.Name</td>
+                        <td class="fw-bold player-name">@player.Name</td>
                         @foreach (var round in Model.Rounds.OrderBy(r => r.RoundNumber))
                         {
                             var playerResult = round.PlayerResults.FirstOrDefault(pr => pr.PlayerId == player.Id);
                             <td class="text-center">
                                 @if (playerResult != null && playerResult.HasSubmitted)
                                 {
-                                    <div class="small">
-                                        <div>
+                                    <div class="small grid-cell-content">
+                                        <div class="mb-1">
+                                            <strong>Answer:</strong>
                                             @if (playerResult.AnswerCorrect)
                                             {
                                                 <span class="badge bg-success">✓</span>
@@ -40,9 +63,14 @@
                                             {
                                                 <span class="badge bg-danger">✗</span>
                                             }
-                                            @(playerResult.Move?.ToString() ?? "?")
                                         </div>
-                                        <div class="text-muted">vs @round.ServerMove</div>
+                                        <div class="grid-cell-answer mb-1">
+                                            "@(playerResult.Answer ?? "No answer")"
+                                        </div>
+                                        <div class="mb-1">
+                                            <strong>Move:</strong> @(playerResult.Move?.ToString() ?? "?")
+                                        </div>
+                                        <div class="text-muted mb-1">vs @round.ServerMove</div>
                                         @if (playerResult.Move.HasValue)
                                         {
                                             @if (playerResult.Move.Value == round.ServerMove)

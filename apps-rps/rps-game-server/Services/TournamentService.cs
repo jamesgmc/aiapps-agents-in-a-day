@@ -168,11 +168,22 @@ public class TournamentService : ITournamentService
             if (round == null || round.Status != RoundStatus.Pending)
                 return false;
 
-            // Generate random question if not provided
+            // Use sequential question based on round number if not provided
             QuestionAnswer qa;
             if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(correctAnswer))
             {
-                qa = _questionService.GetRandomQuestionAsync().GetAwaiter().GetResult();
+                // Get question by order (round number) to ensure exact sequence
+                var sequentialQuestion = _questionService.GetQuestionByOrderAsync(roundNumber).GetAwaiter().GetResult();
+                if (sequentialQuestion != null)
+                {
+                    qa = sequentialQuestion;
+                }
+                else
+                {
+                    // Fallback to random if no question found for this order
+                    _logger.LogWarning($"No question found for round {roundNumber}, falling back to random question");
+                    qa = _questionService.GetRandomQuestionAsync().GetAwaiter().GetResult();
+                }
             }
             else
             {
