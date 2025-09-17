@@ -134,7 +134,7 @@ class GameProcessor:
                         self.log_status(f"Submit failed: {submit_response.get('message', 'Unknown error')}")
                 
                 # Wait before next check
-                time.sleep(2)
+                time.sleep(5)
                 
             except Exception as e:
                 self.log_status(f"Unexpected error: {str(e)}")
