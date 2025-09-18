@@ -18,7 +18,11 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v3_sk.py
 ```
+
+![Azure AI Foundry Project](./images/semantic_kernel.png)
+
 // add screenshot of console output
+//TODO
 
 - because the semantic kernal agent does not use a managed service, so you can't see it in the Azure AI Foundry portal.
 

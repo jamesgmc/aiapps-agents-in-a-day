@@ -91,7 +91,7 @@ az deployment group create --resource-group rg-lab1user200 --template-file ./fou
 
 - Azure AI Foundry portal should look like below:
 
-![Azure AI Foundry Project](./images/azure-ai-foundry.png)
+![Azure AI Foundry Project](./images/azure-ai-foundry_v1.png)
 
 - In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
 
@@ -140,8 +140,7 @@ Now that you have deployed a model, you can create an agent. An agent is a conve
 
 > Furthermore, you can add **Knowledge Base** and **Actions** to enhance the agent's capabilities to provide more information and perform automated tasks based on user requests. For this exercise, you can skip these steps.
     
-![Agent Setup](./images/agent-setup.png)
-//todo update the screenshot
+![Agent Setup](./images/agent-setup_v1.png)
 
 ## Test the agent
 
@@ -149,12 +148,11 @@ After creating the agent, you can test it to see how it responds to user queries
 
 - At the top of the **Setup** pane for your agent, select **Try in playground**.
 
-- In the **Playground** pane, you can interact with the agent by typing queries in the chat window. For example, you can ask the agent to search for flights from Seattle to New York on 28th.
+- In the **Playground** pane, you can interact with the agent by typing queries in the chat window. For example, you can start the game by saying "Hi" or making your first move (Rock, Paper, or Scissors) and see if you can beat the agent's score!
 
     > **Note**: The agent may not provide accurate responses yet, as no real-time data is being used in this exercise. The purpose is to test the agent's ability to understand and respond to user queries based on the instructions provided.
 
-    ![Agent Playground](./images/agent-playground.png)
-    //todo update the screenshot
+    ![Agent Playground](./images/agent-playground_v1.png)    
 
 - After testing the agent, you can further customize it by adding more intents, training data, and actions to enhance its capabilities.
 
