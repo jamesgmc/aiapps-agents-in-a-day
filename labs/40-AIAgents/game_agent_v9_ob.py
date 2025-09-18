@@ -56,7 +56,7 @@ class GameAgent:
             credential=DefaultAzureCredential()
         )
         
-        self.agent_name = f"agent-{self.player_name}"
+        self.agent_name = f"agent_{self.player_name}"
         self.agent = None
 
         self.agent_stock_name = f"stock_price_bot"
@@ -164,7 +164,7 @@ class GameAgent:
         self.agent = self.project_client.agents.create_agent(
             model=self.model_deployment_name,
             name=self.agent_name,
-            instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents.",
+            instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents. Keep answer short and precise, dont need to explain.",
             tools=tools,
             tool_resources=tool_resources
         )
@@ -257,24 +257,7 @@ class GameAgent:
         if not self.agent:
             self._setup_agent()
         return self._call_azure_ai_agent(question)
-        
-    def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using Azure AI Foundry Agent service"""
-        prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
-        
-        if not self.agent:
-            self._setup_agent()
-        azure_choice = self._call_azure_ai_agent(prompt)
-        choice_lower = azure_choice.lower().strip()
-        
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        
-        return 0
+
     
     @staticmethod
     def math_tool_function(expression: str) -> str:

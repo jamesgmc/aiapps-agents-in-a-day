@@ -13,6 +13,7 @@ public class QuestionAnswer
     public string Id { get; set; } = string.Empty;
     public string Question { get; set; } = string.Empty;
     public string Answer { get; set; } = string.Empty;
+    public string? AnswerRule { get; set; } // Rule for answer validation (e.g., "FuzzyMatch")
     public QuestionType Type { get; set; } = QuestionType.Text;
     public string? MediaUrl { get; set; }
     public string? Description { get; set; }
@@ -78,6 +79,7 @@ public class Round
     public RoundStatus Status { get; set; }
     public string Question { get; set; } = string.Empty;
     public string CorrectAnswer { get; set; } = string.Empty;
+    public string? AnswerRule { get; set; } // Rule for answer validation
     public QuestionType QuestionType { get; set; } = QuestionType.Text;
     public string? MediaUrl { get; set; }
     public Move ServerMove { get; set; }

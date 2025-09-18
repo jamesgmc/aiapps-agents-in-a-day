@@ -22,15 +22,14 @@ class GameAgent:
             credential=DefaultAzureCredential()
         )
         
-        self.agent_name = f"agent-{self.player_name}"
+        self.agent_name = f"agent_{self.player_name}"
         self.agent = None
 
-        self.agent_stock_name = f"stock_price_bot"
-        self.agent_stock = None
+        self.agent_logo_name = f"agent_{self.player_name}_logo"
+        self.agent_logo = None
 
         self.thread = None
         self._client_context = None
-
 
         self.vector_store = None
         self.file_search_tool = None
@@ -116,21 +115,22 @@ class GameAgent:
         tools = self._setup_tools()
         tool_resources = self.file_search_tool.resources
             
-        self.agent_stock = self.project_client.agents.create_agent(
+            
+        self.agent_logo = self.project_client.agents.create_agent(
             model=self.model_deployment_name,
-            name=self.agent_stock_name,
-            instructions="Your job is to get the stock price of a company. If you don't know the realtime stock price, return the last known stock price.",
+            name=self.agent_logo_name,
+            instructions="You are a logo recognition expert. When given an image, analyze it and respond ONLY with the name of the logo or brand you see. If you do not recognize the logo, respond with 'I don't know'. Accept image input as a URL or file."
         )
 
         connected_agent = ConnectedAgentTool(
-            id=self.agent_stock.id, name=self.agent_stock.name, description="Gets the stock price of a company"
+            id=self.agent_logo.id, name='agent_logo', description="Detect the name of the logo by using at an image"
         )
         tools.extend(connected_agent.definitions)
         
         self.agent = self.project_client.agents.create_agent(
             model=self.model_deployment_name,
             name=self.agent_name,
-            instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents.",
+            instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents. Keep answer short and precise, dont need to explain.",
             tools=tools,
             tool_resources=tool_resources
         )
@@ -181,23 +181,6 @@ class GameAgent:
             self._setup_agent()
         return self._call_azure_ai_agent(question)
         
-    def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using Azure AI Foundry Agent service"""
-        prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
-        
-        if not self.agent:
-            self._setup_agent()
-        azure_choice = self._call_azure_ai_agent(prompt)
-        choice_lower = azure_choice.lower().strip()
-        
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        
-        return 0
     
     @staticmethod
     def math_tool_function(expression: str) -> str:
@@ -228,11 +211,12 @@ class GameAgent:
         return tools
 
 
+
 if __name__ == "__main__":
 
     print("Game Agent: Test starting...")
     test_questions = [
-        "What is 15 + 27?"
+        "What is this logo ? https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.png"
     ]
     
     with GameAgent() as agent:
