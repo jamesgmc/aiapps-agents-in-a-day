@@ -18,5 +18,9 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v3_langchain.py
 ```
+
+![Azure AI Foundry Project](./images/langchain.png)
 // add screenshot of console output
+
+//TODO
 
