@@ -62,7 +62,7 @@ The `product` data set is located in the `data/product.csv` file. It has the fol
 
 There are multiple options available for performing bulk operations in Cosmos DB. In this section, we will focus on using the `bulkWrite` method. The `bulkWrite` method allows you to execute multiple write operations in a single batch, including insert, update, and delete operations.
 
-1. Open the `1b-1b-import.js` file. You'll see it already has the basic MongoDB connection setup. Now add the following code block where indicated by the `TODO: Add product data loading code here` comment:
+1. Open the `1b-import.js` file. You'll see it already has the basic MongoDB connection setup. Now add the following code block where indicated by the `TODO: Add product data loading code here` comment:
 
    ```javascript
    // Load product data

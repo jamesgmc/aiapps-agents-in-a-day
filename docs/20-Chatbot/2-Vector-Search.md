@@ -218,7 +218,7 @@ We have a lot of people doing the lab at the same time. Get in quick before rate
 ## Use vector search
 
 We have generated vector embeddings for each document and created vector indexes.
-In this section, we will add the steps to retrieve the most relevant documents from Cosmos DB based based on the cosine similarity of the query vector and the content vectors of the documents in the collection.
+In this section, we will add the steps to retrieve the most relevant documents from Cosmos DB based on the cosine similarity of the query vector and the content vectors of the documents in the collection.
 
 1. In `2c-search.js`, add the following code directly above the last line of the file `main().catch(console.error);` (that calls the `main` function) - the code is documented inline to explain the steps taken. This code introduces two functions, one to perform a vector search and another to format and print the search results:
 

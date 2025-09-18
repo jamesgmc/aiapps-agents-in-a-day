@@ -110,15 +110,27 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     ![edit setting](images/edit-settings.png)
 
 
-4.  Update `<MONGODB_CONNECTION_STRING>` with `mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000`
+4. **Use Copilot Agent Mode to Update the Script Automatically**
 
-5.  Update `<AZURE_OPENAI_API_INSTANCE_NAME>` with `aiaaa-s2-openai`
+   Instead of manually editing the `.sh` script file, you can use GitHub Copilot in Agent mode to automate this process:
 
-6.  Update `<AZURE_OPENAI_API_KEY>` with `ee8b7517ac664a608953cad44faa22bd`
+   - Open Copilot Agent mode in VS Code.
+   - Go to https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and copy all the configuration values.
+   - Paste the values into the Copilot chat and ask Copilot to replace the placeholder values in your setup script (e.g., `setup.sh` or `setup.bat`).
+   - If successful, Copilot will update the script for you—no manual editing needed!
 
-7.  Update `<GRAPH_RAG_API>` with `https://arg-syd-aiaaa-ca.ashycoast-2c2322dd.eastus.azurecontainerapps.io`
+   > This demonstrates how Copilot can be used for real-world automation and configuration tasks.
 
-8.  Go to terminal windows, save the `setup.sh` file and run below bash command to replace all variables in the repo. If you need to run `setup.sh` again to fix typos, you need to revert previous changes in `Source Control` tab or ask us for help.
+5. **Backup Script: Auto-Pull Keys from URL**
+
+    If the above step does not work for you, use the `setup-auto.js` script to automatically fetch all configuration values from https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and replace the placeholders in your setup script. Run it to complete the replacement process.
+
+    ``bash
+    chmod +x setup-auto.sh 
+    ./setup-auto.sh
+    ```
+
+6.  Go to terminal windows, save the `setup.sh` file and run below bash command to replace all variables in the repo. If you need to run `setup.sh` again to fix typos, you need to revert previous changes in `Source Control` tab or ask us for help.
 
     ```bash
     chmod +x setup.sh
@@ -134,19 +146,19 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     ![alt text](images/setup.png)
     :::
 
-9.  Install node packages for test program.
+7.  Install node packages for test program.
 
     ```bash
     npm install
     ```
 
-10.  Test Connection to CosMos Db and OpenAI service. Run the following command in the terminal window to execute the script:
+8.  Test Connection to CosMos Db and OpenAI service. Run the following command in the terminal window to execute the script:
 
     ```bash
     node test.js
     ```
 
-11.  If you see below message in the console, you are ready to go! otherwise, please `Raise your hand and ask for help`. Note, you do not need to commit any changes of the `.env` files to Git repo.
+9.  If you see below message in the console, you are ready to go! otherwise, please `Raise your hand and ask for help`. Note, you do not need to commit any changes of the `.env` files to Git repo.
 
     ![alt text](images/setup-test.png)
 
