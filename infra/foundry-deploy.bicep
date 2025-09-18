@@ -146,7 +146,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
 // -----------------------
 
 // AI Services (Multi-service account)
-resource aiServices 'Microsoft.CognitiveServices/accounts@2025-04-01-preview' = {
+resource aiServices 'Microsoft.CognitiveServices/accounts@2025-06-01' = {
   name: aiServicesName
   location: location
   sku: {
@@ -177,8 +177,8 @@ resource aiServices 'Microsoft.CognitiveServices/accounts@2025-04-01-preview' = 
 resource aiServicesProject 'Microsoft.CognitiveServices/accounts/projects@2025-06-01' = {
   parent: aiServices
   name: aiFoundryProjectName
-  location: 'eastus'
-  kind: 'AIServices'
+  location: location
+  // kind: 'AIServices'
   identity: {
     type: 'SystemAssigned'
   }

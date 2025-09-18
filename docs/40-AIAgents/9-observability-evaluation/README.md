@@ -79,6 +79,10 @@ openlit.init(tracer = langfuse._otel_tracer, disable_batch = True)
 cd labs/40-AIAgents
 ```
 
+- update `APPLICATIONINSIGHTS_CONNECTION_STRING` in `.env` file with your Application Insights connection string. You can see the connection string in Azure Portal -> Application Insights resource -> Overview page.
+
+![alt text](images\image.png)
+
 - run the agent and see the console output.
 
 ```python
