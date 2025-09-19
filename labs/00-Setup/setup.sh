@@ -1,34 +1,39 @@
 #!/bin/bash
-# chmod +x setup.sh
-# ./setup.sh
 
-# Define the search and replace pairs
-declare -A replacements=(
-    ["<DEV_Name>"]="add_value"
-    ["<MONGODB_CONNECTION_STRING>"]="add_value"
-    ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="aiaaa-s2-openai"
-    ["<AZURE_OPENAI_API_KEY>"]="add_value"
-    ["<APPLICATIONINSIGHTS_CONNECTION_STRING>"]="add_value"
-    # see examples below
-    # ["<DEV_Name>"]="dev_daniel_66"
-    # ["<MONGODB_CONNECTION_STRING>"]="mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
-    # ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="aiaaa-s2-openai"
-    # ["<AZURE_OPENAI_API_KEY>"]=""
-)
+CONFIG_URL="https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all"
 
-# Check if parent directory exists
-if [ ! -d "../" ]; then
-    echo "Parent directory not found!"
+echo "Fetching configuration from $CONFIG_URL..."
+config_json=$(curl -s "$CONFIG_URL")
+
+if [ -z "$config_json" ]; then
+    echo "Failed to fetch configuration."
     exit 1
 fi
 
-echo "Searching for .env and .js files..."
+# Extract all key-value pairs from the JSON without jq
+declare -A replacements
+# Remove outer braces and split by commas
+config_clean=$(echo "$config_json" | sed 's/^{//; s/}$//' | tr ',' '\n')
+while IFS= read -r line; do
+    if [[ $line =~ \"([^\"]+)\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"|\"([^\"]+)\"[[:space:]]*:[[:space:]]*([^,}]+) ]]; then
+        if [[ -n "${BASH_REMATCH[1]}" ]]; then
+            key="${BASH_REMATCH[1]}"
+            value="${BASH_REMATCH[2]}"
+        else
+            key="${BASH_REMATCH[3]}"
+            value="${BASH_REMATCH[4]}"
+            # Remove quotes if present
+            value=$(echo "$value" | sed 's/^"//; s/"$//')
+        fi
+        replacements["<$key>"]="$value"
+    fi
+done <<< "$config_clean"
 
-# Find .env and .js files in parent directory
-find /workspaces/aiapps-agents-in-a-day -type f \( -name "*.env" -o -name "*.js" \) -not -path "*/node_modules/*" | while read -r file; do
+echo "Searching for .env files..."
+
+find ../../ -type f \( -name "*.env" \) -not -path "*/node_modules/*" | while read -r file; do
     echo "Processing: $file"
     for search in "${!replacements[@]}"; do
-        # replace="${replacements[$search]}"
         replace=$(echo "${replacements[$search]}" | sed 's/&/\\&/g')
         sed -i "s|${search}|${replace}|g" "$file"
     done
