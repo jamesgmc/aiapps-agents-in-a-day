@@ -116,8 +116,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
 
    - Open Copilot Agent mode in VS Code.
    - Go to https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and copy all the configuration values.
-   - Paste the values into the Copilot chat and ask Copilot to replace the placeholder values in your setup script.
-        Prompt: Update the setup.sh file by replacing the values for ["<MONGODB_CONNECTION_STRING>"], ["<AZURE_OPENAI_API_INSTANCE_NAME>"], ["<AZURE_OPENAI_API_KEY>"], and ["<APPLICATIONINSIGHTS_CONNECTION_STRING>"] with the provided values above.
+   - Paste the values into the Copilot chat and ask Copilot to replace the placeholder values in your setup script (e.g., `setup.sh` or `setup.bat`).
    - If successful, Copilot will update the script for you—no manual editing needed!
 
    > This demonstrates how Copilot can be used for real-world automation and configuration tasks.
@@ -129,7 +128,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     ./setup.sh
     ```
 
-    :::info Plan B (Skip if 6 worked)
+    :::info Plan B (Skip if 5 worked)
 
     If the above step does not work for you, use the `setup-auto.js` script to automatically fetch all configuration values from https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and replace the placeholders in your setup script. Run it to complete the replacement process.
 
@@ -137,7 +136,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
 
     ![setup auto edit](images/setup-auto-edit.png)
 
-    ``bash
+    ```bash
     chmod +x setup-auto.sh 
     ./setup-auto.sh
     ```
@@ -228,4 +227,3 @@ Retrieve below keys from https://aiaaa-s2-setting.azurewebsites.net
 | Computer Vision | https://aiaaa-s2-cv.cognitiveservices.azure.com/ |  |
 | Translator Service | https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=xx&from=xx |  |
 | Speech Service | https://eastus.api.cognitive.microsoft.com/ |  (region: eastus) |
-
