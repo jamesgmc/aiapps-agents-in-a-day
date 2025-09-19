@@ -17,8 +17,8 @@ In this lab, you will learn how to use the Azure OpenAI SDK to interact with Azu
 ```bash
 cd labs/10-LLM/
 ```
-![alt text](images/creatfolder.png)
-//todo: update iamge
+![alt text](images/createfolder_v1.png)
+
 
 3. Run the following command to create a new Node.js project:
 
@@ -48,10 +48,6 @@ const client = new OpenAIClient(
 ```
 
 7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://aiaaa-s2-openai.openai.azure.com/`. If not sure about the value of AZURE_OPENAI_API_INSTANCE_NAME, please refer to `Lab Setup` step.
-
-:::info
-More information on the Azure OpenAI client methods can be found in the [@azure/openai package](https://learn.microsoft.com/en-us/javascript/api/%40azure/openai/?view=azure-node-preview) documentation. 
-:::
 
 8. Once the Azure OpenAI client has been created, the next step is to call the `.getCompletions` method on the client to perform a chat completion. And print the response from Azure OpenAI to the console.
 
