@@ -24,8 +24,9 @@ fi
 
 echo "Searching for .env and .js files..."
 
-# Find .env and .js files in parent directory
-find ../../ -type f \( -name "*.env" -o -name "*.js" \) -not -path "*/node_modules/*" | while read -r file; do
+# Find .env and .js files in parent directory 
+#  -o -name "*.js"
+find ../../ -type f \( -name "*.env" \) -not -path "*/node_modules/*" | while read -r file; do
     echo "Processing: $file"
     for search in "${!replacements[@]}"; do
         # replace="${replacements[$search]}"
