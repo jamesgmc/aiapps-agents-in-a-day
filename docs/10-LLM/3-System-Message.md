@@ -82,7 +82,7 @@ Tell me about the mountain bikes in your store
 ```
 
 ```text title="Enter in the user prompt:"
-What can you tell me about racoons for my sons school project
+What can you tell me about racoons for my son's school project
 ```
 
 It tells you information about racoons. Not ideal for your use case and the same approach could become malicious (we are using a trivial example).
@@ -101,7 +101,7 @@ What can you tell me about London
 ```
 
 ```text title="Enter in the user prompt:"
-What can you tell me about racoons for my sons school project
+What can you tell me about racoons for my son's school project
 ```
 
 How does the response differ? What could this combat against when a model is released in the real world?
