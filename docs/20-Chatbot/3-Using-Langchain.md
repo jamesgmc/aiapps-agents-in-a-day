@@ -72,7 +72,11 @@ The return value of a vector search in LangChain is a list of `Document` objects
      new OpenAIEmbeddings(),
      azureCosmosDBConfig
    );
+   ```
 
+3. In the main function, beneath the const db = dbClient.db(dbname); line of code, add the following code 
+
+   ```javascript
    // perform a vector search using the vector store
    const results = await vectorStore.similaritySearch(
      "What yellow products do you have?",
@@ -118,45 +122,14 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
 
 1. Open the `3b-langchain-rag.js` file. Notice it has the basic MongoDB connection setup.
 
-2. Add the following complete code block where the `TODO: Set up Azure Cosmos DB vector store for LangChain RAG` comment appears:
+2. Add the following complete code block in the `main` function, beneath the `const db = dbClient.db(dbname);` line of code, 
 
    ```javascript
-   const {
-     AzureCosmosDBVectorStore,
-     AzureCosmosDBSimilarityType,
-   } = require("@langchain/community/vectorstores/azure_cosmosdb");
-   const { OpenAIEmbeddings, ChatOpenAI } = require("@langchain/openai");
-
-   // To support the LangChain LCEL RAG chain
-   const { PromptTemplate } = require("@langchain/core/prompts");
-   const {
-     RunnableSequence,
-     RunnablePassthrough,
-   } = require("@langchain/core/runnables");
-   const { StringOutputParser } = require("@langchain/core/output_parsers");
-
-   // set up the Azure Cosmos DB vector store using the initialized MongoDB client
-   const azureCosmosDBConfig = {
-     client: dbClient,
-     databaseName: dbname,
-     collectionName: "products",
-     indexName: "VectorSearchIndex",
-     embeddingKey: "contentVector",
-     textKey: "_id",
-   };
-   const vectorStore = new AzureCosmosDBVectorStore(
-     new OpenAIEmbeddings(),
-     azureCosmosDBConfig
-   );
-
-   // set up the OpenAI chat model
-   const chatModel = new ChatOpenAI();
-
    // Test the RAG chain
    console.log(await ragLCELChain("What yellow products do you have?"));
    ```
 
-3. Add the following helper functions before the main function call at the end of the file:
+3. Add the following helper functions before the main function call `main().catch(console.error);` at the end of the file:
 
    ```javascript
    function formatDocuments(docs) {

@@ -30,6 +30,7 @@ const azureCosmosDBConfig = {
 const vectorStore = new AzureCosmosDBVectorStore(new OpenAIEmbeddings(), azureCosmosDBConfig);
 // set up the OpenAI chat model
 const chatModel = new ChatOpenAI();
+
 async function main() {
     try {
         await dbClient.connect();

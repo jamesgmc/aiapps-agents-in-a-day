@@ -11,27 +11,9 @@ In this lab, you will learn how to use an Azure OpenAI embedding model to genera
 
 You will also learn how to use the vector index to retrieve the relevant documents based on the cosine similarity of the query vector and the content vectors of the documents in the collection.
 
-## Setup the lab environment
-
-1. Navigate to the lab folder `~/labs/20-Chatbot/` in the `Terminal` window.
-
-    ```bash
-    cd  labs/20-Chatbot
-    ```
-
-    :::info
-    The `~/labs/20-Chatbot/completed` folder contains the completed solution for this lab. You can compare your code with the files in `completed` folder if your code does not run correctly.
-    :::
-
-2. Install the required packages by running the following command in the terminal window:
-
-   ```bash
-   npm install
-   ```
-
 ## Create the Azure OpenAI client
 
-1. Install the `@azure/openai` package by running the following command in the terminal window.
+1. Make sure your current folder is `~/labs/20-Chatbot/` in the `Terminal` window. Install the `@azure/openai` package by running the following command in the terminal window.
 
    ```bash
    npm install @azure/openai@1.0.0-beta.11 --save
