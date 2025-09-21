@@ -91,7 +91,7 @@ chatResponse
                     console.log('[toolCallResolutionMessages]:' + JSON.stringify(toolCallResolutionMessages));
                     console.log('')
 
-                    const result = await client.getChatCompletions('completions', toolCallResolutionMessages);
+                    const result = await client.getChatCompletions('gpt-4o', toolCallResolutionMessages);
                     console.log('[chatResponse_with_toolcall]:' + JSON.stringify(result));
                     console.log('')
                     console.log('[chatResponse_with_toolcall][Message]:' + JSON.stringify(result.choices[0].message));
