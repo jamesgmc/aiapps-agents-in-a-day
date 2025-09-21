@@ -33,8 +33,7 @@ npm init -y
 npm install @azure/openai@1.0.0-beta.11
 ```
 
-5. Locate `10-LLM` folder in VS Code `Explorer`. Create a new `7a-openai-sdk.js` file for the Node.js program using the `+` icon or `File -> New Text File -> Save`. 
-
+5. Locate `10-LLM` folder in VS Code `Explorer`. Open `7a-openai-sdk.js` file to add code.
 
 6. Then add the following variable definition to the `7a-openai-sdk.js` file using `require` to use the OpenAI library. Create the Azure OpenAI client to call the Azure OpenAI Chat completion API. Have a look at Azure OpenAI service endpoint and Azure OpenAI service key in the code below. Please copy below Javascript code into `7a-openai-sdk.js` below earlier block.
 
@@ -47,7 +46,7 @@ const client = new OpenAIClient(
 );
 ```
 
-7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://aiaaa-s2-openai.openai.azure.com/`. If not sure about the value of AZURE_OPENAI_API_INSTANCE_NAME, please refer to `Lab Setup` step.
+7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://aiaaa-s2-openai.openai.azure.com/`. Please find the configuration value on https://aiaaa-s2-setting.azurewebsites.net, or refer to `Lab Setup` step.
 
 8. Once the Azure OpenAI client has been created, the next step is to call the `.getCompletions` method on the client to perform a chat completion. And print the response from Azure OpenAI to the console.
 
