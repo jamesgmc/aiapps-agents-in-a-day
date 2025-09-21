@@ -4,6 +4,7 @@
 	  "cpus": 4
 	},
 	"features": {
+		"ghcr.io/devcontainers/features/azure-cli:1": {},
 		"ghcr.io/devcontainers/features/powershell:1": {}
 	},
 	"waitFor": "onCreateCommand",
