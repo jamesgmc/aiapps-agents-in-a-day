@@ -26,7 +26,7 @@ echo "Searching for .env and .js files..."
 
 # Find .env and .js files in parent directory 
 #  -o -name "*.js"
-find ../../ -type f \( -name "*.env" \) -not -path "*/node_modules/*" | while read -r file; do
+find ../../ -type f \( -name "*.env" -o -name "*-openai-sdk*" \) -not -path "*/node_modules/*" | while read -r file; do
     echo "Processing: $file"
     for search in "${!replacements[@]}"; do
         # replace="${replacements[$search]}"
