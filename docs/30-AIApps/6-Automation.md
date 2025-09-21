@@ -67,11 +67,11 @@ Start by identifying common store operations that can be automated:
       let kitchenLight = "off";
 
       const client = new OpenAIClient(
-        "https://arg-syd-aiapp1day-openai.openai.azure.com/",
+        "https://aiaaa-s2-openai.openai.azure.com/",
         new AzureKeyCredential("<API_KEY>")
       );
 
-      const deploymentId = "completions";
+      const deploymentId = "gpt-4o";
       console.log("The chatbot is ready. Type 'exit' to quit.");
 
       const getLightStatus = {
@@ -165,7 +165,7 @@ Start by identifying common store operations that can be automated:
         }
 
         const chatResponse = await client.getChatCompletions(
-          "completions",
+          "gpt-4o",
           [
             {
               role: "system",
