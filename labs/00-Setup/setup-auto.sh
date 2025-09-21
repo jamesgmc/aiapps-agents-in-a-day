@@ -48,7 +48,7 @@ replacements["<DEV_Name>"]="${DEV_Name}"
 
 echo "Searching for .env files..."
 
-find ../../ -type f \( -name "*.env" -o -name "*7a-openai-*" \) -not -path "*/node_modules/*" | while read -r file; do
+find ../../ -type f \( -name "*.env" -o -name "*-openai-sdk*" \) -not -path "*/node_modules/*" | while read -r file; do
     echo "Processing: $file"
     for search in "${!replacements[@]}"; do
         replace=$(echo "${replacements[$search]}" | sed 's/&/\\&/g')
