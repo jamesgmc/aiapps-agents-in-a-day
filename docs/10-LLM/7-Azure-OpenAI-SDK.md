@@ -8,30 +8,28 @@ In this lab, you will learn how to use the Azure OpenAI SDK to interact with Azu
 
 ## Setup Node.js project
 
-1. Open a new `Terminal` window in VS code. 
-
-![alt text](images/openterminal.png)
+1. Open a new `Terminal` window in Codespace. 
 
 2. Go to a lab directory `labs/10-LLM/` 
 
-```bash
-cd labs/10-LLM/
-```
-![alt text](images/createfolder_v1.png)
-
+  ```bash
+  cd labs/10-LLM/
+  ```
+  ![alt text](images/openterminal_v1.png)
 
 3. Run the following command to create a new Node.js project:
 
-```bash
-npm init -y
-```
+  ```bash
+  npm init -y
+  ```
+  ![alt text](images/createfolder_v1.png)
 
 4. When integrating Azure OpenAI service in a solution written in Node.js, the OpenAI NPM client library is used.
    Install the latest openai client library using `npm`:
 
-```bash
-npm install @azure/openai@1.0.0-beta.11
-```
+  ```bash
+  npm install @azure/openai@1.0.0-beta.11
+  ```
 
 5. Locate `10-LLM` folder in VS Code `Explorer`. Open `7a-openai-sdk.js` file to add code.
 

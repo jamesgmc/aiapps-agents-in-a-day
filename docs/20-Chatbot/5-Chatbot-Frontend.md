@@ -33,13 +33,13 @@ In the previous lab, we configured and hosted the backend API code locally. The 
 
 4. Navigating to local URL in the browser accesses the front-end application. Through this front-end application user interface, questions can be submitted to the Azure OpenAI model about the Bike Store company data, then it will generate responses accordingly.
 
-   ![Front-end Web Application User Interface](images/2024-01-17-12-42-59.png)
+   ![Front-end Web Application User Interface](images/bike_store_chatbot.png)
 
 ## Ask questions about data and observe the responses
 
 1. To ask the AI questions about the Bike Store company data, type the questions into the front-end application chat user interface. The web application includes tiles with a couple example questions to get started. To use these, simply click on the question tile and it will generate an answer.
 
-   ![Front-end Web Application User Interface](images/2024-01-17-12-42-59.png)
+   ![Front-end Web Application User Interface](images/bike_store_chatbot.png)
 
 2. These example questions are:
 
@@ -49,14 +49,14 @@ In the previous lab, we configured and hosted the backend API code locally. The 
 
 3. The chat user interface presents as a traditional chat application style interface when asking questions.
 
-   ![Chat user interface screenshot with question and generated answer displayed](images/chatbot-frontend-image-2.png)
+   ![Chat user interface screenshot with question and generated answer displayed](images/bike_store_quest.png)
 
 4. Go ahead and ask the service a few questions about Bike Store, and observe the responses.
 
    :::info
    What do the HTTP and RESTful request & responses look like? Use the browser's developer tools to inspect the actual request and response payloads.
 
-   ![alt text](images/raw-request.png)
+   ![alt text](images/raw-request-v1.png)
    :::
 
 ## More things to think about
