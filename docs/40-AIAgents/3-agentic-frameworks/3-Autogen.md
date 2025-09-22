@@ -28,9 +28,6 @@ python game_agent_v3_autogen.py
 ```
 
 ![Azure AI Foundry Project](./images/autogen.png)
-// add screenshot of console output
-//TODO
-
 
 ## Agents
 

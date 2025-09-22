@@ -136,7 +136,7 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v4_rag.py
 ```
-// add screenshot of console output
+![Agentic RAG](./images/agentic-rag.png)
 
 - the agent will ingest a local document and use it as knowledge base to answer questions.
 
