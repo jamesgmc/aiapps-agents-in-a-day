@@ -166,6 +166,3 @@ Abstracts and simplifies context management for AI apps. The idea with memory is
 
     These facts are then stored in the memory collection `SummarizedAzureDocs`. This is a very simplified example, but you can see how you can store information in the memory for the LLM to use.
 
-## Agent Framework
-
-So that's the basics of the Semantic Kernel framework, what about the Agent Framework? //todo
