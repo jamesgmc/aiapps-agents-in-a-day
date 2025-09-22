@@ -138,10 +138,6 @@ Let's use the example of getting the current time in a city to illustrate:
     print(result)
      ```
 
-     ```bash
-    add console output
-     ```
-
 Function Calling is at the heart of most, if not all agent tool use design, however implementing it from scratch can sometimes be challenging.
 As we learned earlier in agentic frameworks provide us with pre-built building blocks to implement tool use.
  
@@ -199,7 +195,7 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v5_tool.py
 ```
-// add screenshot of console output
+![Agentic tools In Action](./images/tool.png)
 
 - the agent can know use a proper math calculation tool to answer the question rather than asking LLM to do so! spoiler alert: LLM is not always good at complex math calculation.
 

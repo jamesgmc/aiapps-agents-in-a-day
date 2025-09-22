@@ -88,7 +88,9 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v9_ob.py
 ```
-// add screenshot of console output
+// TODO
+
+![alt text](images\observability.png)
 
 - the agent wiill ingest the logs and events into application insights.
 

@@ -46,7 +46,7 @@ GPT-4o with vision can:
 
 ### Step 2: Examine the Vision Component
 
-Navigate to `apps-chat\chatbot-frontend\pages\vision\Vision.tsx`. You'll find:
+Navigate to `/apps-chat/chatbot-frontend/src/pages/vision/Vision.tsx`. You'll find:
 - An image upload input for local files
 - A text input for questions about the image
 - A describe button to trigger analysis
