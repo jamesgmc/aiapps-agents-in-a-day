@@ -35,6 +35,20 @@ public class QuestionService : IQuestionService
         }
     }
 
+    public async Task<QuestionAnswer?> GetQuestionByOrderAsync(int order)
+    {
+        lock (_lock)
+        {
+            // Order is 1-based, convert to 0-based index
+            int index = order - 1;
+            if (index >= 0 && index < _questions.Count)
+            {
+                return _questions[index];
+            }
+            return null;
+        }
+    }
+
     public async Task<QuestionAnswer> GetRandomQuestionAsync()
     {
         lock (_lock)

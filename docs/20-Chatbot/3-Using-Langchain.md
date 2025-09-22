@@ -2,7 +2,7 @@
 
 In the previous lab, the `mongodb` package was used to perform a vector search through a db command to find product documents that were most similar to the user's input. In this lab, you will use the LangChain package to perform the same search. LangChain has a vector store class named `AzureCosmosDBVectorStore`, a community contribution, that supports vector search in Azure Cosmos DB.
 
-The `AzureCosmosDBVectorStore` class represents a single vector index in the database, therefore for the instructions for this lab will focus on the `products` collection, however the same steps can be used with the `customers` and `sales` collections as well.
+The `AzureCosmosDBVectorStore` class represents a single vector index in the database, therefore, the instructions for this lab will focus on the `products` collection, however the same steps can be used with the `customers` and `sales` collections as well.
 
 Throughout this lab, notice how much more concise the code is compared to the previous lab with the addition of LangChain.
 
@@ -11,20 +11,20 @@ Throughout this lab, notice how much more concise the code is compared to the pr
 1. Navigate to the lab folder `~/labs/20-Chatbot` within the repository.
 
     ```bash
-    cd  labs/20-Chatbot4-Using-Langchain/start
+    cd  labs/20-Chatbot
     ```
 
     :::info
     The `~/labs/20-Chatbot/completed` folder contains the completed solution for this lab. You can compare your code with the files in `completed` folder if your code does not run correctly.
     :::
 
-2. Check `.env` file has correct configurations. Placeholder string should be all replaced in earlier `Lab Setup` step.
+2. Check that the `.env` file has correct configurations. All placeholder strings should have been replaced in the earlier `Lab Setup` step.
 
    :::info
    The Azure OpenAI service name is not the full endpoint. Only the service name is required. For example, if the endpoint is `https://myservicename.openai.azure.com/`, then the service name is `myservicename`.
    :::
 
-3. Install the langchain packages by running the following command in the terminal window.
+3. Install the LangChain packages by running the following command in the terminal window.
 
    ```bash
    npm install langchain@0.1.21 --save
@@ -48,7 +48,7 @@ When establishing the connection to the vector store, recall that in the previou
 
 The return value of a vector search in LangChain is a list of `Document` objects. The LangChain `Document` class contains two properties: `pageContent`, that represents the textual content that is typically used to augment the prompt, and `metadata` that contains all other attributes of the document. In the cell below, we'll use the `_id` field as the `pageContent`, and the rest of the fields are returned as metadata.
 
-1. Open the `3a-vector-search.js` file in the Visual Studio Code editor. Notice it has the basic MongoDB connection setup.
+1. Open the `3a-vector-search.js` file in the Visual Studio Code editor. Notice that it has the basic MongoDB connection setup.
 
 2. Add the following complete code block where the `TODO: Set up Azure Cosmos DB vector store and perform vector search` comment appears:
 
@@ -72,7 +72,11 @@ The return value of a vector search in LangChain is a list of `Document` objects
      new OpenAIEmbeddings(),
      azureCosmosDBConfig
    );
+   ```
 
+3. In the main function, beneath the const db = dbClient.db(dbname); line of code, add the following code 
+
+   ```javascript
    // perform a vector search using the vector store
    const results = await vectorStore.similaritySearch(
      "What yellow products do you have?",
@@ -96,7 +100,7 @@ The return value of a vector search in LangChain is a list of `Document` objects
    The `Document` objects contain the `page_content` and `metadata` properties. The `page_content` is the `_id` field of the document, and the `metadata` contains all other fields of the document.
    :::
 
-   ![A portion of the console output shows search results with products that are similar to the user query.](images/initial_vector_search.png "Initial vector search results")
+   ![A portion of the console output shows search results with products that are similar to the user query.](images/initial_vector_search_v1.png "Initial vector search results")
 
    :::info
    Please compare `vectorStore.similaritySearch` with previous section's `ragWithVectorsearch`, can you tell the differences between them?
@@ -118,45 +122,14 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
 
 1. Open the `3b-langchain-rag.js` file. Notice it has the basic MongoDB connection setup.
 
-2. Add the following complete code block where the `TODO: Set up Azure Cosmos DB vector store for LangChain RAG` comment appears:
+2. Add the following complete code block in the `main` function, beneath the `console.log("Connected to MongoDB");` line of code, 
 
    ```javascript
-   const {
-     AzureCosmosDBVectorStore,
-     AzureCosmosDBSimilarityType,
-   } = require("@langchain/community/vectorstores/azure_cosmosdb");
-   const { OpenAIEmbeddings, ChatOpenAI } = require("@langchain/openai");
-
-   // To support the LangChain LCEL RAG chain
-   const { PromptTemplate } = require("@langchain/core/prompts");
-   const {
-     RunnableSequence,
-     RunnablePassthrough,
-   } = require("@langchain/core/runnables");
-   const { StringOutputParser } = require("@langchain/core/output_parsers");
-
-   // set up the Azure Cosmos DB vector store using the initialized MongoDB client
-   const azureCosmosDBConfig = {
-     client: dbClient,
-     databaseName: dbname,
-     collectionName: "products",
-     indexName: "VectorSearchIndex",
-     embeddingKey: "contentVector",
-     textKey: "_id",
-   };
-   const vectorStore = new AzureCosmosDBVectorStore(
-     new OpenAIEmbeddings(),
-     azureCosmosDBConfig
-   );
-
-   // set up the OpenAI chat model
-   const chatModel = new ChatOpenAI();
-
    // Test the RAG chain
    console.log(await ragLCELChain("What yellow products do you have?"));
    ```
 
-3. Add the following helper functions before the main function call at the end of the file:
+3. Add the following helper functions before the main function call `main().catch(console.error);` at the end of the file:
 
    ```javascript
    function formatDocuments(docs) {
@@ -245,7 +218,7 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
    node 3b-langchain-rag.js
    ```
 
-   ![The console output shows the response from the LLM based on the augmented prompt and returns the LLM response.](images/rag_chain_output.png "RAG chain output")
+   ![The console output shows the response from the LLM based on the augmented prompt and returns the LLM response.](images/rag_chain_output_v1.png "RAG chain output")
 
 6. You can also try a different question by modifying the test call:
 
@@ -435,7 +408,7 @@ In this scenario, an agent will be equipped with two tools, one that uses a retr
    node 3c-langchain-agent.js
    ```
 
-   ![The console output shows the response from the LangChain agent based on the user input.](images/agent_output.png "LangChain agent output")
+   ![The console output shows the response from the LangChain agent based on the user input.](images/agent_output_v1.png "LangChain agent output")
 
 7. Change the question in the `executeAgent` function to `What is the name of the product that has the SKU TI-R982?`.
 

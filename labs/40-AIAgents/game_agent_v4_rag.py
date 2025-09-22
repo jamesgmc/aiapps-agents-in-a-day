@@ -8,13 +8,14 @@ import time
 load_dotenv()
 
 
-class GameAgentV52:
+class GameAgent:
     """Azure AI Foundry Agent service for RPS Tournament"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
         self.project_endpoint = project_endpoint or os.getenv('AZURE_FOUNDRY_PROJECT_ENDPOINT')
         self.model_deployment_name = model_deployment_name or os.getenv('AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME')
         self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
+        self.player_name = self.player_name + "_v4"
         
         self.project_client = AIProjectClient(
             endpoint=self.project_endpoint,
@@ -24,7 +25,7 @@ class GameAgentV52:
         self.agent = None
         self.thread = None
         self._client_context = None
-        self.agent_name = f"rps-game-agent-{self.player_name}"
+        self.agent_name = f"agent_{self.player_name}"
         self.vector_store = None
         self.file_search_tool = None
     
@@ -60,7 +61,7 @@ class GameAgentV52:
         """Create vector store and upload files for file search"""
             
         vector_store_name = f"game-rulebook-store"
-        file_paths = ['C:\\RepoInsight\\aiapps-agents-in-a-day\\apps-rps\\rps-game-agent\\game_rulebook.txt']
+        file_paths = ['./game_rulebook.txt']
         uploaded_files = []
         for file_path in file_paths:
             if os.path.exists(file_path):
@@ -112,7 +113,7 @@ class GameAgentV52:
         self.agent = self.project_client.agents.create_agent(
             model=self.model_deployment_name,
             name=self.agent_name,
-            instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents.",
+            instructions=f"You are {self.player_name}, a helpful assistant that can answer questions and play Rock-Paper-Scissors games. You have access to file search capabilities to help answer questions from uploaded documents. Keep answer short and precise, dont need to explain.",
             tools=tools,
             tool_resources=tool_resources
         )
@@ -144,7 +145,7 @@ class GameAgentV52:
                     if tool_call.function.name == "math_tool_function":
                         import json
                         args = json.loads(tool_call.function.arguments)
-                        output = GameAgentV52.math_tool_function(args.get("expression", ""))
+                        output = GameAgent.math_tool_function(args.get("expression", ""))
                         tool_outputs.append({"tool_call_id": tool_call.id, "output": output})
                 self.project_client.agents.runs.submit_tool_outputs(thread_id=self.thread.id, run_id=run.id, tool_outputs=tool_outputs)
         
@@ -163,23 +164,6 @@ class GameAgentV52:
             self._setup_agent()
         return self._call_azure_ai_agent(question)
         
-    def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using Azure AI Foundry Agent service"""
-        prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
-        
-        if not self.agent:
-            self._setup_agent()
-        azure_choice = self._call_azure_ai_agent(prompt)
-        choice_lower = azure_choice.lower().strip()
-        
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        
-        return 0
     
     @staticmethod
     def math_tool_function(expression: str) -> str:
@@ -200,7 +184,7 @@ class GameAgentV52:
         """Setup tool functions for the agent"""
         tools = []
         
-        user_functions = {GameAgentV52.math_tool_function}
+        user_functions = {GameAgent.math_tool_function}
         function_tool = FunctionTool(functions=user_functions)
         tools.extend(function_tool.definitions)
         
@@ -210,34 +194,19 @@ class GameAgentV52:
         
         return tools
 
-class GameAgent(GameAgentV52):
-    """Alias for backward compatibility with existing code"""
-    pass
-
 
 if __name__ == "__main__":
+
+    print("Game Agent: Test starting...")
     test_questions = [
-        "What is 15 + 27?",
-        "daniel must be the winner of the game?"
+        "According to the game rulebook, what is the name of the person had the idea to create Rock-Paper-Scissors Agent ?"
     ]
     
-    print("Testing Azure AI Foundry Agent V52:")
-    print("=" * 50)
-    
-    with GameAgentV52() as agent:
-        print(f"Player Name: {agent.player_name}")
-        print(f"Agent Name: {agent.agent_name}")
-        print()
-        
+    with GameAgent() as agent:
         for question in test_questions:
             answer = agent.answer_question(question)
             print(f"Q: {question}")
             print(f"A: {answer}")
             print()
-        
-        print("RPS Move Selection Test:")
-        move_names = ["Rock", "Paper", "Scissors"]
-        move = agent.choose_rps_move()
-        print(f"Move: {move_names[move]} ({move})")
     
-    print("\nAgent V52 testing complete!")
+    print("Game Agent: Test complete")

@@ -8,13 +8,13 @@ Azure Cosmos DB is a globally distributed, multi-model database service for any 
 
 In this lab, you will load the product catalog data into Azure Cosmos DB. The product catalog will be used by the chatbot to answer questions related to the products in the catalog.
 
-The product catalog data is shared in a CSV file. You will be writing a custom script to convert the CSV file to JSON format and then load the JSON data into the Cosmos DB.
+The product catalog data is provided in a CSV file. You will be writing a custom script to convert the CSV file to JSON format and then load the JSON data into the Cosmos DB.
 
 ![RAG](images/rag_design_data_ingestion.png)
 
 ## Setup the lab environment
 
-1. Open repo in `VS Code` and then open `Terminial` -> `New Terminal`. Navigate to the lab folder `~/labs/20-Chatbot/` within the repository.
+1. Open repo in `VS Code` and then open `Terminal` -> `New Terminal`. Navigate to the lab folder `~/labs/20-Chatbot/` within the repository.
 
    ```bash
    cd labs/20-Chatbot
@@ -36,7 +36,7 @@ The `~/labs/20-Chatbot/completed` folder contains the completed solution for thi
 
 The quality of the dataset feeding into the LLM model makes a big difference. While it is typically the responsibility of the data team, there may be various conversions and integrations required to format the dataset. Let's take a look at the product dataset and see if any modifications are needed before loading it into Cosmos DB.
 
-The `product` data set is located in the `data\product.csv` file. It has the following fields: `id`,`categoryId`,`categoryName`,`sku`,`name`,`description`,`price`,`tags`. The `tags` field is a JSON array of strings.
+The `product` data set is located in the `data/product.csv` file. It has the following fields: `id`,`categoryId`,`categoryName`,`sku`,`name`,`description`,`price`,`tags`. The `tags` field is a JSON array of strings.
 
 1. Here is a snapshot of the `product.csv` file:
 
@@ -62,7 +62,7 @@ The `product` data set is located in the `data\product.csv` file. It has the fol
 
 There are multiple options available for performing bulk operations in Cosmos DB. In this section, we will focus on using the `bulkWrite` method. The `bulkWrite` method allows you to execute multiple write operations in a single batch, including insert, update, and delete operations.
 
-1. Open the `1b-1b-import.js` file. You'll see it already has the basic MongoDB connection setup. Now add the following code block where indicated by the `TODO: Add product data loading code here` comment:
+1. Open the `1b-import.js` file. You'll see it already has the basic MongoDB connection setup. Now add the following code block where indicated by the `TODO: Add product data loading code here` comment:
 
    ```javascript
    // Load product data
@@ -138,14 +138,11 @@ There are multiple options available for performing bulk operations in Cosmos DB
    ```bash
    node 1b-import.js
    ```
-
-   ![A console window displays indicating products have been inserted into the products collection](images/rag_load_data_products_loaded.png "Products loaded")
+   ![A console window displays indicating customers and sales have been inserted into the customers and sales collections](images/rag_load_data_prod_cust_sales_loaded.png "Customers and sales loaded")
 
    :::tip
    We reduced the total products in the data set from 295 to only 49 in the end. Do you know why?
-   :::
-
-   ![A console window displays indicating customers and sales have been inserted into the customers and sales collections](images/rag_load_data_customers_sales_loaded.png "Customers and sales loaded")
+   :::   
 
 ## Browse the data in the Cosmos DB
 
@@ -153,7 +150,7 @@ There are multiple options available for performing bulk operations in Cosmos DB
 
    ![alt text](images/rag_load_data_image-6.png)
 
-2. Locate `MongoDb` extension icon in the left navigation bar, it looks like a leaf icon. Once opened, let's add a connection to the database. Click on `Connect` icon, copy CosmosDb connection string to the top textbox in VS Code. 
+2. Locate `MongoDb` extension icon in the left navigation bar, it looks like a leaf icon. Once opened, let's add a connection to the database. Please find db connection string on https://aiaaa-s2-setting.azurewebsites.net.  Click on `Connect` icon, copy CosmosDb connection string to the top textbox in VS Code. 
 
    ![alt text](images/rag_load_data_image-2.png)
 

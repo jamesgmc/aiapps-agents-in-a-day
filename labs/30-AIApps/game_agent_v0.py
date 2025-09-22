@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class GameAgentV1:
+class GameAgent:
     """Simple AI agent for Rock-Paper-Scissors tournament"""
     
     def __init__(self, azure_ai_endpoint=None, azure_ai_key=None):
@@ -80,57 +80,21 @@ class GameAgentV1:
         
         # Limit answer length
         return answer[:50]
-    
-    def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2)"""
-        question = "Choose Rock, Paper, or Scissors for a tournament game. Reply with only one word."
-        system_prompt = "You are a strategic Rock-Paper-Scissors player."
-        
-        print("Choosing RPS move...")
-        choice = self._ask_ai(question, system_prompt)
-        print(f"AI chose: {choice}")
-        
-        if not choice:
-            return 0  # Default to Rock
-        
-        # Convert text to number
-        choice = choice.lower().strip()
-        if 'rock' in choice:
-            return 0
-        elif 'paper' in choice:
-            return 1
-        elif 'scissors' in choice or 'scissor' in choice:
-            return 2
-        else:
-            return 0  # Default to Rock
 
 
-# Keep old name for compatibility
-class GameAgent(GameAgentV1):
-    pass
 if __name__ == "__main__":
-    # Test the agent
-    agent = GameAgentV1()
-    
-    print("Testing Game Agent V1")
-    print("=" * 30)
-    
+
+    print("Game Agent: Test starting...")
     # Test questions
-    questions = [
-        "What is 15 + 27?",
+    test_questions = [
         "What is the capital of France?", 
-        "What is 100 - 35?"
     ]
     
-    for question in questions:
-        answer = agent.answer_question(question)
-        print(f"Q: {question}")
-        print(f"A: {answer}")
-        print()
+    with GameAgent() as agent:
+        for question in test_questions:
+            answer = agent.answer_question(question)
+            print(f"Q: {question}")
+            print(f"A: {answer}")
+            print()
     
-    # Test RPS moves
-    print("Testing RPS moves:")
-    for i in range(3):
-        move = agent.choose_rps_move()
-        moves = ['Rock', 'Paper', 'Scissors']
-        print(f"Move {i+1}: {moves[move] if move is not None else 'Error'}")
+    print("Game Agent: Test complete")

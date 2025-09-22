@@ -7,7 +7,7 @@ DALL-E is a neural network based model that can generate graphical data from nat
 
 The Azure OpenAI service includes the DALL-E model, which you can use to generate original images based on natural language prompts. 
 
-**Switch to the `Image` tab on the top nav bar in the playgroup**
+**Switch to the `Image` tab on the top nav bar in the playground**
 
 For example, you might submit the following natural language prompt to DALL-E:
 

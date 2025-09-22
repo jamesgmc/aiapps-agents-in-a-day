@@ -79,8 +79,8 @@
   {
     "Id": 12,
     "Name": "GPT-4o Endpoint",
-    "Value": "https://aiaaa-s2-openai.openai.azure.com//openai/deployments/gpt4o/chat/completions?api-version=2024-08-01-preview",
-    "Description": "Direct endpoint for GPT-4o chat completions (deploymentName: gpt4o)",
+    "Value": "https://aiaaa-s2-openai.openai.azure.com//openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview",
+    "Description": "Direct endpoint for GPT-4o chat completions (deploymentName: gpt-4o)",
     "Category": "Azure AI Resource Configuration"
   },
   {

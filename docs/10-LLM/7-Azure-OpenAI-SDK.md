@@ -1,40 +1,37 @@
 # Azure OpenAI SDK
 
 :::tip Azure OpenAI SDK
-Azure OpenAI SDK is a set of libraries that allow you to interact with Azure OpenAI services from your code. The SDK are available for multiple programming languages, including Python, Node.js, and C#.
+Azure OpenAI SDK is a set of libraries that allow you to interact with Azure OpenAI services from your code. The SDK is available for multiple programming languages, including Python, Node.js, and C#.
 :::
 
 In this lab, you will learn how to use the Azure OpenAI SDK to interact with Azure OpenAI services from your code using Node.js.
 
 ## Setup Node.js project
 
-1. Open a new `Terminal` window in VS code. 
-
-![alt text](images/openterminal.png)
+1. Open a new `Terminal` window in Codespace. 
 
 2. Go to a lab directory `labs/10-LLM/` 
 
-```bash
-cd labs/10-LLM/
-```
-![alt text](images/creatfolder.png)
-//todo: update iamge
+  ```bash
+  cd labs/10-LLM/
+  ```
+  ![alt text](images/openterminal_v1.png)
 
 3. Run the following command to create a new Node.js project:
 
-```bash
-npm init -y
-```
+  ```bash
+  npm init -y
+  ```
+  ![alt text](images/createfolder_v1.png)
 
 4. When integrating Azure OpenAI service in a solution written in Node.js, the OpenAI NPM client library is used.
    Install the latest openai client library using `npm`:
 
-```bash
-npm install @azure/openai@1.0.0-beta.11
-```
+  ```bash
+  npm install @azure/openai@1.0.0-beta.11
+  ```
 
-5. Locate `10-LLM` folder in VS code `Explorer`. Create a new `7a-openai-sdk.js` file for the Node.js program using the `+` icon or `File -> New Text File -> Save`. 
-
+5. Locate `10-LLM` folder in VS Code `Explorer`. Open `7a-openai-sdk.js` file to add code.
 
 6. Then add the following variable definition to the `7a-openai-sdk.js` file using `require` to use the OpenAI library. Create the Azure OpenAI client to call the Azure OpenAI Chat completion API. Have a look at Azure OpenAI service endpoint and Azure OpenAI service key in the code below. Please copy below Javascript code into `7a-openai-sdk.js` below earlier block.
 
@@ -47,11 +44,7 @@ const client = new OpenAIClient(
 );
 ```
 
-7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://aiaaa-s2-openai.openai.azure.com/`. If not sure about the value of AZURE_OPENAI_API_INSTANCE_NAME, please refer to `Lab Setup` step.
-
-:::info
-More information on the Azure OpenAI client methods can be found in the [@azure/openai package](https://learn.microsoft.com/en-us/javascript/api/%40azure/openai/?view=azure-node-preview) documentation. 
-:::
+7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://aiaaa-s2-openai.openai.azure.com/`. Please find the configuration value on https://aiaaa-s2-setting.azurewebsites.net, or refer to `Lab Setup` step.
 
 8. Once the Azure OpenAI client has been created, the next step is to call the `.getCompletions` method on the client to perform a chat completion. And print the response from Azure OpenAI to the console.
 
@@ -126,7 +119,7 @@ You can call a function from the model to perform a specific task. The available
 
 Locate and open `7b-openai-sdk-func-call.js` to study how to make a function call.  The model calls the `search_bike` function to retrieve bikes from the search index based on the location, company, and model of the bike. 
 
-1. Now let's study the code, you don't need to copy and paste code into above file. Firstly, it defines a funcion call definition.
+1. Now let's study the code, you don't need to copy and paste code into above file. Firstly, it defines a function call definition.
 
 ```javascript
 const searchBikeStore = {

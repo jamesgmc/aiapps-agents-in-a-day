@@ -6,13 +6,14 @@ from azure.identity import DefaultAzureCredential
 load_dotenv()
 
 
-class GameAgentV52:
+class GameAgent:
     """Azure AI Foundry Agent service for RPS Tournament"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
         self.project_endpoint = project_endpoint or os.getenv('AZURE_FOUNDRY_PROJECT_ENDPOINT')
         self.model_deployment_name = model_deployment_name or os.getenv('AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME')
         self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
+        self.player_name = self.player_name + "_v3"
         
         self.project_client = AIProjectClient(
             endpoint=self.project_endpoint,
@@ -22,7 +23,7 @@ class GameAgentV52:
         self.agent = None
         self.thread = None
         self._client_context = None
-        self.agent_name = f"rps-game-agent-{self.player_name}"
+        self.agent_name = f"agent_{self.player_name}"
     
     def __enter__(self):
         self._client_context = self.project_client.__enter__()
@@ -97,52 +98,20 @@ class GameAgentV52:
             self._setup_agent()
         return self._call_azure_ai_agent(question)
         
-    def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using Azure AI Foundry Agent service"""
-        prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
-        
-        if not self.agent:
-            self._setup_agent()
-        azure_choice = self._call_azure_ai_agent(prompt)
-        choice_lower = azure_choice.lower().strip()
-        
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        
-        return 0
-    
-
-class GameAgent(GameAgentV52):
-    """Alias for backward compatibility with existing code"""
-    pass
-
 
 if __name__ == "__main__":
+    
+    print("Game Agent: Test starting...")
     test_questions = [
         "What is 15 + 27?"
     ]
-    
-    print("Testing Azure AI Foundry Agent V52:")
-    print("=" * 50)
-    
-    with GameAgentV52() as agent:
-        print(f"Player Name: {agent.player_name}")
-        print(f"Agent Name: {agent.agent_name}")
-        print()
-        
+
+    with GameAgent() as agent:
+
         for question in test_questions:
             answer = agent.answer_question(question)
             print(f"Q: {question}")
             print(f"A: {answer}")
             print()
-        
-        print("RPS Move Selection Test:")
-        move_names = ["Rock", "Paper", "Scissors"]
-        move = agent.choose_rps_move()
-        print(f"Move: {move_names[move]} ({move})")
     
-    print("\nAgent V52 testing complete!")
+    print("Game Agent: Test complete")

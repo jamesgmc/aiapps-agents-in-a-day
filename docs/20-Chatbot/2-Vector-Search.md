@@ -1,7 +1,7 @@
 # Vector search using text embeddings
 
 :::tip Text Embeddings
-The text embeddings are a type of vector representation of data over a continuous vector space where similar items are close together and dissimilar items are far apart. This allows us to perform operations on the vectors to find similar items, perform clustering, and more.
+The text embeddings are a type of vector representation of data in a continuous vector space where similar items are close together and dissimilar items are far apart. This allows us to perform operations on the vectors to find similar items, perform clustering, and more.
 :::
 
 In the previous lab, you loaded the `product` catalog into Azure Cosmos DB. The Chatbot will use the product catalog to fetch the relevant products based on the user's query.
@@ -11,27 +11,9 @@ In this lab, you will learn how to use an Azure OpenAI embedding model to genera
 
 You will also learn how to use the vector index to retrieve the relevant documents based on the cosine similarity of the query vector and the content vectors of the documents in the collection.
 
-## Setup the lab environment
-
-1. Navigate to the lab folder `~/labs/20-Chatbot/` in the `Terminal` window.
-
-    ```bash
-    cd  labs/20-Chatbot
-    ```
-
-    :::info
-    The `~/labs/20-Chatbot/completed` folder contains the completed solution for this lab. You can compare your code with the files in `completed` folder if your code does not run correctly.
-    :::
-
-2. Install the required packages by running the following command in the terminal window:
-
-   ```bash
-   npm install
-   ```
-
 ## Create the Azure OpenAI client
 
-1. Install the `@azure/openai` package by running the following command in the terminal window.
+1. Make sure your current folder is `~/labs/20-Chatbot/` in the `Terminal` window. Install the `@azure/openai` package by running the following command in the terminal window.
 
    ```bash
    npm install @azure/openai@1.0.0-beta.11 --save
@@ -42,14 +24,14 @@ You will also learn how to use the vector index to retrieve the relevant documen
 
 3. Open the `2a-embedding.js` file in the Visual Studio Code editor.
 
-4. Add the following code to import the Azure OpenAI client and Azure Key Credential classes at the top of the file below `const { MongoClient } = require('mongodb');` line. The code block alse creates an instance of the Azure OpenAI client afer the imports.
+4. Add the following code to import the Azure OpenAI client and Azure Key Credential classes at the top of the file below `const { MongoClient } = require('mongodb');` line. The code block also creates an instance of the Azure OpenAI client after the imports.
 
    ```javascript
    const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
 
    // set up the Azure OpenAI client
    const embeddingsDeploymentName = "embeddings";
-   const completionsDeploymentName = "completions";
+   const completionsDeploymentName = "gpt-4o";
    const aoaiClient = new OpenAIClient(
      "https://" +
        process.env.AZURE_OPENAI_API_INSTANCE_NAME +
@@ -204,7 +186,7 @@ We have a lot of people doing the lab at the same time. Get in quick before rate
    node 2b-vectorize.js
    ```
 
-   ![Console output displays the progress of vectorizing and storing the embeddings in each document.](images/vectorize_and_store_embeddings.png "Vectorizing and storing the embeddings in each document")
+   ![Console output displays the progress of vectorizing and storing the embeddings in each document.](images/vectorize_and_store_embeddings_v1.png "Vectorizing and storing the embeddings in each document")
 
 5. Let us check the `products` collection in the Azure Cosmos DB Data Explorer. The `contentVector` field should be populated with the vector embeddings for each document.
 
@@ -218,7 +200,7 @@ We have a lot of people doing the lab at the same time. Get in quick before rate
 ## Use vector search
 
 We have generated vector embeddings for each document and created vector indexes.
-In this section, we will add the steps to retrieve the most relevant documents from Cosmos DB based based on the cosine similarity of the query vector and the content vectors of the documents in the collection.
+In this section, we will add the steps to retrieve the most relevant documents from Cosmos DB based on the cosine similarity of the query vector and the content vectors of the documents in the collection.
 
 1. In `2c-search.js`, add the following code directly above the last line of the file `main().catch(console.error);` (that calls the `main` function) - the code is documented inline to explain the steps taken. This code introduces two functions, one to perform a vector search and another to format and print the search results:
 

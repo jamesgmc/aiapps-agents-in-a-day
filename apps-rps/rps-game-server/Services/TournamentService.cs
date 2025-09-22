@@ -168,11 +168,22 @@ public class TournamentService : ITournamentService
             if (round == null || round.Status != RoundStatus.Pending)
                 return false;
 
-            // Generate random question if not provided
+            // Use sequential question based on round number if not provided
             QuestionAnswer qa;
             if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(correctAnswer))
             {
-                qa = _questionService.GetRandomQuestionAsync().GetAwaiter().GetResult();
+                // Get question by order (round number) to ensure exact sequence
+                var sequentialQuestion = _questionService.GetQuestionByOrderAsync(roundNumber).GetAwaiter().GetResult();
+                if (sequentialQuestion != null)
+                {
+                    qa = sequentialQuestion;
+                }
+                else
+                {
+                    // Fallback to random if no question found for this order
+                    _logger.LogWarning($"No question found for round {roundNumber}, falling back to random question");
+                    qa = _questionService.GetRandomQuestionAsync().GetAwaiter().GetResult();
+                }
             }
             else
             {
@@ -182,6 +193,7 @@ public class TournamentService : ITournamentService
             round.Status = RoundStatus.InProgress;
             round.Question = qa.Question;
             round.CorrectAnswer = qa.Answer;
+            round.AnswerRule = qa.AnswerRule;
             round.QuestionType = qa.Type;
             round.MediaUrl = qa.MediaUrl;
             round.ServerMove = GenerateRandomMove();
@@ -330,7 +342,7 @@ public class TournamentService : ITournamentService
             playerResult.Answer = request.Answer;
             playerResult.Move = request.Move;
             playerResult.SubmittedAt = DateTime.UtcNow;
-            playerResult.AnswerCorrect = string.Equals(request.Answer.Trim(), round.CorrectAnswer.Trim(), StringComparison.OrdinalIgnoreCase);
+            playerResult.AnswerCorrect = ValidateAnswer(request.Answer.Trim(), round.CorrectAnswer.Trim(), round.AnswerRule);
 
             return new SubmitAnswerResponse
             {
@@ -428,7 +440,7 @@ public class TournamentService : ITournamentService
             // Score for correct answer
             if (result.AnswerCorrect)
             {
-                score += 10;
+                score += 30;
             }
 
             // Score for winning rock-paper-scissors
@@ -451,6 +463,24 @@ public class TournamentService : ITournamentService
                 player.TotalScore += score;
             }
         }
+    }
+
+    private bool ValidateAnswer(string playerAnswer, string correctAnswer, string? answerRule)
+    {
+        if (string.IsNullOrWhiteSpace(answerRule) || answerRule.Equals("Exact", StringComparison.OrdinalIgnoreCase))
+        {
+            // Default exact matching (case-insensitive)
+            return string.Equals(playerAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase);
+        }
+        
+        if (answerRule.Equals("FuzzyMatch", StringComparison.OrdinalIgnoreCase))
+        {
+            // Fuzzy matching - check if player answer contains the correct answer (case-insensitive)
+            return playerAnswer.Contains(correctAnswer, StringComparison.OrdinalIgnoreCase);
+        }
+        
+        // Default to exact matching for unknown rules
+        return string.Equals(playerAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase);
     }
 
     private bool DetermineWinner(Move playerMove, Move serverMove)

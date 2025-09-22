@@ -67,6 +67,38 @@ Let's use the example of getting the current time in a city to illustrate:
 
     ```python
     add code
+    //TODO
+    function_schema = [
+        {
+            "name": "get_current_time",
+            "description": "Get the current time in a given city.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "type": "string",
+                        "description": "The name of the city to get the current time for."
+                    }
+                },
+                "required": ["city"]
+            }
+        }
+    ]
+
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "What time is it in San Francisco?"}
+    ]
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=messages,
+        tools=function_schema,
+        tool_choice="auto"
+    )
+
+    print(response.choices[0].message.tool_calls)
+
     ```
   
 1. **The function code required to carry out the task:**
@@ -76,6 +108,34 @@ Let's use the example of getting the current time in a city to illustrate:
 
      ```python
      add code
+     //TODO
+     def get_current_time(city):
+    from datetime import datetime
+    import pytz
+
+    city_timezones = {
+        "San Francisco": "America/Los_Angeles",
+        "New York": "America/New_York",
+        "London": "Europe/London"
+    }
+    tz = pytz.timezone(city_timezones.get(city, "UTC"))
+    return datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+
+    response_message = {
+        "tool_calls": [
+            {
+                "name": "get_current_time",
+                "arguments": {"city": "San Francisco"}
+            }
+        ]
+    }
+
+    tool_call = response_message["tool_calls"][0]
+    result = None
+    if tool_call["name"] == "get_current_time":
+        result = get_current_time(tool_call["arguments"]["city"])
+
+    print(result)
      ```
 
      ```bash
@@ -155,7 +215,29 @@ The following diagram illustrates the process of function calling with Semantic 
 In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the RPS tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the RPSTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
 
 ```python
-add math calc example lab here for SK here
+    add math calc example lab here for SK here
+    //TODO
+    from semantic_kernel import Kernel, kernel_function, Plugin
+
+    class MathCalcPlugin(Plugin):
+        @kernel_function(
+            description="Calculate the result of a math expression.",
+            name="calculate",
+            parameters={
+                "expression": {
+                    "type": "string",
+                    "description": "The math expression to evaluate, e.g. '2 + 2 * 3'"
+                }
+            }
+        )
+        def calculate(self, expression: str) -> str:
+            return str(eval(expression))
+
+    kernel = Kernel()
+    kernel.add_plugin(MathCalcPlugin())
+
+    result = kernel.invoke("calculate", {"expression": "12 * (3 + 2)"})
+    print(result)
 ```
   
 ## What are the special considerations for using the Tool Use Design Pattern to build trustworthy AI agents?

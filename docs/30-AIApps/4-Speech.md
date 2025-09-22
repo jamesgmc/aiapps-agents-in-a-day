@@ -102,57 +102,7 @@ async function speechApi(text: string): Promise<void> {
 }
 ```
 
-### Step 5: Advanced Speech Features
-
-#### SSML for Enhanced Control
-```typescript
-const ssmlText = `
-<speak version="1.0" xml:lang="en-US">
-    <voice name="en-US-AriaNeural">
-        <prosody rate="medium" pitch="medium">
-            Welcome to our store! 
-            <break time="500ms"/>
-            How can I help you today?
-        </prosody>
-    </voice>
-</speak>`;
-```
-
-#### Voice Customization Options
-```typescript
-const voiceOptions = {
-    'en-US-AriaNeural': 'Professional female voice',
-    'en-US-DavisNeural': 'Professional male voice',
-    'en-US-JennyNeural': 'Friendly female voice',
-    'en-US-GuyNeural': 'Casual male voice'
-};
-```
-
-#### Audio Format Selection
-```typescript
-const audioFormats = {
-    mp3: SpeechSynthesisOutputFormat.Audio16Khz32KBitRateMonoMp3,
-    wav: SpeechSynthesisOutputFormat.Riff16Khz16BitMonoPcm,
-    ogg: SpeechSynthesisOutputFormat.OggOpusMonoMp3
-};
-```
-
-### Step 6: Browser Audio Integration
-
-Implement audio playback in the browser:
-
-```typescript
-function playAudioBuffer(audioData: ArrayBuffer) {
-    const audioContext = new AudioContext();
-    const audioBuffer = await audioContext.decodeAudioData(audioData);
-    const source = audioContext.createBufferSource();
-    source.buffer = audioBuffer;
-    source.connect(audioContext.destination);
-    source.start();
-}
-```
-
-## Solution Reference
+### Step 6: Solution Reference
 
 <details>
 <summary>View Complete Solution</summary>

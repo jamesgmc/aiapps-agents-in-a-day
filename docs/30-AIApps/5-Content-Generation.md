@@ -175,7 +175,7 @@ const Page = () => {
                 options
             );
 
-            const deploymentName = 'gpt4o';
+            const deploymentName = 'gpt-4o';
             const result = await client.getChatCompletions(deploymentName, messages, {
                 maxTokens: 500,
                 temperature: 0.3

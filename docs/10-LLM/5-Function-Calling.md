@@ -20,7 +20,7 @@ First update the system message.
 
 - In this system message explain the goal of the assistant
 - Explain the information that needs to be gathered
-- Which function to all if all information is gathered
+- Which function to call if all information is gathered
 
 ```text title="System Message"
 You are Contoso Bike Store AI assistant that helps users with finding the available bikes in the store.
@@ -74,7 +74,7 @@ Ask:
 I'm looking for a bike in Seattle store. Can you help me find a bike from Trek company and model Domane SLR 9?
 ```
 
-The Model has determined that the function `search_bike` should be called based on the user's input. The response will include the arguments for the function `search_bike`. You would use this response and glue the data to function to get the final response.
+The Model has determined that the function `search_bike` should be called based on the user's input. The response will include the arguments for the function `search_bike`. You would use this response and pass the data to function to get the final response.
 
 ```json title="Response"
 {

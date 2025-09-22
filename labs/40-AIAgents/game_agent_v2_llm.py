@@ -5,13 +5,14 @@ from azure.identity import DefaultAzureCredential
 
 load_dotenv()
 
-class GameAgentV52:
+class GameAgent:
     """Azure AI Foundry Agent service for RPS Tournament"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
         self.project_endpoint = project_endpoint or os.getenv('AZURE_FOUNDRY_PROJECT_ENDPOINT')
         self.model_deployment_name = model_deployment_name or os.getenv('AZURE_FOUNDRY_MODEL_DEPLOYMENT_NAME')
         self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
+        self.player_name = self.player_name + "_v2"
         
         self.project_client = AIProjectClient(
             endpoint=self.project_endpoint,
@@ -21,7 +22,7 @@ class GameAgentV52:
         self.agent = None
         self.thread = None
         self._client_context = None
-        self.agent_name = f"rps-game-agent-{self.player_name}"
+        self.agent_name = f"agent_{self.player_name}"
     
     def __enter__(self):
         self._client_context = self.project_client.__enter__()
@@ -94,20 +95,15 @@ class GameAgentV52:
         if not self.agent:
             self._setup_agent()
         return self._call_azure_ai_agent(question)
-        
-
-class GameAgent(GameAgentV52):
-    """Alias for backward compatibility with existing code"""
-    pass
 
 
 if __name__ == "__main__":
  
-    print("Testing Azure AI Foundry Agent")
+    print("Game Agent: Test starting...")
     
-    with GameAgentV52() as agent:
+    with GameAgent() as agent:
         answer = agent.answer_question('hello, how are you?')
         print(f"Agent: {answer}")
         print()
     
-    print("\nAgent testing complete!")
+    print("Game Agent: Test complete")

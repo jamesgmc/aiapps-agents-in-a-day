@@ -23,7 +23,7 @@ https://aiaaa-s2-chatbot.azurewebsites.net
 
 ![alt text](images/chatbot-image.png)
 
-The product catalog for the bicycle store is stored in Azure Cosmos DB database. The solution will use Azure Cosmos DB vector search capabilities to retrieve relevant documents from the database based on the user's query. It will generate the final response using Chat Completion API from Azure OpenAI.
+The product catalog for the bicycle store is stored in an Azure Cosmos DB database. The solution will use Azure Cosmos DB vector search capabilities to retrieve relevant documents from the database based on the user's query. It will generate the final response using Chat Completion API from Azure OpenAI.
 
 ### Data Ingestion
 
@@ -41,7 +41,7 @@ The product catalog for the bicycle store is stored in Azure Cosmos DB database.
 
 3. [Workflow Orchestration using LangChain](/docs/Chatbot/Using-Langchain): Use LangChain to orchestrate the workflow of querying Azure Cosmos DB and Azure OpenAI services.
 
-4. [Chatbot Backend API](/docs/Chatbot/Chatbot-Backend): Build the Node.js backend API to expose the Azure Open AI functionality.
+4. [Chatbot Backend API](/docs/Chatbot/Chatbot-Backend): Build the Node.js backend API to expose the Azure OpenAI functionality.
 
 5. [Chatbot Frontend](/docs/Chatbot/Chatbot-Frontend): Connect Chatbot Frontend with the Backend API.
 
@@ -53,4 +53,4 @@ The Front-end Web App is a static SPA application written in React. Since React 
 
 The Node.js backend API is responsible for generating responses to user queries. It queries Azure Cosmos DB to extract relevant documents using vector search and then uses Azure OpenAI services to generate responses to user queries.
 
-Lets get started by clicking the Next button below.
+Let's get started by clicking the Next button below.

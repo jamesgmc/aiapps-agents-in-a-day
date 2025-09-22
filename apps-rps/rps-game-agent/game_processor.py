@@ -3,7 +3,6 @@ import time
 import threading
 from typing import Optional, List, Dict, Any
 from api_client import RPSGameClient
-# from agent import GameAgent
 from game_agent import GameAgent
 
 class GameProcessor:
@@ -114,7 +113,7 @@ class GameProcessor:
                     self.log_status(f"Generated answer: {answer}")
                     
                     # Choose RPS move
-                    rps_move = self.agent.choose_rps_move()
+                    rps_move = self.choose_rps_move()
                     move_name = self.get_move_name(rps_move)
                     self.log_status(f"Chosen RPS move: {move_name}")
                     
@@ -135,7 +134,7 @@ class GameProcessor:
                         self.log_status(f"Submit failed: {submit_response.get('message', 'Unknown error')}")
                 
                 # Wait before next check
-                time.sleep(2)
+                time.sleep(5)
                 
             except Exception as e:
                 self.log_status(f"Unexpected error: {str(e)}")
@@ -143,6 +142,11 @@ class GameProcessor:
         
         self.is_running = False
         self.log_status("Game monitoring stopped.")
+
+        
+    def choose_rps_move(self) -> int:
+        """Randomly choose Rock (0), Paper (1), or Scissors (2)"""
+        return random.randint(0, 2)
     
     def get_current_results(self):
         """Get current results and update results list"""

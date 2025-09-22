@@ -56,6 +56,7 @@ Start by identifying common store operations that can be automated:
     <summary>Your solution will be better than our sample answer!</summary>
 
     The basic solution is provided below. Feel free to expand on it to make it more interesting!
+    Go to `labs/30-AIApps` in terminal, run `npm install`, then run `node 6-Automation.js` to see it in action.
     
     ```
     const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
@@ -67,11 +68,11 @@ Start by identifying common store operations that can be automated:
       let kitchenLight = "off";
 
       const client = new OpenAIClient(
-        "https://arg-syd-aiapp1day-openai.openai.azure.com/",
+        "https://aiaaa-s2-openai.openai.azure.com/",
         new AzureKeyCredential("<API_KEY>")
       );
 
-      const deploymentId = "completions";
+      const deploymentId = "gpt-4o";
       console.log("The chatbot is ready. Type 'exit' to quit.");
 
       const getLightStatus = {
@@ -165,7 +166,7 @@ Start by identifying common store operations that can be automated:
         }
 
         const chatResponse = await client.getChatCompletions(
-          "completions",
+          "gpt-4o",
           [
             {
               role: "system",

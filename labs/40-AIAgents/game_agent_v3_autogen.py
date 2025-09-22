@@ -7,12 +7,12 @@ import openai
 load_dotenv()
 
 
-class GameAgentV52:
+class GameAgent:
     """AutoGen Agent service for RPS Tournament"""
     
     def __init__(self, project_endpoint=None, model_deployment_name=None, player_name=None):
         self.player_name = player_name or os.getenv('DEV_Name', 'default-player')
-        self.agent_name = f"rps-game-agent-{self.player_name}"
+        self.agent_name = f"agent_{self.player_name}"
         
         # Configure LLM for AutoGen
         self.llm_config = {
@@ -81,53 +81,22 @@ class GameAgentV52:
         if not self.agent:
             self._setup_agent()
         return self._call_autogen_agent(question)
-        
-    def choose_rps_move(self):
-        """Choose Rock (0), Paper (1), or Scissors (2) using AutoGen agent"""
-        prompt = "You are playing Rock-Paper-Scissors. Choose the best strategic move. Respond with only one word: Rock, Paper, or Scissors."
-        
-        if not self.agent:
-            self._setup_agent()
-        autogen_choice = self._call_autogen_agent(prompt)
-        choice_lower = autogen_choice.lower().strip()
-        
-        if 'rock' in choice_lower:
-            return 0
-        elif 'paper' in choice_lower:
-            return 1
-        elif 'scissors' in choice_lower:
-            return 2
-        
-        return 0
-    
 
-class GameAgent(GameAgentV52):
-    """Alias for backward compatibility with existing code - uses AutoGen"""
-    pass
+    
 
 
 if __name__ == "__main__":
+
+    print("Game Agent: Test starting...")
     test_questions = [
         "What is 15 + 27?"
     ]
     
-    print("Testing AutoGen Agent V52:")
-    print("=" * 50)
-    
-    with GameAgentV52() as agent:
-        print(f"Player Name: {agent.player_name}")
-        print(f"Agent Name: {agent.agent_name}")
-        print()
-        
+    with GameAgent() as agent:
         for question in test_questions:
             answer = agent.answer_question(question)
             print(f"Q: {question}")
             print(f"A: {answer}")
             print()
-        
-        print("RPS Move Selection Test:")
-        move_names = ["Rock", "Paper", "Scissors"]
-        move = agent.choose_rps_move()
-        print(f"Move: {move_names[move]} ({move})")
     
-    print("\nAutoGen Agent V52 testing complete!")
+    print("Game Agent: Test complete")
