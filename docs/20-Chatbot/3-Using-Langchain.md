@@ -11,7 +11,7 @@ Throughout this lab, notice how much more concise the code is compared to the pr
 1. Navigate to the lab folder `~/labs/20-Chatbot` within the repository.
 
     ```bash
-    cd  labs/20-Chatbot4-Using-Langchain/start
+    cd  labs/20-Chatbot
     ```
 
     :::info
@@ -100,7 +100,7 @@ The return value of a vector search in LangChain is a list of `Document` objects
    The `Document` objects contain the `page_content` and `metadata` properties. The `page_content` is the `_id` field of the document, and the `metadata` contains all other fields of the document.
    :::
 
-   ![A portion of the console output shows search results with products that are similar to the user query.](images/initial_vector_search.png "Initial vector search results")
+   ![A portion of the console output shows search results with products that are similar to the user query.](images/initial_vector_search_v1.png "Initial vector search results")
 
    :::info
    Please compare `vectorStore.similaritySearch` with previous section's `ragWithVectorsearch`, can you tell the differences between them?
@@ -122,7 +122,7 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
 
 1. Open the `3b-langchain-rag.js` file. Notice it has the basic MongoDB connection setup.
 
-2. Add the following complete code block in the `main` function, beneath the `const db = dbClient.db(dbname);` line of code, 
+2. Add the following complete code block in the `main` function, beneath the `console.log("Connected to MongoDB");` line of code, 
 
    ```javascript
    // Test the RAG chain
@@ -218,7 +218,7 @@ We'll also define a reusable RAG chain to control the flow and behavior of the c
    node 3b-langchain-rag.js
    ```
 
-   ![The console output shows the response from the LLM based on the augmented prompt and returns the LLM response.](images/rag_chain_output.png "RAG chain output")
+   ![The console output shows the response from the LLM based on the augmented prompt and returns the LLM response.](images/rag_chain_output_v1.png "RAG chain output")
 
 6. You can also try a different question by modifying the test call:
 
@@ -408,7 +408,7 @@ In this scenario, an agent will be equipped with two tools, one that uses a retr
    node 3c-langchain-agent.js
    ```
 
-   ![The console output shows the response from the LangChain agent based on the user input.](images/agent_output.png "LangChain agent output")
+   ![The console output shows the response from the LangChain agent based on the user input.](images/agent_output_v1.png "LangChain agent output")
 
 7. Change the question in the `executeAgent` function to `What is the name of the product that has the SKU TI-R982?`.
 

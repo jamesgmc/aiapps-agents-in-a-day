@@ -138,14 +138,11 @@ There are multiple options available for performing bulk operations in Cosmos DB
    ```bash
    node 1b-import.js
    ```
-
-   ![A console window displays indicating products have been inserted into the products collection](images/rag_load_data_products_loaded.png "Products loaded")
+   ![A console window displays indicating customers and sales have been inserted into the customers and sales collections](images/rag_load_data_prod_cust_sales_loaded.png "Customers and sales loaded")
 
    :::tip
    We reduced the total products in the data set from 295 to only 49 in the end. Do you know why?
-   :::
-
-   ![A console window displays indicating customers and sales have been inserted into the customers and sales collections](images/rag_load_data_customers_sales_loaded.png "Customers and sales loaded")
+   :::   
 
 ## Browse the data in the Cosmos DB
 

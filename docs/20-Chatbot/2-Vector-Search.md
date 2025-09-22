@@ -186,7 +186,7 @@ We have a lot of people doing the lab at the same time. Get in quick before rate
    node 2b-vectorize.js
    ```
 
-   ![Console output displays the progress of vectorizing and storing the embeddings in each document.](images/vectorize_and_store_embeddings.png "Vectorizing and storing the embeddings in each document")
+   ![Console output displays the progress of vectorizing and storing the embeddings in each document.](images/vectorize_and_store_embeddings_v1.png "Vectorizing and storing the embeddings in each document")
 
 5. Let us check the `products` collection in the Azure Cosmos DB Data Explorer. The `contentVector` field should be populated with the vector embeddings for each document.
 
