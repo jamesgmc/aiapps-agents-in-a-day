@@ -57,7 +57,7 @@ pip install -r requirements.txt
 - Once dependencies are installed, run the following command to start the game client:
 
 ```bash
-python python .\app.py
+python app.py
 ```
 
 - Edit the game server urls in this file and replace url with your game server url if needed. Check your local .env file and update the following variables:
