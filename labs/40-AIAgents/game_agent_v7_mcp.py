@@ -73,6 +73,7 @@ class GameAgent:
     
     def create_vector_store_with_files(self):
         """Create vector store and upload files for file search"""
+            
         vector_store_name = f"game-rulebook-store"
         file_paths = ['C:\\RepoInsight\\aiapps-agents-in-a-day\\apps-rps\\rps-game-agent\\game_rulebook.txt']
         uploaded_files = []
@@ -83,7 +84,7 @@ class GameAgent:
                 )
                 uploaded_files.append(uploaded_file)
                 print(f"Uploaded file: {file_path} (ID: {uploaded_file.id})")
-
+            
         self.vector_store = self.project_client.agents.vector_stores.create_and_poll(
             data_sources=[], 
             name=vector_store_name,
@@ -93,27 +94,23 @@ class GameAgent:
             }
         )
         print(f"Created vector store: {self.vector_store.id}")
-
+        
         file_ids = [f.id for f in uploaded_files]
-        if file_ids:
-            vector_store_file_batch = self.project_client.agents.vector_store_file_batches.create_and_poll(
-                vector_store_id=self.vector_store.id, 
-                file_ids=file_ids
-            )
-            print(f"Added files to vector store batch: {vector_store_file_batch.id}")
-        else:
-            print("No files uploaded, skipping vector store file batch creation.")
-
+        vector_store_file_batch = self.project_client.agents.vector_store_file_batches.create_and_poll(
+            vector_store_id=self.vector_store.id, 
+            file_ids=file_ids
+        )
+        print(f"Added files to vector store batch: {vector_store_file_batch.id}")
+        
         return self.vector_store
     
     def setup_file_search_tool(self):
         """Setup file search tool with optional file uploads"""
         self.file_search_tool = FileSearchTool()
+        
         vector_store = self.create_vector_store_with_files()
-        if vector_store is not None:
-            self.file_search_tool.add_vector_store(vector_store.id)
-        else:
-            print("File search tool will not have a vector store attached.")
+        self.file_search_tool.add_vector_store(vector_store.id)
+                
         return self.file_search_tool
     
     def _setup_agent(self):
