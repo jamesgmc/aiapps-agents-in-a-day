@@ -86,8 +86,6 @@ Having tools that provide a clear record of actions is essential. Without them, 
 
 ![AgentRunExample](./images/AgentRunExample.png)
 
-![AgentRunExample2](./images/AgentRunExample2.png)
-
 ## Agentic RAG Example for Game Agent
 
 Here's how an Agentic RAG system might work for a RPS tournament agent:
