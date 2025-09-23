@@ -13,7 +13,7 @@ The game agent is an AI Agent that is written in python, let's use one of the ag
 
 - Go to `labs\40-AIAgents` folder and open `game_agent_v6_multiagent.py` file. Select and copy all code in this file, open `game_agent.py` file in `apps-rps\rps-game-agent` folder and replace all existing code with `game_agent_v6_multiagent.py`'s content .
 
-- Go to `apps-rps\rps-game-agent` folder and run the following command to install dependencies:
+- Go to `apps-rps\rps-game-agent` folder and run the following command to install dependencies. (there might be an error about langchain-community 0.3.29, we can ignore it)
 
 ```bash
 pip install -r requirements.txt
