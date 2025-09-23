@@ -12,11 +12,11 @@ Let's start creating Azure AI Foundry resource in Azure Portal.
 
 - Go to https://portal.azure.com/
 
-- Sign in with your lab account, e.g. `lab1user200@aiapps.top`. Refer to the sheet provided to you during the `Tech Check`.
+- Sign in with your lab account, e.g. `lab1user310@aiapps.top`. Refer to the sheet provided to you during the `Tech Check`.
 
 - Setup 2FA using Authenticator app if required. You can remove the account from Authenticator app after the lab.
 
-- Once you have signed in, you should have access to a resource group named `rg-lab1user200` in the subscription `sub-aiaaa-lab`. 
+- Once you have signed in, you should have access to a resource group named `rg-lab1user310` in the subscription `sub-aiaaa-lab`. 
 
 
 ## Sign in to Azure CLI
@@ -58,16 +58,16 @@ az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
 
 - open `foundry-deploy.parameters.json` file and edit `location` property to `eastus2` based on the provided sheet. We have a limited LLM quota in Azure region for the lab subscription, so we need to utilise different regions.
 
-- create bicep deployment using the following command. make sure to replace `{xxxxx}` with your lab user name, e.g. `lab1user200`.
+- create bicep deployment using the following command. make sure to replace `{xxxxx}` with your lab user name, e.g. `lab1user310`.
 
 ```
 az deployment group create --resource-group rg-{xxxxx} --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.parameters.json 
 ```
 
-- for example, if your lab account is `lab1user200`. Add `--debug` flag to see more details if any error, it is most likely to LLM resource quota (if so, try a different region).
+- for example, if your lab account is `lab1user310`. Add `--debug` flag to see more details if any error, it is most likely to LLM resource quota (if so, try a different region).
 
 ```
-az deployment group create --resource-group rg-lab1user200 --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.parameters.json 
+az deployment group create --resource-group rg-lab1user310 --template-file ./foundry-deploy.bicep --parameters ./foundry-deploy.parameters.json 
 ```
 
 - the deployment will take 5-10 minutes to complete. 
