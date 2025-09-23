@@ -124,7 +124,7 @@ const Page = () => {
     const speechConfigRef = useRef<sdk.SpeechConfig | null>(null);
 
     useEffect(() => {
-        const speech_key = '<API_KEY>';
+        const speech_key = '<Speech_Service_API_Key>';
         const speech_region = 'eastus';
         
         speechConfigRef.current = sdk.SpeechConfig.fromSubscription(
