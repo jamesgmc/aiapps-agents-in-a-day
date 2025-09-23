@@ -95,14 +95,21 @@ python mcp-client.py
 cd labs/40-AIAgents
 ```
 
-- MCP support for agent service is currently in preview. Supported regions are westus, westus2, uaenorth, southindia, and switzerlandnorth. if you are in these regions, run the agent and see the console output. Otherwise, you will get an error. See example here: https://learn.microsoft.com/en-us/azure/ai-foundry/agents/how-to/tools/model-context-protocol-samples?pivots=python
+- The agent can connect to the MCP server and use the tools exposed by the server by using below code block. MCP support for agent service is currently in preview, we will not run below code for now.
 
 ```python
-python game_agent_v7_mcp.py
+    # Initialize agent MCP tool
+    mcp_server_url = os.environ.get("MCP_SERVER_URL", "http://127.0.0.1:3111/mcp")
+    mcp_server_label = os.environ.get("MCP_SERVER_LABEL", "weather")
+
+    self.mcp_tool = McpTool(
+        server_label=mcp_server_label,
+        server_url=mcp_server_url,
+        allowed_tools=[]
+    )
+    
+    tools.extend(self.mcp_tool.definitions)
 ```
-
-- the agent can now connect to the MCP server and use the tools exposed by the server.
-
 
 
 ## Agent-to-Agent Protocol (A2A)
