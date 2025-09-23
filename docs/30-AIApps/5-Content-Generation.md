@@ -167,8 +167,8 @@ const Page = () => {
                 api_version: "2024-08-01-preview"
             };
 
-            const openai_url = "https://aiaaa-s2-openai.openai.azure.com/";
-            const openai_key = "<API_KEY>";
+            const openai_url = "<AZURE_OPENAI_API_ENDPOINT>";
+            const openai_key = "<AZURE_OPENAI_API_KEY>";
             const client = new OpenAIClient(
                 openai_url,
                 new AzureKeyCredential(openai_key),
