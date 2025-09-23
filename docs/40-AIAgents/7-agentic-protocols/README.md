@@ -95,7 +95,7 @@ python mcp-client.py
 cd labs/40-AIAgents
 ```
 
-- run the agent and see the console output.
+- MCP support for agent service is currently in preview. Supported regions are westus, westus2, uaenorth, southindia, and switzerlandnorth. if you are in these regions, run the agent and see the console output. Otherwise, you will get an error. See example here: https://learn.microsoft.com/en-us/azure/ai-foundry/agents/how-to/tools/model-context-protocol-samples?pivots=python
 
 ```python
 python game_agent_v7_mcp.py
