@@ -56,7 +56,7 @@ az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
 
 - navigate to `infra` folder, open `lab-deploy.bicep` file.
 
-- open `foundry-deploy.parameters.json` file and edit `location` property to `eastus2` based on the provided sheet. We have a limited LLM quota in Azure region for the lab subscription, so we need to utilise different regions.
+- open `foundry-deploy.parameters.json` file and edit `location` property to specified Azure region based on the provided sheet (e.g. `eastus2`). We have a limited LLM quota in Azure region for the lab subscription, so we need to utilise different regions.
 
 - create bicep deployment using the following command. make sure to replace `{xxxxx}` with your lab user name, e.g. `lab1user310`.
 
