@@ -101,7 +101,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     cd labs/00-Setup/
     ```
 
-3.  Open `setup.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with your assigned lab username (for example: `lab1user310`).
+3.  Open `setup.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with your assigned lab username (for example: `lab1user200`).
 
     :::info
     if you are deploying your own Azure resources (optional), please update keys and connection string with your own.
@@ -117,7 +117,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
    - Open Copilot Agent mode in VS Code and open `setup.sh`
    - Go to https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and copy all the configuration values.
    - Paste the values into the Copilot chat 
-   - ask Copilot to `replace placeholder values in the script`
+   - ask Copilot to `replace the <MONGODB_CONNECTION_STRING>, <AZURE_OPENAI_API_INSTANCE_NAME>, <AZURE_OPENAI_API_KEY> values in the script`
    - If successful, Copilot will update the script for you—no manual editing needed!
 
     :::info
@@ -135,7 +135,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
 
     If the above step does not work for you, use the `setup-auto.js` script to automatically fetch all configuration values from https://aiaaa-s2-setting.azurewebsites.net/api/configuration/all and replace the placeholders in your setup script. Run it to complete the replacement process.
 
-    Open `setup-auto.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with your assigned login name `lab1user310` (for example: lab1user310).
+    Open `setup-auto.sh`, let's update `<DEV_Name>` setting with your own database name. Replace `add_value` with your assigned login name `lab1user200` (for example: lab1user200).
 
     ![setup auto edit](images/setup-auto-edit.png)
 
@@ -148,7 +148,7 @@ Let us test the connection to Cosmos DB instance and OpenAI service.
     :::info Plan C (Skip if Plan B worked)
     If you have issue running above script, you can also carry out variable replacement manually. 
     - Switch to VS Code `Search` tab, replace `<DEV_Name>` placeholder with your own database name. 
-    - Search for `<DEV_Name>` and replace with your assigned lab username (for example: `lab1user310`). 
+    - Search for `<DEV_Name>` and replace with your assigned lab username (for example: `lab1user200`). 
     - Then click `Replace All` icon, there will be multiple items to be replaced. The placeholder string will be replaced in the whole repo so that you have a dedicated database on the shared Cosmos DB instance.
 
     ![alt text](images/setup.png)
