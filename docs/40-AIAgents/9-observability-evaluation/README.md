@@ -61,15 +61,7 @@ In practice, a combination of these metrics gives the best coverage of an AI age
 
 To gather tracing data, you’ll need to instrument your code. The goal is to instrument the agent code to emit traces and metrics that can be captured, processed, and visualized by an observability platform.
 
-**OpenTelemetry (OTel):** [OpenTelemetry](https://opentelemetry.io/) has emerged as an industry standard for LLM observability. It provides a set of APIs, SDKs, and tools for generating, collecting, and exporting telemetry data. 
-
-There are many instrumentation libraries that wrap existing agent frameworks and make it easy to export OpenTelemetry spans to an observability tool. Below is an example on instrumenting an AutoGen agent with the [OpenLit instrumentation library](https://github.com/openlit/openlit):
-
-```python
-import openlit
-
-openlit.init(tracer = langfuse._otel_tracer, disable_batch = True)
-```
+**OpenTelemetry (OTel):** [OpenTelemetry](https://opentelemetry.io/) has emerged as an industry standard for LLM observability. It provides a set of APIs, SDKs, and tools for generating, collecting, and exporting telemetry data. There are many instrumentation libraries that wrap existing agent frameworks and make it easy to export OpenTelemetry spans to an observability tool. 
 
 ### Add Application Insights to Game Agent
 

@@ -71,6 +71,7 @@ pip install -r requirements.txt
 ```python
 python mcp-server.py
 ```
+![alt text](./images/mcp-server.png)
 
 - open a new terminial windows and also navigate to `apps-rps/rps-game-mcp` folder.
 
@@ -84,6 +85,7 @@ cd apps-rps/rps-game-mcp
 python mcp-client.py
 ```
 
+![alt text](./images/mcp-client.png)
 
 ### Connect AI Agent to MCP server
 
@@ -98,9 +100,10 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v7_mcp.py
 ```
-// add screenshot of console output
 
 - the agent can now connect to the MCP server and use the tools exposed by the server.
+
+
 
 ## Agent-to-Agent Protocol (A2A)
 
