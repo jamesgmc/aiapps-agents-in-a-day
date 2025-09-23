@@ -66,8 +66,6 @@ Let's use the example of getting the current time in a city to illustrate:
     We will then take this schema and pass it to the client created previously, along with the users request to find the time in San Francisco. What's important to note is that a **tool call** is what is returned, **not** the final answer to the question. As mentioned earlier, the LLM returns the name of the function it selected for the task, and the arguments that will be passed to it.
 
     ```python
-    add code
-    //TODO
     function_schema = [
         {
             "name": "get_current_time",
@@ -107,35 +105,33 @@ Let's use the example of getting the current time in a city to illustrate:
     We can implement the code to answer tournament questions and select optimal moves. We will also need to write the code to extract the name and arguments from the response_message to get the final result.
 
      ```python
-     add code
-     //TODO
-     def get_current_time(city):
-    from datetime import datetime
-    import pytz
+    def get_current_time(city):
+        from datetime import datetime
+        import pytz
 
-    city_timezones = {
-        "San Francisco": "America/Los_Angeles",
-        "New York": "America/New_York",
-        "London": "Europe/London"
-    }
-    tz = pytz.timezone(city_timezones.get(city, "UTC"))
-    return datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+        city_timezones = {
+            "San Francisco": "America/Los_Angeles",
+            "New York": "America/New_York",
+            "London": "Europe/London"
+        }
+        tz = pytz.timezone(city_timezones.get(city, "UTC"))
+        return datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
 
-    response_message = {
-        "tool_calls": [
-            {
-                "name": "get_current_time",
-                "arguments": {"city": "San Francisco"}
-            }
-        ]
-    }
+        response_message = {
+            "tool_calls": [
+                {
+                    "name": "get_current_time",
+                    "arguments": {"city": "San Francisco"}
+                }
+            ]
+        }
 
-    tool_call = response_message["tool_calls"][0]
-    result = None
-    if tool_call["name"] == "get_current_time":
-        result = get_current_time(tool_call["arguments"]["city"])
+        tool_call = response_message["tool_calls"][0]
+        result = None
+        if tool_call["name"] == "get_current_time":
+            result = get_current_time(tool_call["arguments"]["city"])
 
-    print(result)
+        print(result)
      ```
 
 Function Calling is at the heart of most, if not all agent tool use design, however implementing it from scratch can sometimes be challenging.
