@@ -207,8 +207,6 @@ The following diagram illustrates the process of function calling with Semantic 
 In Semantic Kernel functions/tools are called <a href="https://learn.microsoft.com/semantic-kernel/concepts/plugins/?pivots=programming-language-python" target="_blank">Plugins</a>. We can convert the RPS tournament functions we saw earlier into a plugin by turning them into a class with the functions in it. We can also import the `kernel_function` decorator, which takes in the description of the function. When you then create a kernel with the RPSTournamentPlugin, the kernel will automatically serialize the functions and their parameters, creating the schema to send to the LLM in the process.
 
 ```python
-    add math calc example lab here for SK here
-    //TODO
     from semantic_kernel import Kernel, kernel_function, Plugin
 
     class MathCalcPlugin(Plugin):

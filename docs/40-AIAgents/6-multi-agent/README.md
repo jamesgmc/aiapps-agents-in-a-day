@@ -139,7 +139,6 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v6_multiagent.py
 ```
-// TODO
 
 ![Multiagent](./images/multi-agent.png)
 

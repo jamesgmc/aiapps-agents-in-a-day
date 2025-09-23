@@ -88,7 +88,6 @@ cd labs/40-AIAgents
 ```python
 python game_agent_v9_ob.py
 ```
-// TODO
 
 ![alt text](images\observability.png)
 
