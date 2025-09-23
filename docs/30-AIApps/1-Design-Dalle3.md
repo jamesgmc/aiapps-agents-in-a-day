@@ -114,8 +114,8 @@ const Page = () => {
         const size = '1024x1024';
         const n = 1;
         
-        var openai_url = "<AZURE_OPENAI_API_ENDPOINT>";
-        var openai_key = "<AZURE_OPENAI_API_KEY>";
+        var openai_url = "https://aiaaa-s2-openai.openai.azure.com/";
+        var openai_key = "<API_KEY>";
         const client = new OpenAIClient(
             openai_url,
             new AzureKeyCredential(openai_key),
@@ -168,10 +168,13 @@ export default Page;
 
 ### Step 6: Testing it out
 
-1. Enter a creative description in the input field
-2. Click the Generate button
-3. Verify the image loads correctly
-4. Test with various prompts to ensure robustness
+- Replace `<AZURE_OPENAI_API_KEY>` placeholder value by looking up  https://aiaaa-s2-setting.azurewebsites.net
+- Go to `apps-chat\chatbot-frontend` folder in terminal windows and run `npm run dev`
+- Navigate to `Design` page in the top navigation bar
+- Enter a creative description in the input field
+- Click the Generate button
+- Verify the image loads correctly
+- Test with various prompts to ensure robustness
 
 ## Additional Resources
 

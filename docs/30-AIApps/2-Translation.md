@@ -111,7 +111,7 @@ const Page = () => {
     }
 
     async function translationApi(text: string): Promise<string> {
-        const translation_url = `<Translator_Service_Endpoint>&to=en&from=fr`;
+        const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en&from=fr`;
         const translation_key = "<Translator_Service_API_Key>";
 
         const body = [{
@@ -167,30 +167,14 @@ export default Page;
 
 ### Step 6: Testing Your Implementation
 
-1. Test with different languages (French, Spanish, German, etc.)
-2. Try complex sentences with technical terms
-3. Test with mixed-language content
-4. Verify error handling with invalid input
+- Replace `<Translator_Service_API_Key>` placeholder value by looking up  https://aiaaa-s2-setting.azurewebsites.net
+- Go to `apps-chat\chatbot-frontend` folder in terminal windows and run `npm run dev`
+- Navigate to `Translation` page in the top navigation bar
+- Test with different languages (French, Spanish, German, etc.)
+- Try complex sentences with technical terms
+- Test with mixed-language content
+- Verify error handling with invalid input
 
-### Step 7: Advanced Features to Consider
-
-#### Automatic Language Detection
-Instead of specifying source language, let Azure detect it:
-```typescript
-const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en`;
-```
-
-#### Multiple Target Languages
-Support translation to multiple languages:
-```typescript
-const translation_url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en&to=es&to=fr`;
-```
-
-#### Language Detection Endpoint
-Use the detect endpoint to identify the source language:
-```typescript
-const detect_url = `https://api.cognitive.microsofttranslator.com/detect?api-version=3.0`;
-```
 #### Integration Ideas
 
 Consider integrating this translation feature with:
