@@ -20,7 +20,7 @@ By the end of this tutorial, you will be able to:
 
 1. Implement web scraping to extract page content
 2. Process HTML and convert it to analyzable text
-3. Use AI to generate SEO-optimized content
+3. Use AI to generate Search engine optimized (SEO) content
 4. Create structured metadata for search engines
 
 ## Scenario
@@ -265,37 +265,14 @@ export default Page;
 </details>
 </details>
 
-## Advanced SEO Features
 
-### Keyword Research Integration
-```typescript
-async function analyzeKeywordDensity(content: string): Promise<KeywordAnalysis> {
-    // Calculate keyword frequency
-    // Identify primary and secondary keywords
-    // Analyze keyword distribution
-    // Suggest optimization opportunities
-}
-```
+### Step 7: Testing it out
 
-### Competitor Analysis
-```typescript
-async function analyzeCompetitors(keyword: string): Promise<CompetitorData> {
-    // Research top-ranking pages for target keywords
-    // Analyze competitor content strategies
-    // Identify content gaps and opportunities
-    // Generate competitive insights
-}
-```
-
-### Content Optimization Suggestions
-```typescript
-async function generateOptimizationSuggestions(content: string): Promise<string[]> {
-    // Analyze content length and structure
-    // Check for SEO best practices
-    // Suggest improvements for readability
-    // Recommend internal linking opportunities
-}
-```
+- Replace `<AZURE_OPENAI_API_KEY>` placeholder value by looking up  https://aiaaa-s2-setting.azurewebsites.net
+- Go to `apps-chat\chatbot-frontend` folder in terminal windows and run `npm run dev`
+- Navigate to `SEO` page in the top navigation bar
+- Copy `http://localhost:4000/product.html` into the text box
+- Click `Generate` to see SEO content
 
 
 ## Integration Opportunities
@@ -338,9 +315,3 @@ async function generateOptimizationSuggestions(content: string): Promise<string[
 - Technical SEO auditing
 - Brand reputation management
 
-## Additional Resources
-
-- [Google SEO Starter Guide](https://developers.google.com/search/docs/beginner/seo-starter-guide)
-- [Schema.org Structured Data](https://schema.org/)
-- [Google Search Console](https://search.google.com/search-console)
-- [SEO Best Practices](https://developers.google.com/search/docs/advanced/guidelines/webmaster-guidelines)
