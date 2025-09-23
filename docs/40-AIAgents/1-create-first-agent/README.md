@@ -37,7 +37,7 @@ az login --tenant f1146386-451a-4cc6-846b-a67f747921e9 --use-device-code
 
 ![alt text](images\image-1.png)
 
-- Use your lab account to sign in. Your lab account should be the form of `lab1user100@aiapps.top`, e.g. `lab1user100@aiapps.top`. use `Work or school account`.
+- Use your lab account to sign in. Your lab account should be the form of `lab1user300@aiapps.top`, e.g. `lab1user300@aiapps.top`. use `Work or school account`.
 
 ![alt text](images\image-2.png)
 
