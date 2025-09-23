@@ -271,7 +271,7 @@ export default Page;
 - Replace `<AZURE_OPENAI_API_KEY>` placeholder value by looking up  https://aiaaa-s2-setting.azurewebsites.net
 - Go to `apps-chat\chatbot-frontend` folder in terminal windows and run `npm run dev`
 - Navigate to `SEO` page in the top navigation bar
-- Copy `http://localhost:4000/product.html` into the text box
+- Copy `https://****.app.github.dev/product.html` into the text box. **** should be your codespaces name
 - Click `Generate` to see SEO content
 
 
