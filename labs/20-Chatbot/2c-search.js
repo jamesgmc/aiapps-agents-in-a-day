@@ -42,3 +42,41 @@ async function generateEmbeddings(text) {
 }
 
 main().catch(console.error);
+
+async function vectorSearch(db, collectionName, query, numResults = 3) {
+  const collection = db.collection(collectionName);
+  // generate the embedding for incoming question
+  const queryEmbedding = await generateEmbeddings(query);
+
+  const pipeline = [
+    {
+      $search: {
+        cosmosSearch: {
+          vector: queryEmbedding,
+          path: "contentVector",
+          k: numResults,
+        },
+        returnStoredSource: true,
+      },
+    },
+    {
+      $project: {
+        similarityScore: { $meta: "searchScore" },
+        document: "$$ROOT",
+      },
+    },
+  ];
+
+  //perform vector search and return the results as an array
+  const results = await collection.aggregate(pipeline).toArray();
+  return results;
+}
+
+function printProductSearchResult(result) {
+  // Print the search result document in a readable format
+  console.log(`Similarity Score: ${result["similarityScore"]}`);
+  console.log(`Name: ${result["document"]["name"]}`);
+  console.log(`Category: ${result["document"]["categoryName"]}`);
+  console.log(`SKU: ${result["document"]["sku"]}`);
+  console.log(`_id: ${result["document"]["_id"]}\n`);
+}

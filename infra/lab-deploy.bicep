@@ -1,6 +1,6 @@
 // Main bicep template for AI Apps and Agents infrastructure
 @description('Location for all resources')
-param location string = 'eastus'
+param location string = 'uaenorth'
 
 @description('Application name prefix')
 param appName string = 'aiapps-agents'

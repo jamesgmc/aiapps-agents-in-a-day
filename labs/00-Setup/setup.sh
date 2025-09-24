@@ -4,10 +4,10 @@
 
 # Define the search and replace pairs
 declare -A replacements=(
-    ["<DEV_Name>"]="add_value"
-    ["<MONGODB_CONNECTION_STRING>"]="add_value"
+    ["<DEV_Name>"]="lab3user333@aiapps.net"
+    ["<MONGODB_CONNECTION_STRING>"]="mongodb+srv://aiaaaadmin:aiaaaP%40ssword123@aiaaa-s2-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
     ["<AZURE_OPENAI_API_INSTANCE_NAME>"]="aiaaa-s2-openai"
-    ["<AZURE_OPENAI_API_KEY>"]="add_value"
+    ["<AZURE_OPENAI_API_KEY>"]="ee8b7517ac664a608953cad44faa22bd"
     # see examples below
     # ["<DEV_Name>"]="dev_daniel_66"
     # ["<MONGODB_CONNECTION_STRING>"]="mongodb+srv://aiaaaadmin:aiaaapassword123@arg-syd-aiaaa-mongo.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"

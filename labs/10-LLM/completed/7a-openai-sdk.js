@@ -1,8 +1,8 @@
 const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
 
 const client = new OpenAIClient(
-    "https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/",
-    new AzureKeyCredential("<AZURE_OPENAI_API_KEY>")
+    "https://aiaaa-s2-openai.openai.azure.com/",
+    new AzureKeyCredential("ee8b7517ac664a608953cad44faa22bd")
 );
 
 const searchBikeStore = {
